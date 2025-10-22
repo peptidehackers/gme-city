@@ -51,77 +51,65 @@ const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 
 // ---------------------- CSS Animations ----------------------
 const neonAnimationStyles = `
-  @keyframes neon-trail {
+  @keyframes neon-border-rotate {
     0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
+      transform: rotate(0deg);
     }
     100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  @keyframes neon-pulse {
-    0%, 100% {
-      opacity: 0.8;
-    }
-    50% {
-      opacity: 1;
+      transform: rotate(360deg);
     }
   }
 
   .neon-loading-border {
     position: relative;
+    border: 2px solid transparent;
   }
 
   .neon-loading-border::before {
     content: '';
     position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
-    background: linear-gradient(
-      90deg,
-      #10b981,
-      #34d399,
-      #6ee7b7,
-      #a7f3d0,
-      #6ee7b7,
-      #34d399,
-      #10b981
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 60deg,
+      #10b981 90deg,
+      #34d399 120deg,
+      #6ee7b7 150deg,
+      #a7f3d0 180deg,
+      transparent 210deg,
+      transparent 360deg
     );
-    background-size: 300% 300%;
-    animation: neon-trail 4s linear infinite, neon-pulse 2s ease-in-out infinite;
     border-radius: 1rem;
+    animation: neon-border-rotate 3s linear infinite;
     z-index: 0;
-    filter: blur(12px);
   }
 
   .neon-loading-border::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(16, 185, 129, 0.2),
-      rgba(52, 211, 153, 0.4),
-      rgba(110, 231, 183, 0.6),
-      rgba(52, 211, 153, 0.4),
-      rgba(16, 185, 129, 0.2),
-      transparent
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 60deg,
+      rgba(16, 185, 129, 0.4) 90deg,
+      rgba(52, 211, 153, 0.6) 120deg,
+      rgba(110, 231, 183, 0.8) 150deg,
+      rgba(167, 243, 208, 1) 180deg,
+      transparent 210deg,
+      transparent 360deg
     );
-    background-size: 300% 300%;
-    animation: neon-trail 3s linear infinite;
     border-radius: 1rem;
-    z-index: 0;
-    pointer-events: none;
+    animation: neon-border-rotate 3s linear infinite;
+    filter: blur(16px);
+    z-index: -1;
   }
 
   .neon-loading-border > * {
