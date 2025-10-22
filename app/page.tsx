@@ -194,7 +194,8 @@ function SEOSnapshotScore() {
   const [results, setResults] = useState<{
     localScore: number;
     onsiteScore: number;
-    issues: string[];
+    localInsights: string[];
+    onsiteInsights: string[];
   } | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -232,7 +233,8 @@ function SEOSnapshotScore() {
       setResults({
         localScore: data.local.score,
         onsiteScore: data.onsite.score,
-        issues: [...data.local.insights, ...data.onsite.insights]
+        localInsights: data.local.insights,
+        onsiteInsights: data.onsite.insights
       });
     } catch (error) {
       console.error('Error fetching SEO score:', error);
@@ -240,7 +242,8 @@ function SEOSnapshotScore() {
       setResults({
         localScore: 50,
         onsiteScore: 50,
-        issues: ['Unable to analyze website. Please try again later.']
+        localInsights: ['Unable to analyze website. Please try again later.'],
+        onsiteInsights: []
       });
     } finally {
       setLoading(false);
@@ -373,17 +376,44 @@ function SEOSnapshotScore() {
             </div>
           </div>
 
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-4">Issues Found:</h3>
-            <div className="space-y-2">
-              {results.issues.map((issue, idx) => (
-                <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
-                  <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-sm text-white/90">{issue}</span>
-                </div>
-              ))}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Local SEO Issues:</h3>
+              <div className="space-y-2">
+                {results.localInsights.length > 0 ? (
+                  results.localInsights.map((issue, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                      <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-sm text-white/90">{issue}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-sm text-white/90">
+                    No major local SEO issues detected
+                  </div>
+                )}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Onsite SEO Issues:</h3>
+              <div className="space-y-2">
+                {results.onsiteInsights.length > 0 ? (
+                  results.onsiteInsights.map((issue, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                      <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-sm text-white/90">{issue}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-sm text-white/90">
+                    No major onsite SEO issues detected
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
