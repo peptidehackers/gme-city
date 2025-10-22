@@ -263,11 +263,12 @@ async function searchBusinessOnGoogleMaps(businessName: string, city: string, zi
 
     // Get the first result (most relevant)
     const business = items[0];
-    console.log('Found business:', business.title, 'Rating:', business.rating?.value);
+    console.log('Found business:', business.title, 'Rating:', business.rating?.value, 'Reviews:', business.rating?.votes_count);
 
     return {
       rating: business.rating?.value || null,
       reviewCount: business.rating?.votes_count || 0,
+      photos_count: business.photos_count || 0,
       cid: business.cid || null,
       place_id: business.place_id || null,
       title: business.title || null
@@ -278,25 +279,34 @@ async function searchBusinessOnGoogleMaps(businessName: string, city: string, zi
   }
 }
 
-// Helper: Get GBP data - Simplified per patch requirements
-// Do not scrape GBP data. Treat URL presence as confidence signal only.
+// Helper: Get GBP data from DataForSEO using Google Maps search
 async function getGBPDataFromDataForSEO(gbpUrl: string | null, businessName: string, city: string, zip: string): Promise<any> {
-  // Per patch requirements:
-  // - Do NOT scrape rating, photos, or post data
-  // - Treat gbp_url as confidence signal only (+10 pts)
-  // - Do not penalize for missing gbp_url
+  try {
+    // Always search by business name to get accurate GBP metrics
+    const mapsData = await searchBusinessOnGoogleMaps(businessName, city, zip);
 
-  console.log('GBP URL provided:', !!gbpUrl);
+    if (!mapsData) {
+      console.log('Could not find business on Google Maps');
+      return null;
+    }
 
-  // If URL is provided, it's a positive signal
-  if (gbpUrl) {
+    console.log('GBP data found:', {
+      rating: mapsData.rating,
+      reviewCount: mapsData.reviewCount,
+      title: mapsData.title
+    });
+
     return {
-      found: true,
-      hasUrl: true
+      rating: mapsData.rating,
+      reviewCount: mapsData.reviewCount,
+      photoCount: mapsData.photos_count || 0,
+      hasRecentActivity: mapsData.reviewCount > 0, // Assume active if has reviews
+      found: true
     };
+  } catch (error) {
+    console.error('getGBPDataFromDataForSEO failed:', error);
+    return null;
   }
-
-  return null;
 }
 
 // Helper: Calculate Local SEO Score (0-100) - With real GBP data from DataForSEO
@@ -316,10 +326,63 @@ function calculateLocalScore(data: {
   let score = 0;
   const insights: string[] = [];
 
-  // GBP URL provided (10 points) - Per patch: treat as confidence signal only
-  // Do NOT scrape or penalize for missing URL
-  if (data.hasGBPUrl && data.gbpData) {
-    score += 10;
+  // GBP Presence & Quality (35 points total)
+  if (data.gbpData && data.gbpData.found) {
+    // Rating quality (10 points)
+    if (data.gbpData.rating) {
+      if (data.gbpData.rating >= 4.5) {
+        score += 10;
+      } else if (data.gbpData.rating >= 4.0) {
+        score += 7;
+        insights.push(`GBP rating is ${data.gbpData.rating.toFixed(1)}/5.0 (aim for 4.5+)`);
+      } else if (data.gbpData.rating >= 3.5) {
+        score += 4;
+        insights.push(`Low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (critical issue)`);
+      } else if (data.gbpData.rating > 0) {
+        score += 2;
+        insights.push(`Very low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (urgent: address negative reviews)`);
+      }
+    } else {
+      insights.push('No rating data found on Google Business Profile');
+    }
+
+    // Review count (15 points)
+    if (data.gbpData.reviewCount >= 50) {
+      score += 15;
+    } else if (data.gbpData.reviewCount >= 25) {
+      score += 12;
+      insights.push(`GBP has ${data.gbpData.reviewCount} reviews (aim for 50+ for maximum impact)`);
+    } else if (data.gbpData.reviewCount >= 10) {
+      score += 8;
+      insights.push(`GBP has only ${data.gbpData.reviewCount} reviews (aim for 50+)`);
+    } else if (data.gbpData.reviewCount > 0) {
+      score += 4;
+      insights.push(`GBP has only ${data.gbpData.reviewCount} reviews (critical: aim for 10+ minimum)`);
+    } else {
+      insights.push('No reviews found on Google Business Profile');
+    }
+
+    // Photos count (5 points)
+    if (data.gbpData.photoCount >= 20) {
+      score += 5;
+    } else if (data.gbpData.photoCount >= 10) {
+      score += 3;
+      insights.push(`GBP has ${data.gbpData.photoCount} photos (aim for 20+ for better engagement)`);
+    } else if (data.gbpData.photoCount > 0) {
+      score += 1;
+      insights.push(`Limited photos on GBP (${data.gbpData.photoCount} photos - add more visual content)`);
+    } else {
+      insights.push('No photos on Google Business Profile');
+    }
+
+    // Recent activity (5 points)
+    if (data.gbpData.hasRecentActivity) {
+      score += 5;
+    } else {
+      insights.push('No review activity detected on GBP');
+    }
+  } else {
+    insights.push('Google Business Profile not found or could not be accessed');
   }
 
   // NAP presence - name, phone, zip provided (10 points)
