@@ -128,7 +128,8 @@ async function scrapeHomepage(url: string): Promise<any> {
       imageCount,
       imagesWithAlt,
       altTextPercentage: imageCount > 0 ? (imagesWithAlt / imageCount) * 100 : 0,
-      internalLinks
+      internalLinks,
+      rawHtml: html // Include raw HTML for city/category detection
     };
   } catch (error) {
     console.error('Homepage scraping failed:', error);
@@ -136,119 +137,112 @@ async function scrapeHomepage(url: string): Promise<any> {
   }
 }
 
-// Helper: Scrape GBP data (basic extraction)
-async function scrapeGBP(gbpUrl: string): Promise<any> {
-  try {
-    // Note: This is a simplified approach. Full GBP scraping may require more sophisticated methods
-    const response = await fetch(gbpUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; SEO-Analyzer/1.0)'
-      }
-    });
-
-    if (!response.ok) {
-      console.error('GBP fetch error:', response.statusText);
-      return null;
-    }
-
-    const html = await response.text();
-
-    // Simple pattern matching (this is approximate and may need adjustment)
-    const ratingMatch = html.match(/aria-label="(\d+\.?\d*)\s+stars?"/i) || html.match(/(\d+\.?\d*)\s+star/i);
-    const reviewMatch = html.match(/(\d+)\s+reviews?/i);
-    const photoMatch = html.match(/(\d+)\s+photos?/i);
-
-    return {
-      rating: ratingMatch ? parseFloat(ratingMatch[1]) : null,
-      reviewCount: reviewMatch ? parseInt(reviewMatch[1]) : null,
-      photoCount: photoMatch ? parseInt(photoMatch[1]) : null,
-      hasRecentPosts: /google posts/i.test(html) // Simplified check
-    };
-  } catch (error) {
-    console.error('GBP scraping failed:', error);
-    return null;
-  }
+// Helper: Validate US phone format
+function isValidUSPhone(phone?: string): boolean {
+  if (!phone) return false;
+  // Match formats: (123) 456-7890, 123-456-7890, 1234567890
+  const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+  return phoneRegex.test(phone.replace(/\s/g, ''));
 }
 
-// Helper: Calculate Local SEO Score (0-100)
+// Helper: Check if homepage contains city name
+function containsCityName(html: string, city: string): boolean {
+  const cityRegex = new RegExp(city, 'i');
+  return cityRegex.test(html);
+}
+
+// Helper: Check if homepage contains category keyword
+function containsCategoryKeyword(html: string, category: string): boolean {
+  // Check in title, meta description, and H1 tags
+  const relevantContent = html.match(/<title[^>]*>([^<]+)<\/title>|<meta\s+name=["']description["'][^>]+content=["']([^"']+)["']|<h1[^>]*>([^<]+)<\/h1>/gi);
+  if (!relevantContent) return false;
+
+  const categoryRegex = new RegExp(category, 'i');
+  return relevantContent.some(match => categoryRegex.test(match));
+}
+
+// Helper: Calculate Local SEO Score (0-100) - Simplified without GBP scraping
 function calculateLocalScore(data: {
-  hasGBP: boolean;
-  gbpData?: any;
-  citationCount: number;
+  hasGBPUrl: boolean;
   hasNAP: boolean;
+  phoneValid: boolean;
   hasSchema: boolean;
+  hasCityName: boolean;
+  hasCategoryKeyword: boolean;
+  hasInternalLinks: boolean;
+  hasAltText: boolean;
+  hasKeywordRelevance: boolean;
+  citationCount: number;
 }): { score: number; insights: string[] } {
   let score = 0;
   const insights: string[] = [];
 
-  // GBP presence & quality (50 points total)
-  if (data.hasGBP) {
-    score += 20; // Base for having GBP
-
-    if (data.gbpData) {
-      // Review count (10 points)
-      if (data.gbpData.reviewCount) {
-        if (data.gbpData.reviewCount >= 50) {
-          score += 10;
-        } else if (data.gbpData.reviewCount >= 10) {
-          score += 7;
-        } else {
-          score += 3;
-          insights.push(`GBP has only ${data.gbpData.reviewCount} reviews (aim for 50+)`);
-        }
-      } else {
-        insights.push('No reviews found on Google Business Profile');
-      }
-
-      // Rating quality (10 points)
-      if (data.gbpData.rating) {
-        if (data.gbpData.rating >= 4.5) {
-          score += 10;
-        } else if (data.gbpData.rating >= 4.0) {
-          score += 7;
-        } else {
-          score += 3;
-          insights.push(`GBP rating is ${data.gbpData.rating}/5.0 (aim for 4.5+)`);
-        }
-      }
-
-      // Photos (5 points)
-      if (data.gbpData.photoCount && data.gbpData.photoCount >= 20) {
-        score += 5;
-      } else {
-        insights.push('GBP needs more photos (aim for 20+)');
-      }
-
-      // Recent posts (5 points)
-      if (!data.gbpData.hasRecentPosts) {
-        insights.push('No recent Google Posts detected');
-      } else {
-        score += 5;
-      }
-    }
+  // GBP URL provided (10 points)
+  if (data.hasGBPUrl) {
+    score += 10;
   } else {
-    insights.push('No Google Business Profile detected');
+    insights.push('Google Business Profile URL not provided');
   }
 
-  // Citation presence (20 points)
-  const citationScore = Math.min(20, (data.citationCount / 10) * 20);
-  score += citationScore;
-  if (data.citationCount < 7) {
-    insights.push(`Listed on only ${data.citationCount}/10 major directories`);
-  }
-
-  // NAP consistency (15 points)
+  // NAP presence - name, phone, zip provided (10 points)
   if (data.hasNAP) {
-    score += 15;
+    score += 10;
   } else {
-    insights.push('Inconsistent NAP (Name, Address, Phone) across web');
+    insights.push('Incomplete NAP data (Name, Address, Phone)');
   }
 
-  // Schema markup (15 points)
+  // Phone format valid (10 points)
+  if (data.phoneValid) {
+    score += 10;
+  } else {
+    insights.push('Phone number not in valid US format');
+  }
+
+  // LocalBusiness schema present (15 points)
   if (data.hasSchema) {
     score += 15;
   } else {
-    insights.push('Missing LocalBusiness schema markup');
+    insights.push('No LocalBusiness schema found on homepage');
+  }
+
+  // Homepage contains city name (10 points)
+  if (data.hasCityName) {
+    score += 10;
+  } else {
+    insights.push('City name not mentioned on homepage');
+  }
+
+  // Homepage contains category keyword (10 points)
+  if (data.hasCategoryKeyword) {
+    score += 10;
+  } else {
+    insights.push('Business category not found in title, headings, or meta description');
+  }
+
+  // Internal links or contact page present (10 points)
+  if (data.hasInternalLinks) {
+    score += 10;
+  } else {
+    insights.push('No internal links or location-specific content found');
+  }
+
+  // Alt text on homepage images (5 points)
+  if (data.hasAltText) {
+    score += 5;
+  } else {
+    insights.push('Most images missing alt text attributes');
+  }
+
+  // Keyword relevance via DataForSEO (10 points)
+  if (data.hasKeywordRelevance) {
+    score += 10;
+  }
+
+  // Citation presence (10 points)
+  const citationScore = Math.min(10, (data.citationCount / 10) * 10);
+  score += citationScore;
+  if (data.citationCount < 7) {
+    insights.push(`Listed on only ${data.citationCount}/10 major directories`);
   }
 
   return { score: Math.round(score), insights };
@@ -378,28 +372,33 @@ export async function POST(request: NextRequest) {
     // 2. Scrape homepage content
     const homepageData = await scrapeHomepage(body.website);
 
-    // 3. Scrape GBP data if URL provided
-    let gbpData = null;
-    if (body.gbp_url) {
-      gbpData = await scrapeGBP(body.gbp_url);
-    }
-
-    // 4. Get organic keywords (optional, for future enhancement)
+    // 3. Get organic keywords (optional, for future enhancement)
     // const keywordData = await getOrganicKeywords(body.website, body.category);
 
-    // 5. Mock citation check (replace with actual BrightLocal API call if needed)
+    // 4. Mock citation check (replace with actual BrightLocal API call if needed)
     const mockCitationCount = Math.floor(Math.random() * 6) + 4; // 4-10 citations
 
-    // 6. Check for schema markup
+    // 5. Analyze local signals
     const hasSchema = homepageData?.hasSchema || psiData?.lighthouseResult?.audits?.['structured-data']?.score === 1;
+    const phoneValid = isValidUSPhone(body.phone);
+    const hasCityName = homepageData?.rawHtml ? containsCityName(homepageData.rawHtml, body.city) : false;
+    const hasCategoryKeyword = homepageData?.rawHtml ? containsCategoryKeyword(homepageData.rawHtml, body.category) : false;
+    const hasInternalLinks = (homepageData?.internalLinks || 0) >= 5;
+    const hasAltText = (homepageData?.altTextPercentage || 0) >= 50;
+    const hasNAP = !!(body.business_name && body.phone && body.zip);
 
-    // 7. Calculate scores
+    // 6. Calculate scores with new rubric
     const localResult = calculateLocalScore({
-      hasGBP: !!body.gbp_url,
-      gbpData,
-      citationCount: mockCitationCount,
-      hasNAP: true, // Assume true if form filled correctly
-      hasSchema
+      hasGBPUrl: !!body.gbp_url,
+      hasNAP,
+      phoneValid,
+      hasSchema,
+      hasCityName,
+      hasCategoryKeyword,
+      hasInternalLinks,
+      hasAltText,
+      hasKeywordRelevance: false, // TODO: Implement DataForSEO keyword matching
+      citationCount: mockCitationCount
     });
 
     const onsiteResult = calculateOnsiteScore(psiData, homepageData);
