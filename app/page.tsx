@@ -53,7 +53,7 @@ const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 const neonAnimationStyles = `
   @keyframes border-trail {
     0% {
-      stroke-dashoffset: 1000;
+      stroke-dashoffset: 4000;
     }
     100% {
       stroke-dashoffset: 0;
@@ -78,7 +78,7 @@ const neonAnimationStyles = `
     stroke: url(#emeraldGradient);
     stroke-width: 3;
     stroke-linecap: round;
-    stroke-dasharray: 200 800;
+    stroke-dasharray: 300 3700;
     animation: border-trail 3s linear infinite;
   }
 
@@ -87,7 +87,7 @@ const neonAnimationStyles = `
     stroke: url(#emeraldGlowGradient);
     stroke-width: 6;
     stroke-linecap: round;
-    stroke-dasharray: 200 800;
+    stroke-dasharray: 300 3700;
     animation: border-trail 3s linear infinite;
     filter: blur(10px);
     opacity: 0.7;
