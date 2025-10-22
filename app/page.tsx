@@ -51,12 +51,12 @@ const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 
 // ---------------------- CSS Animations ----------------------
 const neonAnimationStyles = `
-  @keyframes border-spin {
-    from {
-      transform: rotate(0deg);
+  @keyframes border-trail {
+    0% {
+      stroke-dashoffset: 1000;
     }
-    to {
-      transform: rotate(360deg);
+    100% {
+      stroke-dashoffset: 0;
     }
   }
 
@@ -64,58 +64,33 @@ const neonAnimationStyles = `
     position: relative;
   }
 
-  .neon-loading-border::before {
-    content: '';
+  .neon-loading-border svg {
     position: absolute;
-    inset: -2px;
-    border-radius: 1rem;
-    padding: 2px;
-    background: conic-gradient(
-      from 0deg,
-      transparent,
-      transparent,
-      transparent,
-      #10b981,
-      #34d399,
-      #6ee7b7,
-      transparent,
-      transparent,
-      transparent
-    );
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: border-spin 2.5s linear infinite;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
   }
 
-  .neon-loading-border::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 1rem;
-    background: conic-gradient(
-      from 0deg,
-      transparent,
-      transparent,
-      transparent,
-      rgba(16, 185, 129, 0.5),
-      rgba(52, 211, 153, 0.8),
-      rgba(110, 231, 183, 0.5),
-      transparent,
-      transparent,
-      transparent
-    );
-    filter: blur(10px);
-    opacity: 0.8;
-    animation: border-spin 2.5s linear infinite;
-    pointer-events: none;
-    z-index: -1;
+  .neon-loading-border .border-trail-stroke {
+    fill: none;
+    stroke: url(#emeraldGradient);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 100 900;
+    animation: border-trail 3s linear infinite;
+  }
+
+  .neon-loading-border .border-glow-stroke {
+    fill: none;
+    stroke: url(#emeraldGlowGradient);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 100 900;
+    animation: border-trail 3s linear infinite;
+    filter: blur(8px);
+    opacity: 0.6;
   }
 `;
 
@@ -255,6 +230,24 @@ function SEOSnapshotSection() {
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
       <div className="prelogin-module">
         <div className={`${CARD} ${loading ? 'neon-loading-border' : ''}`}>
+          {loading && (
+            <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+              <defs>
+                <linearGradient id="emeraldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#10b981" />
+                  <stop offset="50%" stopColor="#34d399" />
+                  <stop offset="100%" stopColor="#6ee7b7" />
+                </linearGradient>
+                <linearGradient id="emeraldGlowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="rgba(16, 185, 129, 0.6)" />
+                  <stop offset="50%" stopColor="rgba(52, 211, 153, 0.8)" />
+                  <stop offset="100%" stopColor="rgba(110, 231, 183, 0.6)" />
+                </linearGradient>
+              </defs>
+              <rect className="border-glow-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" />
+              <rect className="border-trail-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" />
+            </svg>
+          )}
           <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Get Your Complete SEO Snapshot</h2>
             <p className="mt-3 text-white/70 max-w-2xl mx-auto">See your Local SEO and Onsite SEO scores with detailed issue breakdown</p>
