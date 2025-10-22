@@ -176,8 +176,209 @@ function parseRatingInput(raw: string) {
 
 // ---------------------- Feature Components ----------------------
 
-function CitationScanner() {
-  const [formData, setFormData] = useState({ businessName: "", phone: "", zip: "" });
+// SEO Snapshot Score Component (2-step form)
+function SEOSnapshotScore() {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    businessName: "",
+    websiteUrl: "",
+    category: "",
+    street: "",
+    city: "",
+    zip: "",
+    phone: "",
+    gbpUrl: "",
+    email: "",
+    consent: false
+  });
+  const [results, setResults] = useState<{
+    localScore: number;
+    onsiteScore: number;
+    issues: string[];
+  } | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleNext = (e: React.FormEvent) => {
+    e.preventDefault();
+    setStep(2);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // TODO: Replace with actual API call to /api/seo-score
+    setTimeout(() => {
+      const mockResults = {
+        localScore: 72,
+        onsiteScore: 64,
+        issues: [
+          "Missing schema markup on homepage",
+          "Low photo freshness (less than 5 photos/month)",
+          "No Google Posts in last 30 days",
+          "Website speed score below 70"
+        ]
+      };
+      setResults(mockResults);
+      setLoading(false);
+    }, 2000);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      {!results ? (
+        <form onSubmit={step === 1 ? handleNext : handleSubmit}>
+          {step === 1 && (
+            <div className="grid sm:grid-cols-2 gap-4">
+              <input
+                className={INPUT}
+                placeholder="Business Name"
+                value={formData.businessName}
+                onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+                required
+              />
+              <input
+                className={INPUT}
+                placeholder="Website URL"
+                type="url"
+                value={formData.websiteUrl}
+                onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+                required
+              />
+              <input
+                className={INPUT}
+                placeholder="Business Category / Services"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                required
+              />
+              <input
+                className={INPUT}
+                placeholder="Street Address"
+                value={formData.street}
+                onChange={(e) => setFormData({ ...formData, street: e.target.value })}
+                required
+              />
+              <input
+                className={INPUT}
+                placeholder="City"
+                value={formData.city}
+                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                required
+              />
+              <input
+                className={INPUT}
+                placeholder="ZIP Code"
+                value={formData.zip}
+                onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
+                required
+              />
+              <div className="sm:col-span-2 flex justify-end">
+                <button type="submit" className={BTN_PRIMARY}>
+                  Next →
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="grid sm:grid-cols-2 gap-4">
+              <input
+                className={INPUT}
+                placeholder="Phone Number (optional)"
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
+              <input
+                className={INPUT}
+                placeholder="Google Business Profile URL (optional)"
+                type="url"
+                value={formData.gbpUrl}
+                onChange={(e) => setFormData({ ...formData, gbpUrl: e.target.value })}
+              />
+              <input
+                className={`${INPUT} sm:col-span-2`}
+                placeholder="Email (optional, for results delivery)"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+              <label className="sm:col-span-2 flex items-start gap-3 text-sm text-white/80 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="mt-1"
+                  checked={formData.consent}
+                  onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                  required
+                />
+                <span>I consent to having my website scanned and evaluated</span>
+              </label>
+              <div className="sm:col-span-2 flex gap-3 justify-end">
+                <button type="button" onClick={() => setStep(1)} className={BTN_GHOST}>
+                  ← Back
+                </button>
+                <button type="submit" className={BTN_PRIMARY} disabled={loading}>
+                  {loading ? "Generating..." : "Generate My SEO Snapshot"}
+                </button>
+              </div>
+            </div>
+          )}
+        </form>
+      ) : (
+        <div>
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <div className="text-center p-8 rounded-2xl bg-white/5 border border-white/10">
+              <div className="text-sm text-white/60 mb-2">Local SEO</div>
+              <div className="text-6xl font-black bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                {results.localScore}
+              </div>
+              <div className="text-white/60 mt-1">/ 100</div>
+              <div className={`mt-4 ${PROGRESS_BG}`}>
+                <div className={PROGRESS_FG} style={{ width: `${results.localScore}%` }} />
+              </div>
+            </div>
+            <div className="text-center p-8 rounded-2xl bg-white/5 border border-white/10">
+              <div className="text-sm text-white/60 mb-2">Onsite SEO</div>
+              <div className="text-6xl font-black bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                {results.onsiteScore}
+              </div>
+              <div className="text-white/60 mt-1">/ 100</div>
+              <div className={`mt-4 ${PROGRESS_BG}`}>
+                <div className={PROGRESS_FG} style={{ width: `${results.onsiteScore}%` }} />
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4">Issues Found:</h3>
+            <div className="space-y-2">
+              {results.issues.map((issue, idx) => (
+                <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                  <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm text-white/90">{issue}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="text-center">
+            <button className={BTN_PRIMARY}>View Full Audit Report</button>
+            <button onClick={() => { setResults(null); setStep(1); }} className={`${BTN_GHOST} ml-3`}>
+              Run Another Scan
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Citation Coverage Check Component
+function CitationCoverageCheck() {
+  const [formData, setFormData] = useState({ businessName: "", phone: "", street: "", zip: "" });
   const [results, setResults] = useState<{ name: string; present: boolean }[] | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -190,11 +391,11 @@ function CitationScanner() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call with mock data
+    // TODO: Replace with actual API call to /api/citations
     setTimeout(() => {
       const mockResults = citationSources.map((name) => ({
         name,
-        present: Math.random() > 0.4 // 60% chance of being present
+        present: Math.random() > 0.4
       }));
       setResults(mockResults);
       setLoading(false);
@@ -203,30 +404,38 @@ function CitationScanner() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <form onSubmit={handleSubmit} className="grid sm:grid-cols-3 gap-4 mb-8">
+      <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4 mb-8">
         <input
           className={INPUT}
-          placeholder="Business name"
+          placeholder="Business Name"
           value={formData.businessName}
           onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
           required
         />
         <input
           className={INPUT}
-          placeholder="Phone number"
+          placeholder="Phone Number"
+          type="tel"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
           required
         />
         <input
           className={INPUT}
-          placeholder="Zip code"
+          placeholder="Street Address"
+          value={formData.street}
+          onChange={(e) => setFormData({ ...formData, street: e.target.value })}
+          required
+        />
+        <input
+          className={INPUT}
+          placeholder="ZIP Code"
           value={formData.zip}
           onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
           required
         />
-        <button type="submit" className={`${BTN_PRIMARY} sm:col-span-3`} disabled={loading}>
-          {loading ? "Scanning..." : "Check My Citations"}
+        <button type="submit" className={`${BTN_PRIMARY} sm:col-span-2`} disabled={loading}>
+          {loading ? "Checking..." : "Check My Listings"}
         </button>
       </form>
 
@@ -270,8 +479,9 @@ function CitationScanner() {
   );
 }
 
-function KeywordTeaser() {
-  const [formData, setFormData] = useState({ service: "", location: "" });
+// Keyword Opportunity Scanner Component
+function KeywordOpportunityScanner() {
+  const [formData, setFormData] = useState({ websiteUrl: "", category: "", city: "", competitorUrl: "" });
   const [results, setResults] = useState<{ keyword: string; volume: number; ranking?: number }[] | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -279,17 +489,17 @@ function KeywordTeaser() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call with mock data
+    // TODO: Replace with actual API call to /api/keywords
     setTimeout(() => {
-      const service = formData.service || "plumber";
-      const location = formData.location || "Encino, CA";
+      const category = formData.category || "plumber";
+      const city = formData.city || "Encino";
 
       const mockKeywords = [
-        { keyword: `emergency ${service} ${location.split(",")[0].toLowerCase()}`, volume: 140, ranking: 9 },
-        { keyword: `${service} near me`, volume: 320, ranking: undefined },
-        { keyword: `best ${service} ${location.split(",")[0].toLowerCase()}`, volume: 180, ranking: undefined },
-        { keyword: `${service} ${location.split(",")[0].toLowerCase()} reviews`, volume: 90, ranking: undefined },
-        { keyword: `24/7 ${service} ${location.split(",")[0].toLowerCase()}`, volume: 110, ranking: undefined },
+        { keyword: `emergency ${category} ${city.toLowerCase()}`, volume: 140, ranking: 8 },
+        { keyword: `${category} near me`, volume: 320, ranking: undefined },
+        { keyword: `best ${category} ${city.toLowerCase()}`, volume: 180, ranking: undefined },
+        { keyword: `${category} ${city.toLowerCase()} reviews`, volume: 90, ranking: undefined },
+        { keyword: `24/7 ${category} ${city.toLowerCase()}`, volume: 110, ranking: undefined },
       ];
 
       setResults(mockKeywords);
@@ -301,21 +511,35 @@ function KeywordTeaser() {
     <div className="max-w-3xl mx-auto">
       <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4 mb-8">
         <input
-          className={INPUT}
-          placeholder="Service (e.g., plumber)"
-          value={formData.service}
-          onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+          className={`${INPUT} sm:col-span-2`}
+          placeholder="Website URL (required)"
+          type="url"
+          value={formData.websiteUrl}
+          onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
           required
         />
         <input
           className={INPUT}
-          placeholder="Location (e.g., Encino, CA)"
-          value={formData.location}
-          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+          placeholder="Business Category / Services"
+          value={formData.category}
+          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           required
         />
+        <input
+          className={INPUT}
+          placeholder="City or Location (optional)"
+          value={formData.city}
+          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+        />
+        <input
+          className={`${INPUT} sm:col-span-2`}
+          placeholder="Competitor Website URL (optional)"
+          type="url"
+          value={formData.competitorUrl}
+          onChange={(e) => setFormData({ ...formData, competitorUrl: e.target.value })}
+        />
         <button type="submit" className={`${BTN_PRIMARY} sm:col-span-2`} disabled={loading}>
-          {loading ? "Finding opportunities..." : "Find Keywords"}
+          {loading ? "Finding keywords..." : "Find My Keywords"}
         </button>
       </form>
 
@@ -331,7 +555,7 @@ function KeywordTeaser() {
                   <div className="font-medium text-white">{kw.keyword}</div>
                   {kw.ranking && (
                     <div className="mt-1 text-sm text-yellow-400">
-                      You're currently ranking #{kw.ranking}
+                      You're currently ranking #{kw.ranking} for this keyword
                     </div>
                   )}
                 </div>
@@ -344,9 +568,9 @@ function KeywordTeaser() {
           </div>
 
           <div className="text-center">
-            <button className={BTN_PRIMARY}>Unlock Full Keyword Plan</button>
+            <button className={BTN_PRIMARY}>Get Full Keyword Plan</button>
             <p className="mt-3 text-sm text-white/60">
-              Get personalized keyword strategies + ranking tracker
+              Unlock personalized keyword strategies + ranking tracker
             </p>
           </div>
         </div>
@@ -920,89 +1144,44 @@ export default function GMECityLanding() {
           </div>
         </section>
 
-        {/* Feature Section 1: Live SEO Snapshot Score */}
+        {/* Feature Section 1: SEO Snapshot Score (Local + Onsite) */}
         <section className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="prelogin-feature-card">
+          <div className="prelogin-module">
             <div className={CARD}>
-              <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">See Your SEO Score Instantly</h2>
-                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Get a snapshot of where you stand before diving into the full audit</p>
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Get Your Complete SEO Snapshot</h2>
+                <p className="mt-3 text-white/70 max-w-2xl mx-auto">See your Local SEO and Onsite SEO scores with detailed issue breakdown</p>
               </div>
 
-              <div className="mt-8 grid md:grid-cols-2 gap-8 items-center">
-                <div className="text-center md:text-left">
-                  <div className="inline-block">
-                    <div className="text-sm text-white/60 mb-2">Your estimated score</div>
-                    <div className="flex items-end gap-3">
-                      <div className="text-7xl md:text-8xl font-black tracking-tight bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent">78</div>
-                      <div className="pb-4 text-2xl text-white/60">/ 100</div>
-                    </div>
-                    <div className={`mt-4 ${PROGRESS_BG} max-w-xs`}>
-                      <div className={PROGRESS_FG} style={{ width: '78%' }} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
-                    <span className="text-white/80">Profile completeness</span>
-                    <span className="font-semibold text-emerald-400">65%</span>
-                  </div>
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
-                    <span className="text-white/80">Reviews count</span>
-                    <span className="font-semibold text-white">42</span>
-                  </div>
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
-                    <span className="text-white/80">Photos freshness</span>
-                    <span className="font-semibold text-yellow-400">4/mo</span>
-                  </div>
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
-                    <span className="text-white/80">Posts cadence</span>
-                    <span className="font-semibold text-orange-400">2/mo</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 text-center">
-                <button
-                  onClick={() => {
-                    setTab("audit");
-                    auditRef.current?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className={`${BTN_PRIMARY} px-8`}
-                >
-                  See My Full Audit
-                </button>
-                <p className="mt-3 text-sm text-white/60">No login required • Free forever</p>
-              </div>
+              <SEOSnapshotScore />
             </div>
           </div>
         </section>
 
-        {/* Feature Section 2: Citation Scanner */}
+        {/* Feature Section 2: Citation Coverage Check */}
         <section className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="prelogin-feature-card">
+          <div className="feature-card">
             <div className={CARD}>
               <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Check Your Citation Coverage</h2>
-                <p className="mt-3 text-white/70 max-w-2xl mx-auto">See where your business is listed across the web in seconds</p>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Citation Coverage Check</h2>
+                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Discover where your business is listed across top directories</p>
               </div>
 
-              <CitationScanner />
+              <CitationCoverageCheck />
             </div>
           </div>
         </section>
 
-        {/* Feature Section 3: Keyword Opportunity Teaser */}
+        {/* Feature Section 3: Keyword Opportunity Scanner */}
         <section className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="prelogin-feature-card">
+          <div className="prelogin-module">
             <div className={CARD}>
               <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Discover Keyword Opportunities</h2>
-                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Find the exact keywords your competitors are ranking for</p>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Find High-Intent Keywords</h2>
+                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Discover the keywords your competitors are ranking for</p>
               </div>
 
-              <KeywordTeaser />
+              <KeywordOpportunityScanner />
             </div>
           </div>
         </section>
