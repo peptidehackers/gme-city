@@ -161,41 +161,18 @@ function containsCategoryKeyword(html: string, category: string): boolean {
   return relevantContent.some(match => categoryRegex.test(match));
 }
 
-// Helper: Extract Place ID from GBP URL
-function extractPlaceId(gbpUrl: string): string | null {
+// Helper: Search for business using Google Maps Search (SERP API POST-then-GET method)
+async function searchBusinessOnGoogleMaps(businessName: string, city: string, zip: string): Promise<any> {
   try {
-    // GBP URLs can be in various formats:
-    // https://maps.google.com/maps?cid=12345678901234567890
-    // https://www.google.com/maps/place/Business+Name/@lat,lng,zoom/data=!4m5!3m4!1s0x...:0xabc123
-    // https://g.page/business-name
-
-    const cidMatch = gbpUrl.match(/cid=(\d+)/);
-    if (cidMatch) return cidMatch[1];
-
-    const placeIdMatch = gbpUrl.match(/!1s([^!]+)/);
-    if (placeIdMatch) return placeIdMatch[1];
-
-    // For g.page links, we'd need to resolve the redirect, but return null for now
-    return null;
-  } catch (error) {
-    console.error('Error extracting place ID:', error);
-    return null;
-  }
-}
-
-// Helper: Get GBP data from DataForSEO
-async function getGBPDataFromDataForSEO(gbpUrl: string): Promise<any> {
-  try {
-    const placeId = extractPlaceId(gbpUrl);
-    if (!placeId) {
-      console.log('Could not extract place ID from URL');
-      return null;
-    }
-
     const auth = Buffer.from(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`).toString('base64');
 
-    const response = await fetch(
-      'https://api.dataforseo.com/v3/business_data/google/reviews/task_post',
+    // Format search query like "business name city zip"
+    const searchQuery = `${businessName} ${city} ${zip}`;
+    console.log('Searching Google Maps for:', searchQuery);
+
+    // Step 1: POST to create task using SERP API (not Business Data API)
+    const postResponse = await fetch(
+      'https://api.dataforseo.com/v3/serp/google/maps/task_post',
       {
         method: 'POST',
         headers: {
@@ -203,44 +180,123 @@ async function getGBPDataFromDataForSEO(gbpUrl: string): Promise<any> {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify([{
-          place_id: placeId,
-          limit: 100,
-          sort_by: "newest"
+          keyword: searchQuery,
+          location_code: 2840, // USA
+          language_code: "en"
         }])
       }
     );
 
-    if (!response.ok) {
-      console.error('DataForSEO API error:', response.statusText);
+    if (!postResponse.ok) {
+      const errorText = await postResponse.text();
+      console.error('DataForSEO Maps POST error:', postResponse.statusText, errorText);
       return null;
     }
 
-    const data = await response.json();
+    const postData = await postResponse.json();
+    console.log('Maps POST response:', postData.status_code, postData.status_message);
 
-    if (!data.tasks || !data.tasks[0] || !data.tasks[0].result || !data.tasks[0].result[0]) {
-      console.log('No results from DataForSEO');
+    if (!postData.tasks || !postData.tasks[0] || postData.tasks[0].status_code !== 20100) {
+      console.log('Maps POST task failed:', postData.tasks?.[0]?.status_message || 'No tasks');
       return null;
     }
 
-    const result = data.tasks[0].result[0];
+    const taskId = postData.tasks[0].id;
+    console.log('Task created with ID:', taskId);
 
-    // Check for recent posts (reviews from last 30 days)
-    const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
-    const recentReviews = result.reviews?.filter((review: any) =>
-      new Date(review.timestamp).getTime() > thirtyDaysAgo
-    ) || [];
+    // Step 2: Poll for results (retry up to 5 times with increasing delays)
+    let getData: any = null;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      // Wait progressively longer (5s, 6s, 7s, 8s, 9s)
+      const delayMs = 5000 + (attempt * 1000);
+      console.log(`Waiting ${delayMs}ms before attempt ${attempt + 1}...`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+
+      const getResponse = await fetch(
+        `https://api.dataforseo.com/v3/serp/google/maps/task_get/advanced/${taskId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Basic ${auth}`
+          }
+        }
+      );
+
+      if (!getResponse.ok) {
+        const errorText = await getResponse.text();
+        console.error('DataForSEO Maps GET error:', getResponse.statusText, errorText);
+        continue; // Try again
+      }
+
+      getData = await getResponse.json();
+      console.log(`Maps GET attempt ${attempt + 1}:`, getData.status_code, getData.tasks?.[0]?.status_message);
+
+      // Check if task is complete
+      if (getData.tasks?.[0]?.status_code === 20000) {
+        console.log('Task completed successfully');
+        break;
+      }
+
+      // If still in queue or processing, continue retrying
+      if (getData.tasks?.[0]?.status_code === 20100 || getData.tasks?.[0]?.status_message?.includes('Queue')) {
+        console.log('Task still processing, retrying...');
+        continue;
+      }
+
+      // If other error, break
+      console.log('Task failed with unexpected status');
+      break;
+    }
+
+    if (!getData || !getData.tasks || !getData.tasks[0] || getData.tasks[0].status_code !== 20000) {
+      console.log('Maps GET task failed after retries:', getData?.tasks?.[0]?.status_message || 'No tasks');
+      return null;
+    }
+
+    const items = getData.tasks[0].result?.[0]?.items;
+    console.log('Items found:', items?.length || 0);
+
+    if (!items || items.length === 0) {
+      console.log('No business found in Maps search');
+      return null;
+    }
+
+    // Get the first result (most relevant)
+    const business = items[0];
+    console.log('Found business:', business.title, 'Rating:', business.rating?.value);
 
     return {
-      rating: result.rating?.value || null,
-      reviewCount: result.reviews_count || 0,
-      photoCount: result.photos_count || 0,
-      hasRecentActivity: recentReviews.length > 0,
-      reviews: result.reviews || []
+      rating: business.rating?.value || null,
+      reviewCount: business.rating?.votes_count || 0,
+      cid: business.cid || null,
+      place_id: business.place_id || null,
+      title: business.title || null
     };
   } catch (error) {
-    console.error('DataForSEO GBP fetch failed:', error);
+    console.error('Maps search failed:', error);
     return null;
   }
+}
+
+// Helper: Get GBP data - Simplified per patch requirements
+// Do not scrape GBP data. Treat URL presence as confidence signal only.
+async function getGBPDataFromDataForSEO(gbpUrl: string | null, businessName: string, city: string, zip: string): Promise<any> {
+  // Per patch requirements:
+  // - Do NOT scrape rating, photos, or post data
+  // - Treat gbp_url as confidence signal only (+10 pts)
+  // - Do not penalize for missing gbp_url
+
+  console.log('GBP URL provided:', !!gbpUrl);
+
+  // If URL is provided, it's a positive signal
+  if (gbpUrl) {
+    return {
+      found: true,
+      hasUrl: true
+    };
+  }
+
+  return null;
 }
 
 // Helper: Calculate Local SEO Score (0-100) - With real GBP data from DataForSEO
@@ -260,55 +316,10 @@ function calculateLocalScore(data: {
   let score = 0;
   const insights: string[] = [];
 
-  // GBP Presence & Quality (35 points total)
+  // GBP URL provided (10 points) - Per patch: treat as confidence signal only
+  // Do NOT scrape or penalize for missing URL
   if (data.hasGBPUrl && data.gbpData) {
-    score += 5; // Base for having GBP URL
-
-    // Review count (15 points)
-    if (data.gbpData.reviewCount >= 50) {
-      score += 15;
-    } else if (data.gbpData.reviewCount >= 25) {
-      score += 12;
-      insights.push(`GBP has ${data.gbpData.reviewCount} reviews (aim for 50+ for maximum impact)`);
-    } else if (data.gbpData.reviewCount >= 10) {
-      score += 8;
-      insights.push(`GBP has only ${data.gbpData.reviewCount} reviews (aim for 50+)`);
-    } else if (data.gbpData.reviewCount > 0) {
-      score += 4;
-      insights.push(`GBP has only ${data.gbpData.reviewCount} reviews (critical: aim for 10+ minimum)`);
-    } else {
-      insights.push('No reviews found on Google Business Profile');
-    }
-
-    // Rating quality (10 points)
-    if (data.gbpData.rating) {
-      if (data.gbpData.rating >= 4.5) {
-        score += 10;
-      } else if (data.gbpData.rating >= 4.0) {
-        score += 7;
-        insights.push(`GBP rating is ${data.gbpData.rating.toFixed(1)}/5.0 (aim for 4.5+)`);
-      } else if (data.gbpData.rating >= 3.5) {
-        score += 4;
-        insights.push(`Low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (critical issue)`);
-      } else {
-        score += 2;
-        insights.push(`Very low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (urgent: address negative reviews)`);
-      }
-    } else {
-      insights.push('No rating data found on Google Business Profile');
-    }
-
-    // Recent activity (5 points)
-    if (data.gbpData.hasRecentActivity) {
-      score += 5;
-    } else {
-      insights.push('No recent review activity in last 30 days');
-    }
-  } else if (data.hasGBPUrl) {
-    score += 5;
-    insights.push('Could not fetch GBP data (may be invalid URL or API issue)');
-  } else {
-    insights.push('Google Business Profile URL not provided');
+    score += 10;
   }
 
   // NAP presence - name, phone, zip provided (10 points)
@@ -491,11 +502,13 @@ export async function POST(request: NextRequest) {
     // 2. Scrape homepage content
     const homepageData = await scrapeHomepage(body.website);
 
-    // 3. Get real GBP data from DataForSEO if URL provided
-    let gbpData = null;
-    if (body.gbp_url) {
-      gbpData = await getGBPDataFromDataForSEO(body.gbp_url);
-    }
+    // 3. Get real GBP data from DataForSEO (URL or search)
+    const gbpData = await getGBPDataFromDataForSEO(
+      body.gbp_url || null,
+      body.business_name,
+      body.city,
+      body.zip
+    );
 
     // 4. Get organic keywords (optional, for future enhancement)
     // const keywordData = await getOrganicKeywords(body.website, body.category);
