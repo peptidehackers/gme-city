@@ -92,9 +92,88 @@ async function getOrganicKeywords(domain: string, category: string): Promise<any
   }
 }
 
+// Helper: Scrape homepage HTML content
+async function scrapeHomepage(url: string): Promise<any> {
+  try {
+    const cleanUrl = url.startsWith('http') ? url : `https://${url}`;
+    const response = await fetch(cleanUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; SEO-Analyzer/1.0)'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('Homepage fetch error:', response.statusText);
+      return null;
+    }
+
+    const html = await response.text();
+
+    // Parse HTML content
+    const wordCount = html.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(w => w.length > 0).length;
+    const hasH1 = /<h1/i.test(html);
+    const hasMetaDescription = /<meta\s+name=["']description["']/i.test(html);
+    const hasTitle = /<title[^>]*>([^<]+)<\/title>/i.test(html);
+    const hasSchema = /application\/ld\+json/i.test(html) && /"@type"\s*:\s*["']LocalBusiness["']/i.test(html);
+    const imageCount = (html.match(/<img/gi) || []).length;
+    const imagesWithAlt = (html.match(/<img[^>]+alt=/gi) || []).length;
+    const internalLinks = (html.match(/<a\s+[^>]*href=["'][^"']*["']/gi) || []).length;
+
+    return {
+      wordCount,
+      hasH1,
+      hasMetaDescription,
+      hasTitle,
+      hasSchema,
+      imageCount,
+      imagesWithAlt,
+      altTextPercentage: imageCount > 0 ? (imagesWithAlt / imageCount) * 100 : 0,
+      internalLinks
+    };
+  } catch (error) {
+    console.error('Homepage scraping failed:', error);
+    return null;
+  }
+}
+
+// Helper: Scrape GBP data (basic extraction)
+async function scrapeGBP(gbpUrl: string): Promise<any> {
+  try {
+    // Note: This is a simplified approach. Full GBP scraping may require more sophisticated methods
+    const response = await fetch(gbpUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; SEO-Analyzer/1.0)'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('GBP fetch error:', response.statusText);
+      return null;
+    }
+
+    const html = await response.text();
+
+    // Simple pattern matching (this is approximate and may need adjustment)
+    const ratingMatch = html.match(/aria-label="(\d+\.?\d*)\s+stars?"/i) || html.match(/(\d+\.?\d*)\s+star/i);
+    const reviewMatch = html.match(/(\d+)\s+reviews?/i);
+    const photoMatch = html.match(/(\d+)\s+photos?/i);
+
+    return {
+      rating: ratingMatch ? parseFloat(ratingMatch[1]) : null,
+      reviewCount: reviewMatch ? parseInt(reviewMatch[1]) : null,
+      photoCount: photoMatch ? parseInt(photoMatch[1]) : null,
+      hasRecentPosts: /google posts/i.test(html) // Simplified check
+    };
+  } catch (error) {
+    console.error('GBP scraping failed:', error);
+    return null;
+  }
+}
+
 // Helper: Calculate Local SEO Score (0-100)
 function calculateLocalScore(data: {
   hasGBP: boolean;
+  gbpData?: any;
   citationCount: number;
   hasNAP: boolean;
   hasSchema: boolean;
@@ -102,18 +181,60 @@ function calculateLocalScore(data: {
   let score = 0;
   const insights: string[] = [];
 
-  // GBP presence (40 points)
+  // GBP presence & quality (50 points total)
   if (data.hasGBP) {
-    score += 40;
+    score += 20; // Base for having GBP
+
+    if (data.gbpData) {
+      // Review count (10 points)
+      if (data.gbpData.reviewCount) {
+        if (data.gbpData.reviewCount >= 50) {
+          score += 10;
+        } else if (data.gbpData.reviewCount >= 10) {
+          score += 7;
+        } else {
+          score += 3;
+          insights.push(`GBP has only ${data.gbpData.reviewCount} reviews (aim for 50+)`);
+        }
+      } else {
+        insights.push('No reviews found on Google Business Profile');
+      }
+
+      // Rating quality (10 points)
+      if (data.gbpData.rating) {
+        if (data.gbpData.rating >= 4.5) {
+          score += 10;
+        } else if (data.gbpData.rating >= 4.0) {
+          score += 7;
+        } else {
+          score += 3;
+          insights.push(`GBP rating is ${data.gbpData.rating}/5.0 (aim for 4.5+)`);
+        }
+      }
+
+      // Photos (5 points)
+      if (data.gbpData.photoCount && data.gbpData.photoCount >= 20) {
+        score += 5;
+      } else {
+        insights.push('GBP needs more photos (aim for 20+)');
+      }
+
+      // Recent posts (5 points)
+      if (!data.gbpData.hasRecentPosts) {
+        insights.push('No recent Google Posts detected');
+      } else {
+        score += 5;
+      }
+    }
   } else {
     insights.push('No Google Business Profile detected');
   }
 
-  // Citation presence (30 points)
-  const citationScore = Math.min(30, (data.citationCount / 10) * 30);
+  // Citation presence (20 points)
+  const citationScore = Math.min(20, (data.citationCount / 10) * 20);
   score += citationScore;
   if (data.citationCount < 7) {
-    insights.push(`Only listed on ${data.citationCount}/10 major directories`);
+    insights.push(`Listed on only ${data.citationCount}/10 major directories`);
   }
 
   // NAP consistency (15 points)
@@ -134,11 +255,11 @@ function calculateLocalScore(data: {
 }
 
 // Helper: Calculate Onsite SEO Score (0-100)
-function calculateOnsiteScore(psiData: any): { score: number; insights: string[] } {
+function calculateOnsiteScore(psiData: any, homepageData: any): { score: number; insights: string[] } {
   let score = 0;
   const insights: string[] = [];
 
-  if (!psiData) {
+  if (!psiData && !homepageData) {
     return {
       score: 50,
       insights: ['Unable to analyze website performance']
@@ -146,37 +267,90 @@ function calculateOnsiteScore(psiData: any): { score: number; insights: string[]
   }
 
   try {
-    // Performance score (40 points)
-    const performanceScore = psiData.lighthouseResult?.categories?.performance?.score || 0;
-    score += performanceScore * 40;
+    // Performance score - LIMITED to 30% weight
+    if (psiData) {
+      const performanceScore = psiData.lighthouseResult?.categories?.performance?.score || 0;
+      score += performanceScore * 30; // Reduced from 40 to 30
 
-    if (performanceScore < 0.7) {
-      insights.push('Slow page speed (below 70/100)');
+      if (performanceScore < 0.7) {
+        insights.push(`Page speed score is ${Math.round(performanceScore * 100)}/100 (aim for 70+)`);
+      }
     }
 
-    // SEO score (30 points)
-    const seoScore = psiData.lighthouseResult?.categories?.seo?.score || 0;
-    score += seoScore * 30;
+    // HTML Structure & Tags (35 points)
+    if (homepageData) {
+      // H1 tag (8 points)
+      if (homepageData.hasH1) {
+        score += 8;
+      } else {
+        insights.push('No H1 tag found on homepage');
+      }
 
-    // Meta tags (15 points)
-    const audits = psiData.lighthouseResult?.audits || {};
-    if (audits['meta-description']?.score === 1) {
-      score += 8;
-    } else {
-      insights.push('Missing or poor meta description');
+      // Meta description (8 points)
+      if (homepageData.hasMetaDescription) {
+        score += 8;
+      } else {
+        insights.push('Missing meta description tag');
+      }
+
+      // Title tag (7 points)
+      if (homepageData.hasTitle) {
+        score += 7;
+      } else {
+        insights.push('Missing or empty title tag');
+      }
+
+      // Schema markup (7 points)
+      if (homepageData.hasSchema) {
+        score += 7;
+      } else {
+        insights.push('Missing LocalBusiness schema markup');
+      }
+
+      // Mobile viewport (5 points)
+      const hasViewport = psiData?.lighthouseResult?.audits?.['viewport']?.score === 1;
+      if (hasViewport) {
+        score += 5;
+      } else {
+        insights.push('Not mobile-friendly (no viewport meta tag)');
+      }
     }
 
-    if (audits['document-title']?.score === 1) {
-      score += 7;
-    } else {
-      insights.push('Missing or poor page title');
+    // Content Quality (20 points)
+    if (homepageData) {
+      // Word count (10 points)
+      if (homepageData.wordCount >= 500) {
+        score += 10;
+      } else if (homepageData.wordCount >= 250) {
+        score += 6;
+      } else {
+        score += 2;
+        insights.push(`Homepage has only ${homepageData.wordCount} words (aim for 500+)`);
+      }
+
+      // Internal links (5 points)
+      if (homepageData.internalLinks >= 10) {
+        score += 5;
+      } else if (homepageData.internalLinks >= 5) {
+        score += 3;
+      } else {
+        insights.push(`Only ${homepageData.internalLinks} internal links found (aim for 10+)`);
+      }
+
+      // Alt text on images (5 points)
+      if (homepageData.altTextPercentage >= 80) {
+        score += 5;
+      } else if (homepageData.altTextPercentage >= 50) {
+        score += 3;
+      } else {
+        insights.push(`Only ${Math.round(homepageData.altTextPercentage)}% of images have alt text`);
+      }
     }
 
-    // Mobile friendliness (15 points)
-    if (audits['viewport']?.score === 1) {
-      score += 15;
-    } else {
-      insights.push('Not mobile-friendly (no viewport meta tag)');
+    // SEO audit score (15 points)
+    if (psiData) {
+      const seoScore = psiData.lighthouseResult?.categories?.seo?.score || 0;
+      score += seoScore * 15;
     }
 
   } catch (error) {
@@ -201,24 +375,34 @@ export async function POST(request: NextRequest) {
     // 1. Get PageSpeed Insights data
     const psiData = await getPageSpeedData(body.website);
 
-    // 2. Get organic keywords (optional, for future enhancement)
+    // 2. Scrape homepage content
+    const homepageData = await scrapeHomepage(body.website);
+
+    // 3. Scrape GBP data if URL provided
+    let gbpData = null;
+    if (body.gbp_url) {
+      gbpData = await scrapeGBP(body.gbp_url);
+    }
+
+    // 4. Get organic keywords (optional, for future enhancement)
     // const keywordData = await getOrganicKeywords(body.website, body.category);
 
-    // 3. Mock citation check (replace with actual BrightLocal API call if needed)
+    // 5. Mock citation check (replace with actual BrightLocal API call if needed)
     const mockCitationCount = Math.floor(Math.random() * 6) + 4; // 4-10 citations
 
-    // 4. Check for schema markup
-    const hasSchema = psiData?.lighthouseResult?.audits?.['structured-data']?.score === 1;
+    // 6. Check for schema markup
+    const hasSchema = homepageData?.hasSchema || psiData?.lighthouseResult?.audits?.['structured-data']?.score === 1;
 
-    // 5. Calculate scores
+    // 7. Calculate scores
     const localResult = calculateLocalScore({
       hasGBP: !!body.gbp_url,
+      gbpData,
       citationCount: mockCitationCount,
       hasNAP: true, // Assume true if form filled correctly
       hasSchema
     });
 
-    const onsiteResult = calculateOnsiteScore(psiData);
+    const onsiteResult = calculateOnsiteScore(psiData, homepageData);
 
     const combined = Math.round((localResult.score + onsiteResult.score) / 2);
 
