@@ -166,9 +166,36 @@ async function searchBusinessOnGoogleMaps(businessName: string, city: string, zi
   try {
     const auth = Buffer.from(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`).toString('base64');
 
-    // Format search query like "business name city zip"
-    const searchQuery = `${businessName} ${city} ${zip}`;
-    console.log('Searching Google Maps for:', searchQuery);
+    // Try multiple search query formats
+    const searchQueries = [
+      `${businessName} ${city}`, // Just name and city
+      `${businessName} ${zip}`, // Name and ZIP
+      `${businessName} ${city} ${zip}`, // All three
+      `${businessName}` // Just the name
+    ];
+
+    for (const searchQuery of searchQueries) {
+      console.log('Searching Google Maps for:', searchQuery);
+
+      const result = await tryGoogleMapsSearch(auth, searchQuery);
+      if (result) {
+        return result;
+      }
+
+      console.log(`No results with query "${searchQuery}", trying next variation...`);
+    }
+
+    console.log('No results found with any search variation');
+    return null;
+  } catch (error) {
+    console.error('Maps search failed:', error);
+    return null;
+  }
+}
+
+// Helper: Try a single Google Maps search with a specific query
+async function tryGoogleMapsSearch(auth: string, searchQuery: string): Promise<any> {
+  try {
 
     // Step 1: POST to create task using SERP API (not Business Data API)
     const postResponse = await fetch(
