@@ -78,7 +78,7 @@ const neonAnimationStyles = `
     stroke: url(#emeraldGradient);
     stroke-width: 3;
     stroke-linecap: round;
-    stroke-dasharray: 100 900;
+    stroke-dasharray: 200 800;
     animation: border-trail 3s linear infinite;
   }
 
@@ -87,10 +87,10 @@ const neonAnimationStyles = `
     stroke: url(#emeraldGlowGradient);
     stroke-width: 6;
     stroke-linecap: round;
-    stroke-dasharray: 100 900;
+    stroke-dasharray: 200 800;
     animation: border-trail 3s linear infinite;
-    filter: blur(8px);
-    opacity: 0.6;
+    filter: blur(10px);
+    opacity: 0.7;
   }
 `;
 
