@@ -326,7 +326,6 @@ async function getGBPDataFromDataForSEO(gbpUrl: string | null, businessName: str
     return {
       rating: mapsData.rating,
       reviewCount: mapsData.reviewCount,
-      photoCount: mapsData.photos_count || 0,
       hasRecentActivity: mapsData.reviewCount > 0, // Assume active if has reviews
       found: true
     };
@@ -355,29 +354,31 @@ function calculateLocalScore(data: {
 
   // GBP Presence & Quality (35 points total)
   if (data.gbpData && data.gbpData.found) {
-    // Rating quality (10 points)
+    // Rating quality (15 points - increased from 10)
     if (data.gbpData.rating) {
       if (data.gbpData.rating >= 4.5) {
-        score += 10;
+        score += 15;
       } else if (data.gbpData.rating >= 4.0) {
-        score += 7;
+        score += 11;
         insights.push(`GBP rating is ${data.gbpData.rating.toFixed(1)}/5.0 (aim for 4.5+)`);
       } else if (data.gbpData.rating >= 3.5) {
-        score += 4;
+        score += 6;
         insights.push(`Low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (critical issue)`);
       } else if (data.gbpData.rating > 0) {
-        score += 2;
+        score += 3;
         insights.push(`Very low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (urgent: address negative reviews)`);
       }
     } else {
       insights.push('No rating data found on Google Business Profile');
     }
 
-    // Review count (15 points)
-    if (data.gbpData.reviewCount >= 50) {
-      score += 15;
+    // Review count (20 points - increased from 15)
+    if (data.gbpData.reviewCount >= 100) {
+      score += 20;
+    } else if (data.gbpData.reviewCount >= 50) {
+      score += 17;
     } else if (data.gbpData.reviewCount >= 25) {
-      score += 12;
+      score += 13;
       insights.push(`GBP has ${data.gbpData.reviewCount} reviews (aim for 50+ for maximum impact)`);
     } else if (data.gbpData.reviewCount >= 10) {
       score += 8;
@@ -389,25 +390,8 @@ function calculateLocalScore(data: {
       insights.push('No reviews found on Google Business Profile');
     }
 
-    // Photos count (5 points)
-    if (data.gbpData.photoCount >= 20) {
-      score += 5;
-    } else if (data.gbpData.photoCount >= 10) {
-      score += 3;
-      insights.push(`GBP has ${data.gbpData.photoCount} photos (aim for 20+ for better engagement)`);
-    } else if (data.gbpData.photoCount > 0) {
-      score += 1;
-      insights.push(`Limited photos on GBP (${data.gbpData.photoCount} photos - add more visual content)`);
-    } else {
-      insights.push('No photos on Google Business Profile');
-    }
-
-    // Recent activity (5 points)
-    if (data.gbpData.hasRecentActivity) {
-      score += 5;
-    } else {
-      insights.push('No review activity detected on GBP');
-    }
+    // Note: Photo count removed due to DataForSEO API limitations
+    // Points redistributed to rating (10→15) and reviews (15→20)
   } else {
     insights.push('Google Business Profile not found or could not be accessed');
   }
