@@ -53,10 +53,10 @@ const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 const neonAnimationStyles = `
   @keyframes border-trail {
     0% {
-      stroke-dashoffset: 4000;
+      stroke-dashoffset: 0;
     }
     100% {
-      stroke-dashoffset: 0;
+      stroke-dashoffset: -4000;
     }
   }
 
