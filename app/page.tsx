@@ -51,70 +51,71 @@ const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 
 // ---------------------- CSS Animations ----------------------
 const neonAnimationStyles = `
-  @keyframes neon-border-rotate {
-    0% {
+  @keyframes border-spin {
+    from {
       transform: rotate(0deg);
     }
-    100% {
+    to {
       transform: rotate(360deg);
     }
   }
 
   .neon-loading-border {
     position: relative;
-    border: 2px solid transparent;
   }
 
   .neon-loading-border::before {
     content: '';
     position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
+    inset: -2px;
+    border-radius: 1rem;
+    padding: 2px;
     background: conic-gradient(
       from 0deg,
-      transparent 0deg,
-      transparent 60deg,
-      #10b981 90deg,
-      #34d399 120deg,
-      #6ee7b7 150deg,
-      #a7f3d0 180deg,
-      transparent 210deg,
-      transparent 360deg
+      transparent,
+      transparent,
+      transparent,
+      #10b981,
+      #34d399,
+      #6ee7b7,
+      transparent,
+      transparent,
+      transparent
     );
-    border-radius: 1rem;
-    animation: neon-border-rotate 3s linear infinite;
-    z-index: 0;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-spin 2.5s linear infinite;
+    pointer-events: none;
   }
 
   .neon-loading-border::after {
     content: '';
     position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
+    inset: -2px;
+    border-radius: 1rem;
     background: conic-gradient(
       from 0deg,
-      transparent 0deg,
-      transparent 60deg,
-      rgba(16, 185, 129, 0.4) 90deg,
-      rgba(52, 211, 153, 0.6) 120deg,
-      rgba(110, 231, 183, 0.8) 150deg,
-      rgba(167, 243, 208, 1) 180deg,
-      transparent 210deg,
-      transparent 360deg
+      transparent,
+      transparent,
+      transparent,
+      rgba(16, 185, 129, 0.5),
+      rgba(52, 211, 153, 0.8),
+      rgba(110, 231, 183, 0.5),
+      transparent,
+      transparent,
+      transparent
     );
-    border-radius: 1rem;
-    animation: neon-border-rotate 3s linear infinite;
-    filter: blur(16px);
+    filter: blur(10px);
+    opacity: 0.8;
+    animation: border-spin 2.5s linear infinite;
+    pointer-events: none;
     z-index: -1;
-  }
-
-  .neon-loading-border > * {
-    position: relative;
-    z-index: 1;
   }
 `;
 
