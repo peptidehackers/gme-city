@@ -174,6 +174,187 @@ function parseRatingInput(raw: string) {
   return parseNumberInput(raw, 1, 5);
 }
 
+// ---------------------- Feature Components ----------------------
+
+function CitationScanner() {
+  const [formData, setFormData] = useState({ businessName: "", phone: "", zip: "" });
+  const [results, setResults] = useState<{ name: string; present: boolean }[] | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const citationSources = [
+    "Yelp", "Apple Maps", "BBB", "Facebook", "Bing Places",
+    "Yellow Pages", "Foursquare", "Angi", "Thumbtack", "MapQuest"
+  ];
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulate API call with mock data
+    setTimeout(() => {
+      const mockResults = citationSources.map((name) => ({
+        name,
+        present: Math.random() > 0.4 // 60% chance of being present
+      }));
+      setResults(mockResults);
+      setLoading(false);
+    }, 1500);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      <form onSubmit={handleSubmit} className="grid sm:grid-cols-3 gap-4 mb-8">
+        <input
+          className={INPUT}
+          placeholder="Business name"
+          value={formData.businessName}
+          onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+          required
+        />
+        <input
+          className={INPUT}
+          placeholder="Phone number"
+          value={formData.phone}
+          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          required
+        />
+        <input
+          className={INPUT}
+          placeholder="Zip code"
+          value={formData.zip}
+          onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
+          required
+        />
+        <button type="submit" className={`${BTN_PRIMARY} sm:col-span-3`} disabled={loading}>
+          {loading ? "Scanning..." : "Check My Citations"}
+        </button>
+      </form>
+
+      {results && (
+        <div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            {results.map((result) => (
+              <div
+                key={result.name}
+                className={`p-4 rounded-xl border ${
+                  result.present
+                    ? "bg-emerald-500/10 border-emerald-500/30"
+                    : "bg-red-500/10 border-red-500/30"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-medium truncate">{result.name}</span>
+                  {result.present ? (
+                    <svg className="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <div className="mb-4 text-white/70">
+              Found on {results.filter(r => r.present).length} out of {results.length} directories
+            </div>
+            <button className={BTN_PRIMARY}>Fix My Citations</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function KeywordTeaser() {
+  const [formData, setFormData] = useState({ service: "", location: "" });
+  const [results, setResults] = useState<{ keyword: string; volume: number; ranking?: number }[] | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulate API call with mock data
+    setTimeout(() => {
+      const service = formData.service || "plumber";
+      const location = formData.location || "Encino, CA";
+
+      const mockKeywords = [
+        { keyword: `emergency ${service} ${location.split(",")[0].toLowerCase()}`, volume: 140, ranking: 9 },
+        { keyword: `${service} near me`, volume: 320, ranking: undefined },
+        { keyword: `best ${service} ${location.split(",")[0].toLowerCase()}`, volume: 180, ranking: undefined },
+        { keyword: `${service} ${location.split(",")[0].toLowerCase()} reviews`, volume: 90, ranking: undefined },
+        { keyword: `24/7 ${service} ${location.split(",")[0].toLowerCase()}`, volume: 110, ranking: undefined },
+      ];
+
+      setResults(mockKeywords);
+      setLoading(false);
+    }, 1500);
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4 mb-8">
+        <input
+          className={INPUT}
+          placeholder="Service (e.g., plumber)"
+          value={formData.service}
+          onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+          required
+        />
+        <input
+          className={INPUT}
+          placeholder="Location (e.g., Encino, CA)"
+          value={formData.location}
+          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+          required
+        />
+        <button type="submit" className={`${BTN_PRIMARY} sm:col-span-2`} disabled={loading}>
+          {loading ? "Finding opportunities..." : "Find Keywords"}
+        </button>
+      </form>
+
+      {results && (
+        <div>
+          <div className="space-y-3 mb-8">
+            {results.map((kw, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between gap-4"
+              >
+                <div className="flex-1">
+                  <div className="font-medium text-white">{kw.keyword}</div>
+                  {kw.ranking && (
+                    <div className="mt-1 text-sm text-yellow-400">
+                      You're currently ranking #{kw.ranking}
+                    </div>
+                  )}
+                </div>
+                <div className="text-right">
+                  <div className="text-lg font-semibold text-emerald-400">{kw.volume}</div>
+                  <div className="text-xs text-white/60">searches/mo</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <button className={BTN_PRIMARY}>Unlock Full Keyword Plan</button>
+            <p className="mt-3 text-sm text-white/60">
+              Get personalized keyword strategies + ranking tracker
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ---------------------- UI ----------------------
 export default function GMECityLanding() {
   const auditRef = useRef<HTMLDivElement | null>(null);
@@ -735,6 +916,93 @@ export default function GMECityLanding() {
                 </div>
                 <div className="mt-4 text-sm text-white/70">Improve the score by knocking out the tasks below</div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Feature Section 1: Live SEO Snapshot Score */}
+        <section className={`${CONTAINER} ${SECTION_Y}`}>
+          <div className="prelogin-feature-card">
+            <div className={CARD}>
+              <div className="text-center">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">See Your SEO Score Instantly</h2>
+                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Get a snapshot of where you stand before diving into the full audit</p>
+              </div>
+
+              <div className="mt-8 grid md:grid-cols-2 gap-8 items-center">
+                <div className="text-center md:text-left">
+                  <div className="inline-block">
+                    <div className="text-sm text-white/60 mb-2">Your estimated score</div>
+                    <div className="flex items-end gap-3">
+                      <div className="text-7xl md:text-8xl font-black tracking-tight bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent">78</div>
+                      <div className="pb-4 text-2xl text-white/60">/ 100</div>
+                    </div>
+                    <div className={`mt-4 ${PROGRESS_BG} max-w-xs`}>
+                      <div className={PROGRESS_FG} style={{ width: '78%' }} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                    <span className="text-white/80">Profile completeness</span>
+                    <span className="font-semibold text-emerald-400">65%</span>
+                  </div>
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                    <span className="text-white/80">Reviews count</span>
+                    <span className="font-semibold text-white">42</span>
+                  </div>
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                    <span className="text-white/80">Photos freshness</span>
+                    <span className="font-semibold text-yellow-400">4/mo</span>
+                  </div>
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                    <span className="text-white/80">Posts cadence</span>
+                    <span className="font-semibold text-orange-400">2/mo</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 text-center">
+                <button
+                  onClick={() => {
+                    setTab("audit");
+                    auditRef.current?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className={`${BTN_PRIMARY} px-8`}
+                >
+                  See My Full Audit
+                </button>
+                <p className="mt-3 text-sm text-white/60">No login required • Free forever</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Feature Section 2: Citation Scanner */}
+        <section className={`${CONTAINER} ${SECTION_Y}`}>
+          <div className="prelogin-feature-card">
+            <div className={CARD}>
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Check Your Citation Coverage</h2>
+                <p className="mt-3 text-white/70 max-w-2xl mx-auto">See where your business is listed across the web in seconds</p>
+              </div>
+
+              <CitationScanner />
+            </div>
+          </div>
+        </section>
+
+        {/* Feature Section 3: Keyword Opportunity Teaser */}
+        <section className={`${CONTAINER} ${SECTION_Y}`}>
+          <div className="prelogin-feature-card">
+            <div className={CARD}>
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Discover Keyword Opportunities</h2>
+                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Find the exact keywords your competitors are ranking for</p>
+              </div>
+
+              <KeywordTeaser />
             </div>
           </div>
         </section>
