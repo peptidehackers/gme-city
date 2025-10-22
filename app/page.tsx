@@ -207,21 +207,44 @@ function SEOSnapshotScore() {
     e.preventDefault();
     setLoading(true);
 
-    // TODO: Replace with actual API call to /api/seo-score
-    setTimeout(() => {
-      const mockResults = {
-        localScore: 72,
-        onsiteScore: 64,
-        issues: [
-          "Missing schema markup on homepage",
-          "Low photo freshness (less than 5 photos/month)",
-          "No Google Posts in last 30 days",
-          "Website speed score below 70"
-        ]
-      };
-      setResults(mockResults);
+    try {
+      const response = await fetch('/api/seo-score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          business_name: formData.businessName,
+          website: formData.websiteUrl,
+          address: formData.street,
+          city: formData.city,
+          zip: formData.zip,
+          phone: formData.phone,
+          category: formData.category,
+          gbp_url: formData.gbpUrl,
+          email: formData.email
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate SEO score');
+      }
+
+      const data = await response.json();
+      setResults({
+        localScore: data.local.score,
+        onsiteScore: data.onsite.score,
+        issues: [...data.local.insights, ...data.onsite.insights]
+      });
+    } catch (error) {
+      console.error('Error fetching SEO score:', error);
+      // Fallback to mock data if API fails
+      setResults({
+        localScore: 50,
+        onsiteScore: 50,
+        issues: ['Unable to analyze website. Please try again later.']
+      });
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   return (
