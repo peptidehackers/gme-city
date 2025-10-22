@@ -49,6 +49,87 @@ const BTN_GHOST = `${BTN} border border-white/20 hover:bg-white/10 transition`;
 const PROGRESS_BG = "h-2 w-full rounded-full bg-white/10";
 const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 
+// ---------------------- CSS Animations ----------------------
+const neonAnimationStyles = `
+  @keyframes neon-trail {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes neon-pulse {
+    0%, 100% {
+      opacity: 0.8;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .neon-loading-border {
+    position: relative;
+  }
+
+  .neon-loading-border::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(
+      90deg,
+      #10b981,
+      #34d399,
+      #6ee7b7,
+      #a7f3d0,
+      #6ee7b7,
+      #34d399,
+      #10b981
+    );
+    background-size: 300% 300%;
+    animation: neon-trail 4s linear infinite, neon-pulse 2s ease-in-out infinite;
+    border-radius: 1rem;
+    z-index: 0;
+    filter: blur(12px);
+  }
+
+  .neon-loading-border::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(16, 185, 129, 0.2),
+      rgba(52, 211, 153, 0.4),
+      rgba(110, 231, 183, 0.6),
+      rgba(52, 211, 153, 0.4),
+      rgba(16, 185, 129, 0.2),
+      transparent
+    );
+    background-size: 300% 300%;
+    animation: neon-trail 3s linear infinite;
+    border-radius: 1rem;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .neon-loading-border > * {
+    position: relative;
+    z-index: 1;
+  }
+`;
+
 // ---------------------- Helpers ----------------------
 function notifyError(source: string, err: unknown) {
   console.error(source, err);
@@ -176,8 +257,28 @@ function parseRatingInput(raw: string) {
 
 // ---------------------- Feature Components ----------------------
 
+// SEO Snapshot Score Section Wrapper (with neon loading effect on card)
+function SEOSnapshotSection() {
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <section className={`${CONTAINER} ${SECTION_Y}`}>
+      <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
+      <div className="prelogin-module">
+        <div className={`${CARD} ${loading ? 'neon-loading-border' : ''}`}>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Get Your Complete SEO Snapshot</h2>
+            <p className="mt-3 text-white/70 max-w-2xl mx-auto">See your Local SEO and Onsite SEO scores with detailed issue breakdown</p>
+          </div>
+          <SEOSnapshotScore onLoadingChange={setLoading} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // SEO Snapshot Score Component (2-step form)
-function SEOSnapshotScore() {
+function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     businessName: "",
@@ -207,6 +308,7 @@ function SEOSnapshotScore() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    onLoadingChange(true);
 
     try {
       const response = await fetch('/api/seo-score', {
@@ -247,6 +349,7 @@ function SEOSnapshotScore() {
       });
     } finally {
       setLoading(false);
+      onLoadingChange(false);
     }
   };
 
@@ -1198,18 +1301,7 @@ export default function GMECityLanding() {
         </section>
 
         {/* Feature Section 1: SEO Snapshot Score (Local + Onsite) */}
-        <section className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="prelogin-module">
-            <div className={CARD}>
-              <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Get Your Complete SEO Snapshot</h2>
-                <p className="mt-3 text-white/70 max-w-2xl mx-auto">See your Local SEO and Onsite SEO scores with detailed issue breakdown</p>
-              </div>
-
-              <SEOSnapshotScore />
-            </div>
-          </div>
-        </section>
+        <SEOSnapshotSection />
 
         {/* Feature Section 2: Citation Coverage Check */}
         <section className={`${CONTAINER} ${SECTION_Y}`}>
