@@ -1282,9 +1282,10 @@ function KeywordOpportunityScanner() {
 }
 
 // GBP Audit Form Component
-function GBPAuditForm({ onAuditComplete, onLoadingChange }: {
+function GBPAuditForm({ onAuditComplete, onLoadingChange, onDataLoaded }: {
   onAuditComplete: (audit: AuditInput) => void;
   onLoadingChange: (loading: boolean) => void;
+  onDataLoaded: (loaded: boolean) => void;
 }) {
   const [formData, setFormData] = useState({
     businessName: "",
@@ -1335,15 +1336,18 @@ function GBPAuditForm({ onAuditComplete, onLoadingChange }: {
 
       if (!data.success || !data.found) {
         setError(data.error || 'No Google Business Profile found. Try adding more details like address or phone number.');
+        onDataLoaded(false);
         return;
       }
 
       if (data.auditData) {
         onAuditComplete(data.auditData);
+        onDataLoaded(true);
       }
     } catch (err) {
       console.error('GBP audit error:', err);
       setError('Unable to fetch audit data. Please try again.');
+      onDataLoaded(false);
     } finally {
       setLoading(false);
       onLoadingChange(false);
@@ -1457,6 +1461,7 @@ export default function GMECityLanding() {
     napConsistent: false,
   });
   const [auditLoading, setAuditLoading] = useState(false);
+  const [hasAuditData, setHasAuditData] = useState(false);
   const { score, breakdown} = computeScore(audit);
   const animatedScore = useAnimatedNumber(score);
   const tasks = taskList(audit);
@@ -2025,11 +2030,11 @@ export default function GMECityLanding() {
                   <h2 className="text-2xl font-semibold tracking-tight">Instant Google Business Profile audit</h2>
                   <p className="mt-1 text-white/70 text-sm">Enter your business details to get your automated GBP audit</p>
                 </div>
-                <GBPAuditForm onAuditComplete={setAudit} onLoadingChange={setAuditLoading} />
+                <GBPAuditForm onAuditComplete={setAudit} onLoadingChange={setAuditLoading} onDataLoaded={setHasAuditData} />
               </div>
 
               <div className={CARD}>
-                {!audit.businessName && !auditLoading ? (
+                {!hasAuditData && !auditLoading ? (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
                     <div className="w-16 h-16 rounded-full bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center mb-4">
                       <svg className="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2038,6 +2043,15 @@ export default function GMECityLanding() {
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-2">Ready to See Your Score?</h3>
                     <p className="text-white/70 max-w-sm">Enter your business details on the left to get your instant GBP audit with personalized action plan</p>
+                  </div>
+                ) : auditLoading ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <svg className="animate-spin h-12 w-12 text-emerald-400 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <h3 className="text-xl font-semibold text-white mb-2">Analyzing Your Profile...</h3>
+                    <p className="text-white/70 max-w-sm">Fetching data from Google Maps & Business APIs</p>
                   </div>
                 ) : (
                   <>
@@ -2129,7 +2143,7 @@ export default function GMECityLanding() {
           )}
 
           {/* GBP Audit CTA */}
-          {tab === "audit" && audit.businessName && (
+          {tab === "audit" && hasAuditData && (
             <MeetingCTACard
               title="Ready to Dominate Local Search?"
               description="Your audit reveals exactly where you stand. Now let's build a custom action plan to crush your competition and own your local market."
