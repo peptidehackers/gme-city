@@ -2083,7 +2083,7 @@ export default function GMECityLanding() {
                 <div className="mt-6">
                   <button
                     className={`${BTN_PRIMARY} w-full flex items-center justify-center gap-2`}
-                    onClick={() => window.open('https://calendly.com/your-booking-link', '_blank')}
+                    onClick={() => window.open('https://calendly.com/peptidehackers-info/30min', '_blank')}
                   >
                     Book a Call with us to Help
                   </button>
