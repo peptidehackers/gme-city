@@ -798,8 +798,33 @@ function CitationCoverageCheck({ onLoadingChange }: { onLoadingChange: (loading:
   );
 }
 
+// Keyword Opportunity Scanner Section Wrapper (with loading animation)
+function KeywordScannerSection() {
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <section className={`${CONTAINER} ${SECTION_Y}`}>
+      <div className="prelogin-module">
+        <div className={`${CARD} relative`}>
+          {loading && (
+            <svg className="loading-border-animation" xmlns="http://www.w3.org/2000/svg">
+              <rect className="border-glow-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" />
+              <rect className="border-trail-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" />
+            </svg>
+          )}
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Find High-Intent Keywords</h2>
+            <p className="mt-3 text-white/70 max-w-2xl mx-auto">Discover the keywords your competitors are ranking for</p>
+          </div>
+          <KeywordOpportunityScanner onLoadingChange={setLoading} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Keyword Opportunity Scanner Component
-function KeywordOpportunityScanner() {
+function KeywordOpportunityScanner({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
   const [formData, setFormData] = useState({ websiteUrl: "", category: "", city: "", competitorUrl: "" });
   const [results, setResults] = useState<{ keyword: string; volume: number; ranking?: number; opportunity?: string }[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -818,6 +843,7 @@ function KeywordOpportunityScanner() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    onLoadingChange(true);
     setError(null);
 
     try {
@@ -846,6 +872,7 @@ function KeywordOpportunityScanner() {
       setResults(null);
     } finally {
       setLoading(false);
+      onLoadingChange(false);
     }
   };
 
@@ -1550,18 +1577,7 @@ export default function GMECityLanding() {
         <CitationCoverageSection />
 
         {/* Feature Section 3: Keyword Opportunity Scanner */}
-        <section className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="prelogin-module">
-            <div className={CARD}>
-              <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Find High-Intent Keywords</h2>
-                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Discover the keywords your competitors are ranking for</p>
-              </div>
-
-              <KeywordOpportunityScanner />
-            </div>
-          </div>
-        </section>
+        <KeywordScannerSection />
 
         {/* Tabs content */}
         <section id="start" ref={auditRef} className={`${CONTAINER} ${SECTION_Y}`}>
