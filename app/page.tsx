@@ -282,6 +282,26 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
   } | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Helper: Format phone number as 123-456-7890
+  const formatPhoneNumber = (value: string): string => {
+    const cleaned = value.replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+    if (match) {
+      return [match[1], match[2], match[3]].filter(Boolean).join('-');
+    }
+    return value;
+  };
+
+  // Helper: Add https:// prefix if missing
+  const normalizeUrl = (value: string): string => {
+    const trimmed = value.trim();
+    if (!trimmed) return '';
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    return `https://${trimmed}`;
+  };
+
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
     setStep(2);
@@ -350,10 +370,11 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
               />
               <input
                 className={INPUT}
-                placeholder="Website URL"
-                type="url"
+                placeholder="Website URL (e.g., example.com)"
+                type="text"
                 value={formData.websiteUrl}
                 onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+                onBlur={(e) => setFormData({ ...formData, websiteUrl: normalizeUrl(e.target.value) })}
                 required
               />
               <input
@@ -396,17 +417,19 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
             <div className="grid sm:grid-cols-2 gap-4">
               <input
                 className={INPUT}
-                placeholder="Phone Number (optional)"
+                placeholder="Phone Number (123-456-7890)"
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, phone: formatPhoneNumber(e.target.value) })}
+                maxLength={12}
               />
               <input
                 className={INPUT}
                 placeholder="Google Business Profile URL (optional)"
-                type="url"
+                type="text"
                 value={formData.gbpUrl}
                 onChange={(e) => setFormData({ ...formData, gbpUrl: e.target.value })}
+                onBlur={(e) => setFormData({ ...formData, gbpUrl: normalizeUrl(e.target.value) })}
               />
               <input
                 className={`${INPUT} sm:col-span-2`}
@@ -623,6 +646,16 @@ function KeywordOpportunityScanner() {
   const [results, setResults] = useState<{ keyword: string; volume: number; ranking?: number }[] | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Helper: Add https:// prefix if missing
+  const normalizeUrl = (value: string): string => {
+    const trimmed = value.trim();
+    if (!trimmed) return '';
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    return `https://${trimmed}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -650,10 +683,11 @@ function KeywordOpportunityScanner() {
       <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4 mb-8">
         <input
           className={`${INPUT} sm:col-span-2`}
-          placeholder="Website URL (required)"
-          type="url"
+          placeholder="Website URL (e.g., example.com)"
+          type="text"
           value={formData.websiteUrl}
           onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+          onBlur={(e) => setFormData({ ...formData, websiteUrl: normalizeUrl(e.target.value) })}
           required
         />
         <input
@@ -672,9 +706,10 @@ function KeywordOpportunityScanner() {
         <input
           className={`${INPUT} sm:col-span-2`}
           placeholder="Competitor Website URL (optional)"
-          type="url"
+          type="text"
           value={formData.competitorUrl}
           onChange={(e) => setFormData({ ...formData, competitorUrl: e.target.value })}
+          onBlur={(e) => setFormData({ ...formData, competitorUrl: normalizeUrl(e.target.value) })}
         />
         <button type="submit" className={`${BTN_PRIMARY} sm:col-span-2`} disabled={loading}>
           {loading ? "Finding keywords..." : "Find My Keywords"}
