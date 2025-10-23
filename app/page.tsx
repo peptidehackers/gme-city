@@ -263,8 +263,8 @@ function MeetingCTACard({
         <div className="relative z-10">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-400/30 border border-emerald-400/40 text-emerald-400 text-base font-semibold mb-5 animate-pulse">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-400/40 border-2 border-emerald-400/60 text-emerald-300 text-base font-bold mb-5 shadow-lg shadow-emerald-400/20">
+              <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
               Unlock Your Complete {featureName} Analysis
@@ -274,13 +274,15 @@ function MeetingCTACard({
           </div>
 
           {/* Benefits Grid */}
-          <div className="grid md:grid-cols-2 gap-4 mb-10">
+          <div className="grid md:grid-cols-2 gap-5 mb-10">
             {benefits.map((benefit, idx) => (
-              <div key={idx} className="flex items-start gap-3 p-5 rounded-xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-white/10 hover:border-emerald-400/30 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:shadow-emerald-400/10">
-                <svg className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="text-white/90 font-medium">{benefit}</span>
+              <div key={idx} className="group relative flex items-start gap-4 p-6 rounded-xl bg-gradient-to-br from-emerald-500/20 via-teal-500/10 to-emerald-500/5 border-2 border-emerald-400/40 hover:border-emerald-400/70 hover:scale-[1.03] transition-all duration-200 hover:shadow-2xl hover:shadow-emerald-400/30 backdrop-blur-sm">
+                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center group-hover:bg-emerald-400/30 group-hover:border-emerald-400/60 transition-all duration-200">
+                  <svg className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-white font-semibold text-base leading-relaxed">{benefit}</span>
               </div>
             ))}
           </div>
