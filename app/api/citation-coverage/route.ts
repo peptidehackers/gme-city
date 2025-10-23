@@ -270,17 +270,10 @@ async function checkGoogleBusinessProfile(
             }
 
             // 4. BUSINESS INFORMATION COMPLETENESS
-            const hasDescription = bestMatch.description && bestMatch.description.length > 50;
             const hasHours = bestMatch.work_hours?.timetable;
             const hasWebsite = bestMatch.domain;
             const hasPhone = bestMatch.phone;
             const hasCategory = bestMatch.category;
-
-            if (hasDescription) {
-              positives.push(`Business description added`);
-            } else {
-              improvements.push(`Missing description - add 250+ words with service keywords`);
-            }
 
             if (hasHours) {
               positives.push(`Business hours listed`);
