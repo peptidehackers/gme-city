@@ -537,35 +537,55 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
   );
 }
 
-// Citation Coverage Check Component
+// Citation Coverage Check Component (GBP Focus)
 function CitationCoverageCheck() {
-  const [formData, setFormData] = useState({ businessName: "", phone: "", street: "", zip: "" });
-  const [results, setResults] = useState<{ name: string; present: boolean }[] | null>(null);
+  const [formData, setFormData] = useState({ businessName: "", city: "", zip: "" });
+  const [results, setResults] = useState<{
+    hasGBP: boolean;
+    gbpData?: { name: string; rating: number; reviewCount: number };
+    insights: string[];
+  } | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const citationSources = [
-    "Yelp", "Apple Maps", "BBB", "Facebook", "Bing Places",
-    "Yellow Pages", "Foursquare", "Angi", "Thumbtack", "MapQuest"
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // TODO: Replace with actual API call to /api/citations
-    setTimeout(() => {
-      const mockResults = citationSources.map((name) => ({
-        name,
-        present: Math.random() > 0.4
-      }));
-      setResults(mockResults);
+    try {
+      const response = await fetch('/api/citation-coverage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          business_name: formData.businessName,
+          city: formData.city,
+          zip: formData.zip
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to check GBP');
+      }
+
+      const data = await response.json();
+      setResults({
+        hasGBP: data.hasGBP,
+        gbpData: data.gbpData,
+        insights: data.insights || []
+      });
+    } catch (error) {
+      console.error('GBP check error:', error);
+      setResults({
+        hasGBP: false,
+        insights: ['Unable to verify Google Business Profile. Please try again.']
+      });
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4 mb-8">
+    <div className="max-w-3xl mx-auto">
+      <form onSubmit={handleSubmit} className="grid sm:grid-cols-3 gap-4 mb-8">
         <input
           className={INPUT}
           placeholder="Business Name"
@@ -575,17 +595,9 @@ function CitationCoverageCheck() {
         />
         <input
           className={INPUT}
-          placeholder="Phone Number"
-          type="tel"
-          value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          required
-        />
-        <input
-          className={INPUT}
-          placeholder="Street Address"
-          value={formData.street}
-          onChange={(e) => setFormData({ ...formData, street: e.target.value })}
+          placeholder="City"
+          value={formData.city}
+          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
           required
         />
         <input
@@ -595,44 +607,66 @@ function CitationCoverageCheck() {
           onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
           required
         />
-        <button type="submit" className={`${BTN_PRIMARY} sm:col-span-2`} disabled={loading}>
-          {loading ? "Checking..." : "Check My Listings"}
+        <button type="submit" className={`${BTN_PRIMARY} sm:col-span-3`} disabled={loading}>
+          {loading ? "Checking..." : "Check My Google Business Profile"}
         </button>
       </form>
 
       {results && (
         <div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-            {results.map((result) => (
-              <div
-                key={result.name}
-                className={`p-4 rounded-xl border ${
-                  result.present
-                    ? "bg-emerald-500/10 border-emerald-500/30"
-                    : "bg-red-500/10 border-red-500/30"
-                }`}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm font-medium truncate">{result.name}</span>
-                  {result.present ? (
-                    <svg className="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  )}
-                </div>
+          {/* GBP Status Card */}
+          <div className={`p-6 rounded-xl border mb-6 ${
+            results.hasGBP
+              ? "bg-emerald-500/10 border-emerald-500/30"
+              : "bg-red-500/10 border-red-500/30"
+          }`}>
+            <div className="flex items-start gap-4">
+              {results.hasGBP ? (
+                <svg className="w-12 h-12 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ) : (
+                <svg className="w-12 h-12 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+              <div className="flex-1">
+                <h3 className="text-xl font-bold mb-2">
+                  {results.hasGBP ? "Google Business Profile Found!" : "No Google Business Profile Found"}
+                </h3>
+                {results.gbpData && (
+                  <div className="text-white/80 mb-3">
+                    <p className="font-medium">{results.gbpData.name}</p>
+                    <p>⭐ {results.gbpData.rating}/5.0 ({results.gbpData.reviewCount} reviews)</p>
+                  </div>
+                )}
+                <ul className="space-y-2 text-white/70">
+                  {results.insights.map((insight, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-emerald-400 mt-1">•</span>
+                      <span>{insight}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            ))}
+            </div>
           </div>
 
-          <div className="text-center">
-            <div className="mb-4 text-white/70">
-              Found on {results.filter(r => r.present).length} out of {results.length} directories
-            </div>
-            <button className={BTN_PRIMARY}>Fix My Citations</button>
+          {/* Full Citation Audit CTA */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+            <h3 className="text-2xl font-bold mb-3">Want a Complete Citation Audit?</h3>
+            <p className="text-white/70 mb-6 max-w-xl mx-auto">
+              Get a comprehensive review of your business listings across 40+ top directories including
+              Yelp, Apple Maps, Facebook, Bing Places, and more.
+            </p>
+            <a
+              href="https://calendly.com/your-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={BTN_PRIMARY}
+            >
+              Schedule Free Citation Audit
+            </a>
           </div>
         </div>
       )}
@@ -1320,13 +1354,13 @@ export default function GMECityLanding() {
         {/* Feature Section 1: SEO Snapshot Score (Local + Onsite) */}
         <SEOSnapshotSection />
 
-        {/* Feature Section 2: Citation Coverage Check */}
+        {/* Feature Section 2: Google Business Profile Check */}
         <section className={`${CONTAINER} ${SECTION_Y}`}>
           <div className="feature-card">
             <div className={CARD}>
               <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Citation Coverage Check</h2>
-                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Discover where your business is listed across top directories</p>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Google Business Profile Checker</h2>
+                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Verify your Google Business Profile presence instantly — the #1 ranking factor for local search</p>
               </div>
 
               <CitationCoverageCheck />
