@@ -658,7 +658,7 @@ function CitationCoverageCheck() {
           onChange={(e) => setFormData({ ...formData, category: e.target.value })}
         />
         <button type="submit" className={`${BTN_PRIMARY} sm:col-span-2`} disabled={loading}>
-          {loading ? "Checking..." : "Check My Google Business Profile"}
+          {loading ? "Checking..." : "See Citations"}
         </button>
       </form>
 
@@ -1411,7 +1411,7 @@ export default function GMECityLanding() {
           <div className="feature-card">
             <div className={CARD}>
               <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Google Business Profile Checker</h2>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Citation Coverage Checker</h2>
                 <p className="mt-3 text-white/70 max-w-2xl mx-auto">Verify your Google Business Profile presence instantly — the #1 ranking factor for local search</p>
               </div>
 
