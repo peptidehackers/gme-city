@@ -537,8 +537,45 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
   );
 }
 
+// Citation Coverage Section Wrapper with Loading Animation
+function CitationCoverageSection() {
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <section className={`${CONTAINER} ${SECTION_Y}`}>
+      <div className="feature-card">
+        <div className={CARD} style={{ position: 'relative' }}>
+          {loading && (
+            <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+              <defs>
+                <linearGradient id="emeraldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#10b981" />
+                  <stop offset="50%" stopColor="#34d399" />
+                  <stop offset="100%" stopColor="#6ee7b7" />
+                </linearGradient>
+                <linearGradient id="emeraldGlowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="rgba(16, 185, 129, 0.6)" />
+                  <stop offset="50%" stopColor="rgba(52, 211, 153, 0.8)" />
+                  <stop offset="100%" stopColor="rgba(110, 231, 183, 0.6)" />
+                </linearGradient>
+              </defs>
+              <rect className="border-glow-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" />
+              <rect className="border-trail-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" />
+            </svg>
+          )}
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Citation Coverage Checker</h2>
+            <p className="mt-3 text-white/70 max-w-2xl mx-auto">Verify your Google Business Profile presence instantly — the #1 ranking factor for local search</p>
+          </div>
+          <CitationCoverageCheck onLoadingChange={setLoading} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Citation Coverage Check Component (GBP Focus)
-function CitationCoverageCheck() {
+function CitationCoverageCheck({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
   const [formData, setFormData] = useState({
     businessName: "",
     address: "",
@@ -569,6 +606,7 @@ function CitationCoverageCheck() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    onLoadingChange(true);
 
     try {
       const response = await fetch('/api/citation-coverage', {
@@ -605,6 +643,7 @@ function CitationCoverageCheck() {
       });
     } finally {
       setLoading(false);
+      onLoadingChange(false);
     }
   };
 
@@ -1439,19 +1478,8 @@ export default function GMECityLanding() {
         {/* Feature Section 1: SEO Snapshot Score (Local + Onsite) */}
         <SEOSnapshotSection />
 
-        {/* Feature Section 2: Google Business Profile Check */}
-        <section className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="feature-card">
-            <div className={CARD}>
-              <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Citation Coverage Checker</h2>
-                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Verify your Google Business Profile presence instantly — the #1 ranking factor for local search</p>
-              </div>
-
-              <CitationCoverageCheck />
-            </div>
-          </div>
-        </section>
+        {/* Feature Section 2: Citation Coverage Check */}
+        <CitationCoverageSection />
 
         {/* Feature Section 3: Keyword Opportunity Scanner */}
         <section className={`${CONTAINER} ${SECTION_Y}`}>
