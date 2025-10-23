@@ -222,6 +222,23 @@ async function checkGoogleBusinessProfile(
               bestMatch.rating?.votes_count < 10 ? 'Get more reviews to improve local rankings' : 'Strong review count'
             ];
 
+            // Add verification status insight
+            if (bestMatch.is_claimed === false) {
+              insights.push('⚠️ Profile is not claimed - claim it to manage your listing');
+            } else if (bestMatch.is_claimed === true) {
+              insights.push('✓ Profile is claimed and verified');
+            }
+
+            // Add photo count insight
+            const photoCount = bestMatch.total_photos || 0;
+            if (photoCount === 0) {
+              insights.push('📸 No photos - add images to improve engagement by 35%');
+            } else if (photoCount < 10) {
+              insights.push(`📸 ${photoCount} photos - add more to boost visibility`);
+            } else {
+              insights.push(`📸 ${photoCount} photos - good visual presence`);
+            }
+
             return {
               found: true,
               hasGBP: true,
