@@ -335,119 +335,102 @@ async function getGBPDataFromDataForSEO(gbpUrl: string | null, businessName: str
   }
 }
 
-// Helper: Calculate Local SEO Score (0-100) - With real GBP data from DataForSEO
+// Helper: Calculate Local SEO Score (0-100) - Local ranking signals only
 function calculateLocalScore(data: {
   hasGBPUrl: boolean;
   gbpData?: any;
   hasNAP: boolean;
   phoneValid: boolean;
-  hasSchema: boolean;
   hasCityName: boolean;
   hasCategoryKeyword: boolean;
-  hasInternalLinks: boolean;
-  hasAltText: boolean;
-  hasKeywordRelevance: boolean;
 }): { score: number; insights: string[] } {
   let score = 0;
   const insights: string[] = [];
 
-  // GBP Presence & Quality (35 points total)
+  // ========================================
+  // GOOGLE BUSINESS PROFILE (56 points)
+  // ========================================
+
   if (data.gbpData && data.gbpData.found) {
-    // Rating quality (15 points - increased from 10)
+    // GBP URL provided (11 points)
+    if (data.hasGBPUrl) {
+      score += 11;
+    }
+
+    // Rating quality (20 points)
     if (data.gbpData.rating) {
       if (data.gbpData.rating >= 4.5) {
-        score += 15;
+        score += 20;
       } else if (data.gbpData.rating >= 4.0) {
-        score += 11;
+        score += 15;
         insights.push(`GBP rating is ${data.gbpData.rating.toFixed(1)}/5.0 (aim for 4.5+)`);
       } else if (data.gbpData.rating >= 3.5) {
-        score += 6;
+        score += 8;
         insights.push(`Low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (critical issue)`);
       } else if (data.gbpData.rating > 0) {
-        score += 3;
+        score += 4;
         insights.push(`Very low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (urgent: address negative reviews)`);
       }
     } else {
       insights.push('No rating data found on Google Business Profile');
     }
 
-    // Review count (20 points - increased from 15)
+    // Review count (25 points)
     if (data.gbpData.reviewCount >= 100) {
-      score += 20;
+      score += 25;
     } else if (data.gbpData.reviewCount >= 50) {
-      score += 17;
+      score += 21;
     } else if (data.gbpData.reviewCount >= 25) {
-      score += 13;
+      score += 16;
       insights.push(`GBP has ${data.gbpData.reviewCount} reviews (aim for 50+ for maximum impact)`);
     } else if (data.gbpData.reviewCount >= 10) {
-      score += 8;
+      score += 10;
       insights.push(`GBP has only ${data.gbpData.reviewCount} reviews (aim for 50+)`);
     } else if (data.gbpData.reviewCount > 0) {
-      score += 4;
+      score += 5;
       insights.push(`GBP has only ${data.gbpData.reviewCount} reviews (critical: aim for 10+ minimum)`);
     } else {
       insights.push('No reviews found on Google Business Profile');
     }
-
-    // Note: Photo count removed due to DataForSEO API limitations
-    // Points redistributed to rating (10→15) and reviews (15→20)
   } else {
     insights.push('Google Business Profile not found or could not be accessed');
   }
 
-  // NAP presence - name, phone, zip provided (10 points)
+  // ========================================
+  // NAP CONSISTENCY (22 points)
+  // ========================================
+
+  // NAP presence - name, phone, zip provided (12 points)
   if (data.hasNAP) {
-    score += 10;
+    score += 12;
   } else {
     insights.push('Incomplete NAP data (Name, Address, Phone)');
   }
 
-  // Phone format valid (8 points)
+  // Phone format valid (10 points)
   if (data.phoneValid) {
-    score += 8;
+    score += 10;
   } else {
     insights.push('Phone number not in valid US format');
   }
 
-  // LocalBusiness schema present (15 points)
-  if (data.hasSchema) {
-    score += 15;
-  } else {
-    insights.push('No LocalBusiness schema found on homepage');
-  }
+  // ========================================
+  // LOCAL CONTENT SIGNALS (22 points)
+  // ========================================
 
-  // Homepage contains city name (10 points)
+  // Homepage contains city name (12 points)
   if (data.hasCityName) {
-    score += 10;
+    score += 12;
   } else {
-    insights.push('City name not mentioned on homepage');
+    insights.push('City name not mentioned on homepage - critical for local SEO');
   }
 
-  // Homepage contains category keyword (8 points)
+  // Homepage contains category keyword (10 points)
   if (data.hasCategoryKeyword) {
-    score += 8;
+    score += 10;
   } else {
     insights.push('Business category not found in title, headings, or meta description');
   }
-
-  // Internal links or contact page present (7 points)
-  if (data.hasInternalLinks) {
-    score += 7;
-  } else {
-    insights.push('No internal links or location-specific content found');
-  }
-
-  // Alt text on homepage images (7 points - increased from 5, absorbed citation points)
-  if (data.hasAltText) {
-    score += 7;
-  } else {
-    insights.push('Most images missing alt text attributes');
-  }
-
-  // Note: Citation checking removed. GBP (Google Business Profile) is the primary
-  // local citation signal and is already weighted heavily in the score above.
-  // Additional citations across directories like Yelp, YellowPages, etc. would
-  // require API integration or advanced scraping tools (Puppeteer).
 
   return { score: Math.round(score), insights };
 }
@@ -466,29 +449,29 @@ function calculateOnsiteScore(psiData: any, homepageData: any): { score: number;
 
   try {
     // ========================================
-    // GOOGLE PAGESPEED INSIGHTS (55 points)
+    // GOOGLE PAGESPEED INSIGHTS (48 points)
     // ========================================
 
     if (psiData) {
-      // Performance (20 points)
+      // Performance (17 points)
       const performanceScore = psiData.lighthouseResult?.categories?.performance?.score || 0;
-      score += performanceScore * 20;
+      score += performanceScore * 17;
 
       if (performanceScore < 0.7) {
         insights.push(`Page speed score is ${Math.round(performanceScore * 100)}/100 (aim for 70+)`);
       }
 
-      // SEO Audit (20 points)
+      // SEO Audit (17 points)
       const seoScore = psiData.lighthouseResult?.categories?.seo?.score || 0;
-      score += seoScore * 20;
+      score += seoScore * 17;
 
       if (seoScore < 0.9) {
         insights.push(`Google SEO audit score is ${Math.round(seoScore * 100)}/100 (aim for 90+)`);
       }
 
-      // Accessibility (10 points)
+      // Accessibility (9 points)
       const accessibilityScore = psiData.lighthouseResult?.categories?.accessibility?.score || 0;
-      score += accessibilityScore * 10;
+      score += accessibilityScore * 9;
 
       if (accessibilityScore < 0.9) {
         insights.push(`Accessibility score is ${Math.round(accessibilityScore * 100)}/100 (impacts SEO & UX)`);
@@ -504,13 +487,13 @@ function calculateOnsiteScore(psiData: any, homepageData: any): { score: number;
     }
 
     // ========================================
-    // HTML STRUCTURE (25 points)
+    // HTML STRUCTURE (32 points)
     // ========================================
 
     if (homepageData) {
-      // H1 tag (9 points)
+      // H1 tag (8 points)
       if (homepageData.hasH1) {
-        score += 9;
+        score += 8;
       } else {
         insights.push('No H1 tag found on homepage');
       }
@@ -522,11 +505,29 @@ function calculateOnsiteScore(psiData: any, homepageData: any): { score: number;
         insights.push('Missing meta description tag');
       }
 
-      // Title tag (8 points)
+      // Title tag (7 points)
       if (homepageData.hasTitle) {
-        score += 8;
+        score += 7;
       } else {
         insights.push('Missing or empty title tag');
+      }
+
+      // Schema markup (7 points) - moved from Local SEO
+      const hasSchema = homepageData.hasSchema || psiData?.lighthouseResult?.audits?.['structured-data']?.score === 1;
+      if (hasSchema) {
+        score += 7;
+      } else {
+        insights.push('No LocalBusiness schema markup found (critical for local SEO)');
+      }
+    }
+
+    // Viewport meta tag (3 points) - re-added
+    if (psiData) {
+      const hasViewport = psiData.lighthouseResult?.audits?.['viewport']?.score === 1;
+      if (hasViewport) {
+        score += 3;
+      } else {
+        insights.push('Missing viewport meta tag (required for mobile-friendliness)');
       }
     }
 
@@ -559,11 +560,11 @@ function calculateOnsiteScore(psiData: any, homepageData: any): { score: number;
         insights.push(`Only ${homepageData.internalLinks} internal links found (critical: aim for 20+)`);
       }
 
-      // Alt text on images (5 points)
+      // Alt text on images (4 points)
       if (homepageData.altTextPercentage >= 80) {
-        score += 5;
+        score += 4;
       } else if (homepageData.altTextPercentage >= 50) {
-        score += 3;
+        score += 2;
         insights.push(`Only ${Math.round(homepageData.altTextPercentage)}% of images have alt text (aim for 80%+)`);
       } else {
         insights.push(`Only ${Math.round(homepageData.altTextPercentage)}% of images have alt text (critical for accessibility & SEO)`);
@@ -607,12 +608,9 @@ export async function POST(request: NextRequest) {
     // const keywordData = await getOrganicKeywords(body.website, body.category);
 
     // 5. Analyze local signals (Note: Citation checking removed - GBP is primary signal)
-    const hasSchema = homepageData?.hasSchema || psiData?.lighthouseResult?.audits?.['structured-data']?.score === 1;
     const phoneValid = isValidUSPhone(body.phone);
     const hasCityName = homepageData?.rawHtml ? containsCityName(homepageData.rawHtml, body.city) : false;
     const hasCategoryKeyword = homepageData?.rawHtml ? containsCategoryKeyword(homepageData.rawHtml, body.category) : false;
-    const hasInternalLinks = (homepageData?.internalLinks || 0) >= 5;
-    const hasAltText = (homepageData?.altTextPercentage || 0) >= 50;
     const hasNAP = !!(body.business_name && body.phone && body.zip);
 
     // 7. Calculate scores with real GBP data
@@ -621,12 +619,8 @@ export async function POST(request: NextRequest) {
       gbpData,
       hasNAP,
       phoneValid,
-      hasSchema,
       hasCityName,
-      hasCategoryKeyword,
-      hasInternalLinks,
-      hasAltText,
-      hasKeywordRelevance: false // TODO: Implement DataForSEO keyword matching
+      hasCategoryKeyword
     });
 
     const onsiteResult = calculateOnsiteScore(psiData, homepageData);
