@@ -253,7 +253,7 @@ function MeetingCTACard({
   benefits,
   featureName,
   urgencyMessage = "Limited consultation slots available this week",
-  calendlyUrl = "https://calendly.com/your-link"
+  calendlyUrl = "https://calendly.com/peptidehackers-info/30min"
 }: MeetingCTAProps) {
   return (
     <div className="my-12">
