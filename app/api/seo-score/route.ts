@@ -287,7 +287,6 @@ async function getGBPDataFromDataForSEO(gbpUrl: string | null, businessName: str
 
 // Helper: Calculate Local SEO Score (0-100) - Local ranking signals only
 function calculateLocalScore(data: {
-  hasGBPUrl: boolean;
   gbpData?: any;
   hasNAP: boolean;
   phoneValid: boolean;
@@ -302,23 +301,18 @@ function calculateLocalScore(data: {
   // ========================================
 
   if (data.gbpData && data.gbpData.found) {
-    // GBP URL provided (11 points)
-    if (data.hasGBPUrl) {
-      score += 11;
-    }
-
-    // Rating quality (20 points)
+    // Rating quality (31 points - increased from 20 to redistribute the 11 from removed URL field)
     if (data.gbpData.rating) {
       if (data.gbpData.rating >= 4.5) {
-        score += 20;
+        score += 31;
       } else if (data.gbpData.rating >= 4.0) {
-        score += 15;
+        score += 23;
         insights.push(`GBP rating is ${data.gbpData.rating.toFixed(1)}/5.0 (aim for 4.5+)`);
       } else if (data.gbpData.rating >= 3.5) {
-        score += 8;
+        score += 12;
         insights.push(`Low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (critical issue)`);
       } else if (data.gbpData.rating > 0) {
-        score += 4;
+        score += 6;
         insights.push(`Very low GBP rating of ${data.gbpData.rating.toFixed(1)}/5.0 (urgent: address negative reviews)`);
       }
     } else {
@@ -563,7 +557,6 @@ export async function POST(request: NextRequest) {
 
     // 7. Calculate scores with real GBP data
     const localResult = calculateLocalScore({
-      hasGBPUrl: !!body.gbp_url,
       gbpData,
       hasNAP,
       phoneValid,

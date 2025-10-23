@@ -279,7 +279,6 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
     city: "",
     zip: "",
     phone: "",
-    gbpUrl: "",
     email: "",
     consent: false
   });
@@ -333,7 +332,6 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
           zip: formData.zip,
           phone: formData.phone,
           category: formData.category,
-          gbp_url: formData.gbpUrl,
           email: formData.email
         })
       });
@@ -434,14 +432,6 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
               />
               <input
                 className={INPUT}
-                placeholder="Google Business Profile URL (optional)"
-                type="text"
-                value={formData.gbpUrl}
-                onChange={(e) => setFormData({ ...formData, gbpUrl: e.target.value })}
-                onBlur={(e) => setFormData({ ...formData, gbpUrl: normalizeUrl(e.target.value) })}
-              />
-              <input
-                className={`${INPUT} sm:col-span-2`}
                 placeholder="Email (optional, for results delivery)"
                 type="email"
                 value={formData.email}
