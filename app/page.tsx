@@ -52,10 +52,10 @@ const PROGRESS_BG = "h-2 w-full rounded-full bg-white/10";
 const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 
 // High-urgency CTA tokens
-const CTA_CARD = "relative rounded-2xl border-2 border-emerald-400/50 bg-gradient-to-br from-emerald-500/10 via-cyan-500/5 to-emerald-500/10 p-8 shadow-2xl shadow-emerald-500/20 backdrop-blur-sm";
-const CTA_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 rounded-2xl blur-xl opacity-30 animate-pulse";
-const LOCKED_CONTENT = "relative rounded-xl border border-white/20 bg-white/5 p-6 overflow-hidden";
-const LOCKED_OVERLAY = "absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/80 backdrop-blur-sm flex items-center justify-center";
+const CTA_CARD = "relative rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/5 via-transparent to-emerald-500/5 p-8 shadow-2xl shadow-black/40 backdrop-blur-sm";
+const CTA_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-60";
+const LOCKED_CONTENT = "relative rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 overflow-hidden backdrop-blur-sm";
+const LOCKED_OVERLAY = "absolute inset-0 flex items-center justify-center";
 
 // ---------------------- CSS Animations ----------------------
 const neonAnimationStyles = `
@@ -639,20 +639,49 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
 
           {/* Locked Content Preview */}
           <div className={LOCKED_CONTENT}>
-            <div className={LOCKED_OVERLAY}>
-              <div className="text-center">
-                <svg className="w-12 h-12 text-emerald-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                <p className="text-white font-semibold text-lg">47-Point Comprehensive Analysis Locked</p>
-                <p className="text-white/70 text-sm mt-1">Book a free consultation to unlock</p>
+            <div className="relative filter blur-[2px] opacity-40 pointer-events-none select-none space-y-4">
+              <h3 className="text-lg font-semibold text-white mb-3">Advanced SEO Analysis</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">⚠</span>
+                    <span className="text-sm text-white/90">Missing meta description optimization</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">⚠</span>
+                    <span className="text-sm text-white/90">Slow server response time (2.3s)</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">⚠</span>
+                    <span className="text-sm text-white/90">Internal linking structure needs work</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">⚠</span>
+                    <span className="text-sm text-white/90">Canonical URL issues detected</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">⚠</span>
+                    <span className="text-sm text-white/90">Image compression needed</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">⚠</span>
+                    <span className="text-sm text-white/90">Mobile usability warnings</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="blur-sm pointer-events-none select-none space-y-3">
-              <div className="h-4 bg-white/20 rounded w-3/4"></div>
-              <div className="h-4 bg-white/20 rounded w-full"></div>
-              <div className="h-4 bg-white/20 rounded w-5/6"></div>
-              <div className="h-4 bg-white/20 rounded w-2/3"></div>
+            <div className={LOCKED_OVERLAY}>
+              <div className="text-center bg-black/80 backdrop-blur-md rounded-xl p-6 border border-emerald-400/30">
+                <div className="w-12 h-12 rounded-full bg-emerald-400/20 flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <p className="text-white font-semibold text-base mb-1">Advanced Analysis Available</p>
+                <p className="text-white/60 text-sm">Book a consultation to see all 40+ issues</p>
+              </div>
             </div>
           </div>
 
@@ -934,20 +963,45 @@ function CitationCoverageCheck({ onLoadingChange }: { onLoadingChange: (loading:
 
           {/* Locked 40+ Directory Analysis */}
           <div className={LOCKED_CONTENT}>
-            <div className={LOCKED_OVERLAY}>
-              <div className="text-center">
-                <svg className="w-12 h-12 text-emerald-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                <p className="text-white font-semibold text-lg">40+ Directory Citation Analysis Locked</p>
-                <p className="text-white/70 text-sm mt-1">Includes Yelp, Apple Maps, Bing, Facebook & more</p>
+            <div className="relative filter blur-[2px] opacity-40 pointer-events-none select-none">
+              <h3 className="text-lg font-semibold text-white mb-4">Citation Directory Coverage</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                  <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                  <span className="text-sm font-medium text-white">Yelp</span>
+                </div>
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
+                  <span className="text-sm font-medium text-white">Apple Maps</span>
+                </div>
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
+                  <span className="text-sm font-medium text-white">Bing Places</span>
+                </div>
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                  <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                  <span className="text-sm font-medium text-white">Facebook</span>
+                </div>
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
+                  <span className="text-sm font-medium text-white">YellowPages</span>
+                </div>
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/></svg>
+                  <span className="text-sm font-medium text-white">Foursquare</span>
+                </div>
               </div>
             </div>
-            <div className="blur-sm pointer-events-none select-none grid grid-cols-2 gap-3">
-              <div className="h-12 bg-white/20 rounded"></div>
-              <div className="h-12 bg-white/20 rounded"></div>
-              <div className="h-12 bg-white/20 rounded"></div>
-              <div className="h-12 bg-white/20 rounded"></div>
+            <div className={LOCKED_OVERLAY}>
+              <div className="text-center bg-black/80 backdrop-blur-md rounded-xl p-6 border border-emerald-400/30">
+                <div className="w-12 h-12 rounded-full bg-emerald-400/20 flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <p className="text-white font-semibold text-base mb-1">35+ More Directories</p>
+                <p className="text-white/60 text-sm">Book a consultation for full coverage report</p>
+              </div>
             </div>
           </div>
 
@@ -1124,19 +1178,49 @@ function KeywordOpportunityScanner() {
 
           {/* Locked Competitor Analysis */}
           <div className={LOCKED_CONTENT}>
-            <div className={LOCKED_OVERLAY}>
-              <div className="text-center">
-                <svg className="w-12 h-12 text-emerald-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                <p className="text-white font-semibold text-lg">Competitor Gap Analysis Locked</p>
-                <p className="text-white/70 text-sm mt-1">See keywords your competitors rank for but you don't</p>
+            <div className="relative filter blur-[2px] opacity-40 pointer-events-none select-none space-y-3">
+              <h3 className="text-lg font-semibold text-white mb-4">Competitor Keyword Gaps</h3>
+              <div className="p-4 rounded-xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-blue-500/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-white">emergency plumber near me</span>
+                  <span className="text-sm text-purple-400">Competitor ranks #2</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-white/70">8,200 searches/mo</span>
+                  <span className="text-red-400">You're not ranking</span>
+                </div>
+              </div>
+              <div className="p-4 rounded-xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-blue-500/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-white">24 hour plumber [city]</span>
+                  <span className="text-sm text-purple-400">Competitor ranks #1</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-white/70">5,400 searches/mo</span>
+                  <span className="text-red-400">You're not ranking</span>
+                </div>
+              </div>
+              <div className="p-4 rounded-xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-blue-500/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-white">drain cleaning service</span>
+                  <span className="text-sm text-purple-400">Competitor ranks #3</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-white/70">3,900 searches/mo</span>
+                  <span className="text-red-400">You're not ranking</span>
+                </div>
               </div>
             </div>
-            <div className="blur-sm pointer-events-none select-none space-y-3">
-              <div className="h-14 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded"></div>
-              <div className="h-14 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded"></div>
-              <div className="h-14 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded"></div>
+            <div className={LOCKED_OVERLAY}>
+              <div className="text-center bg-black/80 backdrop-blur-md rounded-xl p-6 border border-emerald-400/30">
+                <div className="w-12 h-12 rounded-full bg-emerald-400/20 flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <p className="text-white font-semibold text-base mb-1">Full Gap Analysis Available</p>
+                <p className="text-white/60 text-sm">See all keyword opportunities vs. competitors</p>
+              </div>
             </div>
           </div>
 
