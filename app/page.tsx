@@ -40,10 +40,10 @@ const GRID_GAP = "gap-8 md:gap-12";
 const CARD = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm";
 
 // control tokens
-const INPUT = "h-11 w-full rounded-xl border border-white/10 bg-white/10 px-3 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400";
-const BTN = "h-11 px-4 rounded-xl font-semibold";
-const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 transition`;
-const BTN_GHOST = `${BTN} border border-white/20 hover:bg-white/10 transition`;
+const INPUT = "h-12 w-full rounded-xl border border-white/10 bg-white/10 px-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
+const BTN = "h-12 px-6 rounded-xl font-semibold transition-all duration-200";
+const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-400/20`;
+const BTN_GHOST = `${BTN} border border-white/20 hover:bg-white/10 hover:border-white/30`;
 
 // progress bar
 const PROGRESS_BG = "h-2 w-full rounded-full bg-white/10";
@@ -1510,7 +1510,7 @@ export default function GMECityLanding() {
           <div className="absolute inset-0 opacity-90 md:opacity-100 bg-[radial-gradient(900px_400px_at_50%_-10%,rgba(16,185,129,0.25),transparent_60%)]" />
           <div className={`${CONTAINER} grid md:grid-cols-2 ${GRID_GAP} items-center`}>
             <div>
-              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[14ch]">Rank higher on Maps with a plan that writes itself</h1>
+              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a href="#start" onClick={(e) => { e.preventDefault(); auditRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start free audit</a>
