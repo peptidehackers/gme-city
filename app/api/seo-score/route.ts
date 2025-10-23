@@ -465,21 +465,52 @@ function calculateOnsiteScore(psiData: any, homepageData: any): { score: number;
   }
 
   try {
-    // Performance score - LIMITED to 30% weight
+    // ========================================
+    // GOOGLE PAGESPEED INSIGHTS (55 points)
+    // ========================================
+
     if (psiData) {
+      // Performance (20 points)
       const performanceScore = psiData.lighthouseResult?.categories?.performance?.score || 0;
-      score += performanceScore * 30; // Reduced from 40 to 30
+      score += performanceScore * 20;
 
       if (performanceScore < 0.7) {
         insights.push(`Page speed score is ${Math.round(performanceScore * 100)}/100 (aim for 70+)`);
       }
+
+      // SEO Audit (20 points)
+      const seoScore = psiData.lighthouseResult?.categories?.seo?.score || 0;
+      score += seoScore * 20;
+
+      if (seoScore < 0.9) {
+        insights.push(`Google SEO audit score is ${Math.round(seoScore * 100)}/100 (aim for 90+)`);
+      }
+
+      // Accessibility (10 points)
+      const accessibilityScore = psiData.lighthouseResult?.categories?.accessibility?.score || 0;
+      score += accessibilityScore * 10;
+
+      if (accessibilityScore < 0.9) {
+        insights.push(`Accessibility score is ${Math.round(accessibilityScore * 100)}/100 (impacts SEO & UX)`);
+      }
+
+      // Best Practices (5 points)
+      const bestPracticesScore = psiData.lighthouseResult?.categories?.['best-practices']?.score || 0;
+      score += bestPracticesScore * 5;
+
+      if (bestPracticesScore < 0.9) {
+        insights.push(`Best practices score is ${Math.round(bestPracticesScore * 100)}/100 (includes HTTPS, security)`);
+      }
     }
 
-    // HTML Structure & Tags (35 points)
+    // ========================================
+    // HTML STRUCTURE (25 points)
+    // ========================================
+
     if (homepageData) {
-      // H1 tag (8 points)
+      // H1 tag (9 points)
       if (homepageData.hasH1) {
-        score += 8;
+        score += 9;
       } else {
         insights.push('No H1 tag found on homepage');
       }
@@ -491,48 +522,41 @@ function calculateOnsiteScore(psiData: any, homepageData: any): { score: number;
         insights.push('Missing meta description tag');
       }
 
-      // Title tag (7 points)
+      // Title tag (8 points)
       if (homepageData.hasTitle) {
-        score += 7;
+        score += 8;
       } else {
         insights.push('Missing or empty title tag');
       }
-
-      // Schema markup (7 points)
-      if (homepageData.hasSchema) {
-        score += 7;
-      } else {
-        insights.push('Missing LocalBusiness schema markup');
-      }
-
-      // Mobile viewport (5 points)
-      const hasViewport = psiData?.lighthouseResult?.audits?.['viewport']?.score === 1;
-      if (hasViewport) {
-        score += 5;
-      } else {
-        insights.push('Not mobile-friendly (no viewport meta tag)');
-      }
     }
 
-    // Content Quality (20 points)
+    // ========================================
+    // CONTENT QUALITY (20 points)
+    // ========================================
+
     if (homepageData) {
-      // Word count (10 points)
-      if (homepageData.wordCount >= 500) {
+      // Word count (10 points) - updated thresholds for modern SEO
+      if (homepageData.wordCount >= 1000) {
         score += 10;
+      } else if (homepageData.wordCount >= 500) {
+        score += 7;
+        insights.push(`Homepage has ${homepageData.wordCount} words (aim for 1000+ for best SEO)`);
       } else if (homepageData.wordCount >= 250) {
-        score += 6;
+        score += 4;
+        insights.push(`Homepage has only ${homepageData.wordCount} words (aim for 1000+)`);
       } else {
-        score += 2;
-        insights.push(`Homepage has only ${homepageData.wordCount} words (aim for 500+)`);
+        insights.push(`Homepage has only ${homepageData.wordCount} words (critical: aim for 1000+)`);
       }
 
-      // Internal links (5 points)
-      if (homepageData.internalLinks >= 10) {
+      // Internal links (5 points) - increased threshold for better site structure
+      if (homepageData.internalLinks >= 20) {
         score += 5;
-      } else if (homepageData.internalLinks >= 5) {
+      } else if (homepageData.internalLinks >= 10) {
         score += 3;
+        insights.push(`Only ${homepageData.internalLinks} internal links found (aim for 20+)`);
       } else {
-        insights.push(`Only ${homepageData.internalLinks} internal links found (aim for 10+)`);
+        score += 1;
+        insights.push(`Only ${homepageData.internalLinks} internal links found (critical: aim for 20+)`);
       }
 
       // Alt text on images (5 points)
@@ -540,15 +564,10 @@ function calculateOnsiteScore(psiData: any, homepageData: any): { score: number;
         score += 5;
       } else if (homepageData.altTextPercentage >= 50) {
         score += 3;
+        insights.push(`Only ${Math.round(homepageData.altTextPercentage)}% of images have alt text (aim for 80%+)`);
       } else {
-        insights.push(`Only ${Math.round(homepageData.altTextPercentage)}% of images have alt text`);
+        insights.push(`Only ${Math.round(homepageData.altTextPercentage)}% of images have alt text (critical for accessibility & SEO)`);
       }
-    }
-
-    // SEO audit score (15 points)
-    if (psiData) {
-      const seoScore = psiData.lighthouseResult?.categories?.seo?.score || 0;
-      score += seoScore * 15;
     }
 
   } catch (error) {
