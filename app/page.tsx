@@ -233,11 +233,11 @@ function parseRatingInput(raw: string) {
 // ---------------------- Feature Components ----------------------
 
 // SEO Snapshot Score Section Wrapper (with neon loading effect on card)
-function SEOSnapshotSection() {
+function SEOSnapshotSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLDivElement> }) {
   const [loading, setLoading] = useState(false);
 
   return (
-    <section className={`${CONTAINER} ${SECTION_Y}`}>
+    <section ref={sectionRef} className={`${CONTAINER} ${SECTION_Y}`}>
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
       <div className="prelogin-module p-8 group">
         <div className={CARD_GLOW}></div>
@@ -540,11 +540,11 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
 }
 
 // Citation Coverage Section Wrapper with Loading Animation
-function CitationCoverageSection() {
+function CitationCoverageSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLDivElement> }) {
   const [loading, setLoading] = useState(false);
 
   return (
-    <section className={`${CONTAINER} ${SECTION_Y}`}>
+    <section ref={sectionRef} className={`${CONTAINER} ${SECTION_Y}`}>
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
       <div className="feature-card p-8 group">
         <div className={CARD_GLOW}></div>
@@ -985,6 +985,9 @@ function KeywordOpportunityScanner() {
 // ---------------------- UI ----------------------
 export default function GMECityLanding() {
   const auditRef = useRef<HTMLDivElement | null>(null);
+  const seoSnapshotRef = useRef<HTMLDivElement | null>(null);
+  const citationsRef = useRef<HTMLDivElement | null>(null);
+  const keywordsRef = useRef<HTMLDivElement | null>(null);
   const [tab, setTab] = useState<"audit" | "schema" | "data" | "compare" | "citations">("audit");
 
   // Audit state
@@ -1483,12 +1486,10 @@ export default function GMECityLanding() {
             <span className="text-lg font-semibold tracking-tight">GME City</span>
           </div>
           <nav className="hidden md:flex items-center gap-2 text-sm">
-            <button onClick={() => setTab("audit")} className={`px-3 py-1.5 rounded-lg ${tab === "audit" ? "bg-white text-black" : "hover:bg-white/10"}`}>Audit</button>
-            <button onClick={() => setTab("compare")} className={`px-3 py-1.5 rounded-lg ${tab === "compare" ? "bg-white text-black" : "hover:bg-white/10"}`}>Compare</button>
-            <button onClick={() => setTab("citations")} className={`px-3 py-1.5 rounded-lg ${tab === "citations" ? "bg-white text-black" : "hover:bg-white/10"}`}>Citations</button>
-            <button onClick={() => setTab("schema")} className={`px-3 py-1.5 rounded-lg ${tab === "schema" ? "bg-white text-black" : "hover:bg-white/10"}`}>Schema</button>
-            <button onClick={() => setTab("data")} className={`px-3 py-1.5 rounded-lg ${tab === "data" ? "bg-white text-black" : "hover:bg-white/10"}`}>Data</button>
-            <a href="#start" onClick={(e) => { e.preventDefault(); auditRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} ml-2`}>Start free audit</a>
+            <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">SEO Snapshot</button>
+            <button onClick={() => citationsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">Citations</button>
+            <button onClick={() => keywordsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">Keywords</button>
+            <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} ml-2`}>Start free audit</a>
           </nav>
           <button aria-label="Open menu" className="md:hidden p-2 rounded-lg border border-white/20" onClick={() => setMobileOpen(v => !v)}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
@@ -1496,12 +1497,10 @@ export default function GMECityLanding() {
           {mobileOpen && (
             <div className="md:hidden absolute top-full left-0 right-0 bg-neutral-900/95 border-b border-white/10 z-50">
               <div className={`${CONTAINER} py-4 flex flex-col space-y-2 text-sm`}>
-                <button onClick={() => { setTab("audit"); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Audit</button>
-                <button onClick={() => { setTab("compare"); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Compare</button>
-                <button onClick={() => { setTab("citations"); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Citations</button>
-                <button onClick={() => { setTab("schema"); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Schema</button>
-                <button onClick={() => { setTab("data"); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Data</button>
-                <a href="#start" onClick={(e) => { e.preventDefault(); setMobileOpen(false); auditRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} text-center`}>Start free audit</a>
+                <button onClick={() => { seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">SEO Snapshot</button>
+                <button onClick={() => { citationsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Citations</button>
+                <button onClick={() => { keywordsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Keywords</button>
+                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); setMobileOpen(false); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} text-center`}>Start free audit</a>
               </div>
             </div>
           )}
@@ -1517,7 +1516,7 @@ export default function GMECityLanding() {
               <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#start" onClick={(e) => { e.preventDefault(); auditRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start free audit</a>
+                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start free audit</a>
                 <a href="#schema" onClick={(e) => { e.preventDefault(); setTab("schema"); }} className={BTN_GHOST}>Build schema</a>
               </div>
               <div className="mt-6 text-sm text-white/70">No login. No credit card. Save your plan as a PDF when you are done.</div>
@@ -1548,13 +1547,13 @@ export default function GMECityLanding() {
         </section>
 
         {/* Feature Section 1: SEO Snapshot Score (Local + Onsite) */}
-        <SEOSnapshotSection />
+        <SEOSnapshotSection sectionRef={seoSnapshotRef} />
 
         {/* Feature Section 2: Citation Coverage Check */}
-        <CitationCoverageSection />
+        <CitationCoverageSection sectionRef={citationsRef} />
 
         {/* Feature Section 3: Keyword Opportunity Scanner */}
-        <section className={`${CONTAINER} ${SECTION_Y}`}>
+        <section ref={keywordsRef} className={`${CONTAINER} ${SECTION_Y}`}>
           <div className="prelogin-module p-8 group">
             <div className={CARD_GLOW}></div>
             <div className={CARD_INTERACTIVE}>
