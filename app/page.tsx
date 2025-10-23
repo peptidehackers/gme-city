@@ -39,7 +39,7 @@ const GRID_GAP = "gap-8 md:gap-12";
 // surface tokens
 const CARD = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm";
 const CARD_INTERACTIVE = "relative rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:border-emerald-400/80 hover:bg-white/8";
-const CARD_GLOW = "absolute -inset-2 bg-emerald-500/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10";
+const CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none";
 
 // control tokens
 const INPUT = "h-12 w-full rounded-xl border border-white/10 bg-white/10 px-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
