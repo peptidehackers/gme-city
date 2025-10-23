@@ -161,28 +161,26 @@ function containsCategoryKeyword(html: string, category: string): boolean {
   return relevantContent.some(match => categoryRegex.test(match));
 }
 
-// Helper: Search for business using Google Maps Search (SERP API POST-then-GET method)
+// Helper: Search for business using Google Maps Search (Live API - fast, instant results)
 async function searchBusinessOnGoogleMaps(businessName: string, city: string, zip: string): Promise<any> {
   try {
     const auth = Buffer.from(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`).toString('base64');
 
-    // Try multiple search query formats
-    const searchQueries = [
-      `${businessName} ${city}`, // Just name and city
-      `${businessName} ${zip}`, // Name and ZIP
-      `${businessName} ${city} ${zip}`, // All three
-      `${businessName}` // Just the name
-    ];
+    // Primary search query (most specific)
+    let searchQuery = `${businessName} ${city}`;
+    console.log('Searching Google Maps (live API):', searchQuery);
 
-    for (const searchQuery of searchQueries) {
-      console.log('Searching Google Maps for:', searchQuery);
+    let result = await tryGoogleMapsSearchLive(auth, searchQuery);
+    if (result) {
+      return result;
+    }
 
-      const result = await tryGoogleMapsSearch(auth, searchQuery);
-      if (result) {
-        return result;
-      }
-
-      console.log(`No results with query "${searchQuery}", trying next variation...`);
+    // Fallback: try with ZIP if city search failed
+    searchQuery = `${businessName} ${zip}`;
+    console.log('Trying ZIP fallback:', searchQuery);
+    result = await tryGoogleMapsSearchLive(auth, searchQuery);
+    if (result) {
+      return result;
     }
 
     console.log('No results found with any search variation');
@@ -193,13 +191,12 @@ async function searchBusinessOnGoogleMaps(businessName: string, city: string, zi
   }
 }
 
-// Helper: Try a single Google Maps search with a specific query
-async function tryGoogleMapsSearch(auth: string, searchQuery: string): Promise<any> {
+// Helper: Try a single Google Maps search with Live API (instant results)
+async function tryGoogleMapsSearchLive(auth: string, searchQuery: string): Promise<any> {
   try {
-
-    // Step 1: POST to create task using SERP API (not Business Data API)
-    const postResponse = await fetch(
-      'https://api.dataforseo.com/v3/serp/google/maps/task_post',
+    // Use live/advanced endpoint for instant results (no polling needed)
+    const response = await fetch(
+      'https://api.dataforseo.com/v3/serp/google/maps/live/advanced',
       {
         method: 'POST',
         headers: {
@@ -209,82 +206,35 @@ async function tryGoogleMapsSearch(auth: string, searchQuery: string): Promise<a
         body: JSON.stringify([{
           keyword: searchQuery,
           location_code: 2840, // USA
-          language_code: "en"
+          language_code: "en",
+          depth: 3 // Get top 3 results
         }])
       }
     );
 
-    if (!postResponse.ok) {
-      const errorText = await postResponse.text();
-      console.error('DataForSEO Maps POST error:', postResponse.statusText, errorText);
+    if (!response.ok) {
+      console.error('Maps Live API error:', response.statusText);
       return null;
     }
 
-    const postData = await postResponse.json();
-    console.log('Maps POST response:', postData.status_code, postData.status_message);
+    const data = await response.json();
+    console.log('Maps response:', data.status_code, data.status_message);
 
-    if (!postData.tasks || !postData.tasks[0] || postData.tasks[0].status_code !== 20100) {
-      console.log('Maps POST task failed:', postData.tasks?.[0]?.status_message || 'No tasks');
+    if (data.status_code !== 20000 || !data.tasks || !data.tasks[0]) {
+      console.log('Maps API failed:', data.status_message);
       return null;
     }
 
-    const taskId = postData.tasks[0].id;
-    console.log('Task created with ID:', taskId);
-
-    // Step 2: Poll for results (retry up to 5 times with increasing delays)
-    let getData: any = null;
-    for (let attempt = 0; attempt < 5; attempt++) {
-      // Wait progressively longer (5s, 6s, 7s, 8s, 9s)
-      const delayMs = 5000 + (attempt * 1000);
-      console.log(`Waiting ${delayMs}ms before attempt ${attempt + 1}...`);
-      await new Promise(resolve => setTimeout(resolve, delayMs));
-
-      const getResponse = await fetch(
-        `https://api.dataforseo.com/v3/serp/google/maps/task_get/advanced/${taskId}`,
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Basic ${auth}`
-          }
-        }
-      );
-
-      if (!getResponse.ok) {
-        const errorText = await getResponse.text();
-        console.error('DataForSEO Maps GET error:', getResponse.statusText, errorText);
-        continue; // Try again
-      }
-
-      getData = await getResponse.json();
-      console.log(`Maps GET attempt ${attempt + 1}:`, getData.status_code, getData.tasks?.[0]?.status_message);
-
-      // Check if task is complete
-      if (getData.tasks?.[0]?.status_code === 20000) {
-        console.log('Task completed successfully');
-        break;
-      }
-
-      // If still in queue or processing, continue retrying
-      if (getData.tasks?.[0]?.status_code === 20100 || getData.tasks?.[0]?.status_message?.includes('Queue')) {
-        console.log('Task still processing, retrying...');
-        continue;
-      }
-
-      // If other error, break
-      console.log('Task failed with unexpected status');
-      break;
-    }
-
-    if (!getData || !getData.tasks || !getData.tasks[0] || getData.tasks[0].status_code !== 20000) {
-      console.log('Maps GET task failed after retries:', getData?.tasks?.[0]?.status_message || 'No tasks');
+    const task = data.tasks[0];
+    if (task.status_code !== 20000 || !task.result || task.result.length === 0) {
+      console.log('No results in task');
       return null;
     }
 
-    const items = getData.tasks[0].result?.[0]?.items;
-    console.log('Items found:', items?.length || 0);
+    const items = task.result[0]?.items || [];
+    console.log('Items found:', items.length);
 
-    if (!items || items.length === 0) {
-      console.log('No business found in Maps search');
+    if (items.length === 0) {
       return null;
     }
 
@@ -301,7 +251,7 @@ async function tryGoogleMapsSearch(auth: string, searchQuery: string): Promise<a
       title: business.title || null
     };
   } catch (error) {
-    console.error('Maps search failed:', error);
+    console.error('Maps Live API search failed:', error);
     return null;
   }
 }
@@ -590,19 +540,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 1. Get PageSpeed Insights data
-    const psiData = await getPageSpeedData(body.website);
-
-    // 2. Scrape homepage content
-    const homepageData = await scrapeHomepage(body.website);
-
-    // 3. Get real GBP data from DataForSEO (URL or search)
-    const gbpData = await getGBPDataFromDataForSEO(
-      body.gbp_url || null,
-      body.business_name,
-      body.city,
-      body.zip
-    );
+    // Run API calls in parallel for faster performance
+    const [psiData, homepageData, gbpData] = await Promise.all([
+      getPageSpeedData(body.website),
+      scrapeHomepage(body.website),
+      getGBPDataFromDataForSEO(
+        body.gbp_url || null,
+        body.business_name,
+        body.city,
+        body.zip
+      )
+    ]);
 
     // 4. Get organic keywords (optional, for future enhancement)
     // const keywordData = await getOrganicKeywords(body.website, body.category);
