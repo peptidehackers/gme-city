@@ -51,6 +51,12 @@ const BTN_GHOST = `${BTN} border border-white/20 hover:bg-white/10 hover:border-
 const PROGRESS_BG = "h-2 w-full rounded-full bg-white/10";
 const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 
+// High-urgency CTA tokens
+const CTA_CARD = "relative rounded-2xl border-2 border-emerald-400/50 bg-gradient-to-br from-emerald-500/10 via-cyan-500/5 to-emerald-500/10 p-8 shadow-2xl shadow-emerald-500/20 backdrop-blur-sm";
+const CTA_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 rounded-2xl blur-xl opacity-30 animate-pulse";
+const LOCKED_CONTENT = "relative rounded-xl border border-white/20 bg-white/5 p-6 overflow-hidden";
+const LOCKED_OVERLAY = "absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/80 backdrop-blur-sm flex items-center justify-center";
+
 // ---------------------- CSS Animations ----------------------
 const neonAnimationStyles = `
   @keyframes border-trail {
@@ -228,6 +234,96 @@ function parseNumberInput(raw: string, min = 0, max?: number) {
 
 function parseRatingInput(raw: string) {
   return parseNumberInput(raw, 1, 5);
+}
+
+// ---------------------- Meeting CTA Component ----------------------
+
+interface MeetingCTAProps {
+  title: string;
+  description: string;
+  benefits: string[];
+  featureName: string;
+  urgencyMessage?: string;
+  calendlyUrl?: string;
+}
+
+function MeetingCTACard({
+  title,
+  description,
+  benefits,
+  featureName,
+  urgencyMessage = "Limited consultation slots available this week",
+  calendlyUrl = "https://calendly.com/your-link"
+}: MeetingCTAProps) {
+  return (
+    <div className="my-12">
+      <div className={CTA_CARD}>
+        <div className={CTA_CARD_GLOW}></div>
+
+        <div className="relative z-10">
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-400/20 border border-emerald-400/30 text-emerald-400 text-sm font-semibold mb-4">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Unlock Your Complete {featureName} Analysis
+            </div>
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-3">{title}</h3>
+            <p className="text-lg text-white/80 max-w-2xl mx-auto">{description}</p>
+          </div>
+
+          {/* Benefits Grid */}
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            {benefits.map((benefit, idx) => (
+              <div key={idx} className="flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+                <svg className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-white/90 font-medium">{benefit}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA Button */}
+          <div className="text-center">
+            <a
+              href={calendlyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-emerald-400 text-black text-lg font-bold hover:bg-emerald-500 transition-all duration-200 shadow-xl shadow-emerald-400/30 hover:shadow-2xl hover:shadow-emerald-400/40 hover:scale-105"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Book Your Free Strategy Call
+            </a>
+
+            {/* Urgency message */}
+            <div className="mt-4 flex items-center justify-center gap-2 text-sm">
+              <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-orange-400 font-semibold">{urgencyMessage}</span>
+            </div>
+          </div>
+
+          {/* Social Proof */}
+          <div className="mt-8 pt-6 border-t border-white/10 text-center">
+            <div className="flex items-center justify-center gap-1 mb-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <svg key={star} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p className="text-white/70 text-sm italic">"These insights helped us increase our local calls by 47% in just 60 days!"</p>
+            <p className="text-white/50 text-xs mt-1">- James K., Local Business Owner</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 // ---------------------- Feature Components ----------------------
@@ -491,14 +587,21 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
               <h3 className="text-lg font-semibold mb-4">Local SEO Issues:</h3>
               <div className="space-y-2">
                 {results.localInsights.length > 0 ? (
-                  results.localInsights.map((issue, idx) => (
-                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
-                      <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-sm text-white/90">{issue}</span>
-                    </div>
-                  ))
+                  <>
+                    {results.localInsights.slice(0, 3).map((issue, idx) => (
+                      <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                        <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-sm text-white/90">{issue}</span>
+                      </div>
+                    ))}
+                    {results.localInsights.length > 3 && (
+                      <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+                        <span className="text-white/60 text-sm">...and {results.localInsights.length - 3} more critical issues</span>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-sm text-white/90">
                     No major local SEO issues detected
@@ -510,14 +613,21 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
               <h3 className="text-lg font-semibold mb-4">Onsite SEO Issues:</h3>
               <div className="space-y-2">
                 {results.onsiteInsights.length > 0 ? (
-                  results.onsiteInsights.map((issue, idx) => (
-                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
-                      <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-sm text-white/90">{issue}</span>
-                    </div>
-                  ))
+                  <>
+                    {results.onsiteInsights.slice(0, 3).map((issue, idx) => (
+                      <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                        <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-sm text-white/90">{issue}</span>
+                      </div>
+                    ))}
+                    {results.onsiteInsights.length > 3 && (
+                      <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+                        <span className="text-white/60 text-sm">...and {results.onsiteInsights.length - 3} more critical issues</span>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-sm text-white/90">
                     No major onsite SEO issues detected
@@ -527,9 +637,41 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
             </div>
           </div>
 
+          {/* Locked Content Preview */}
+          <div className={LOCKED_CONTENT}>
+            <div className={LOCKED_OVERLAY}>
+              <div className="text-center">
+                <svg className="w-12 h-12 text-emerald-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <p className="text-white font-semibold text-lg">47-Point Comprehensive Analysis Locked</p>
+                <p className="text-white/70 text-sm mt-1">Book a free consultation to unlock</p>
+              </div>
+            </div>
+            <div className="blur-sm pointer-events-none select-none space-y-3">
+              <div className="h-4 bg-white/20 rounded w-3/4"></div>
+              <div className="h-4 bg-white/20 rounded w-full"></div>
+              <div className="h-4 bg-white/20 rounded w-5/6"></div>
+              <div className="h-4 bg-white/20 rounded w-2/3"></div>
+            </div>
+          </div>
+
+          {/* Meeting CTA */}
+          <MeetingCTACard
+            title="Ready to Dominate Local Search?"
+            description="Get your complete 47-point SEO analysis with a personalized action plan that drives real results."
+            benefits={[
+              "Complete technical SEO audit (200+ checkpoints)",
+              "Custom keyword strategy for your market",
+              "Competitor gap analysis & opportunities",
+              "Priority action plan with ROI projections"
+            ]}
+            featureName="SEO Audit"
+            urgencyMessage="Only 3 strategy sessions available this week"
+          />
+
           <div className="text-center">
-            <button className={BTN_PRIMARY}>View Full Audit Report</button>
-            <button onClick={() => { setResults(null); setStep(1); }} className={`${BTN_GHOST} ml-3`}>
+            <button onClick={() => { setResults(null); setStep(1); }} className={BTN_GHOST}>
               Run Another Scan
             </button>
           </div>
@@ -744,14 +886,19 @@ function CitationCoverageCheck({ onLoadingChange }: { onLoadingChange: (loading:
                 What's Working
               </h4>
               {results.positives.length > 0 ? (
-                <ul className="space-y-3">
-                  {results.positives.map((positive, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-white/80">
-                      <span className="text-emerald-400 mt-1">✓</span>
-                      <span>{positive}</span>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="space-y-3">
+                    {results.positives.slice(0, 3).map((positive, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-white/80">
+                        <span className="text-emerald-400 mt-1">✓</span>
+                        <span>{positive}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {results.positives.length > 3 && (
+                    <p className="text-emerald-400/60 text-sm mt-3">+{results.positives.length - 3} more verified</p>
+                  )}
+                </>
               ) : (
                 <p className="text-white/50 italic">No positive signals detected</p>
               )}
@@ -766,36 +913,57 @@ function CitationCoverageCheck({ onLoadingChange }: { onLoadingChange: (loading:
                 Needs Attention
               </h4>
               {results.improvements.length > 0 ? (
-                <ul className="space-y-3">
-                  {results.improvements.map((improvement, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-white/80">
-                      <span className="text-red-400 mt-1">⚠</span>
-                      <span>{improvement}</span>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="space-y-3">
+                    {results.improvements.slice(0, 3).map((improvement, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-white/80">
+                        <span className="text-red-400 mt-1">⚠</span>
+                        <span>{improvement}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {results.improvements.length > 3 && (
+                    <p className="text-red-400/60 text-sm mt-3">+{results.improvements.length - 3} more issues</p>
+                  )}
+                </>
               ) : (
                 <p className="text-white/50 italic">Everything looks great!</p>
               )}
             </div>
           </div>
 
-          {/* Full Citation Audit CTA */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
-            <h3 className="text-2xl font-bold mb-3">Want a Complete Citation Audit?</h3>
-            <p className="text-white/70 mb-6 max-w-xl mx-auto">
-              Get a comprehensive review of your business listings across 40+ top directories including
-              Yelp, Apple Maps, Facebook, Bing Places, and more.
-            </p>
-            <a
-              href="https://calendly.com/your-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={BTN_PRIMARY}
-            >
-              Schedule Free Citation Audit
-            </a>
+          {/* Locked 40+ Directory Analysis */}
+          <div className={LOCKED_CONTENT}>
+            <div className={LOCKED_OVERLAY}>
+              <div className="text-center">
+                <svg className="w-12 h-12 text-emerald-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <p className="text-white font-semibold text-lg">40+ Directory Citation Analysis Locked</p>
+                <p className="text-white/70 text-sm mt-1">Includes Yelp, Apple Maps, Bing, Facebook & more</p>
+              </div>
+            </div>
+            <div className="blur-sm pointer-events-none select-none grid grid-cols-2 gap-3">
+              <div className="h-12 bg-white/20 rounded"></div>
+              <div className="h-12 bg-white/20 rounded"></div>
+              <div className="h-12 bg-white/20 rounded"></div>
+              <div className="h-12 bg-white/20 rounded"></div>
+            </div>
           </div>
+
+          {/* Meeting CTA */}
+          <MeetingCTACard
+            title="Get Your Complete Citation Coverage Report"
+            description="Verify your business listings across 40+ top directories and claim thousands in free traffic you're missing."
+            benefits={[
+              "Citation audit across Yelp, Apple Maps, Bing, Facebook & 35+ more",
+              "NAP consistency check & correction plan",
+              "Duplicate listing detection & removal",
+              "Local pack ranking improvement strategy"
+            ]}
+            featureName="Citation Audit"
+            urgencyMessage="Book this week for bonus review generation strategy"
+          />
         </div>
       )}
     </div>
@@ -900,8 +1068,8 @@ function KeywordOpportunityScanner() {
 
       {results && results.length > 0 && (
         <div>
-          <div className="space-y-3 mb-8">
-            {results.map((kw, idx) => {
+          <div className="space-y-3 mb-6">
+            {results.slice(0, 5).map((kw, idx) => {
               // Determine color based on opportunity type
               const getOpportunityColor = () => {
                 if (kw.opportunity === 'ranking') {
@@ -948,34 +1116,69 @@ function KeywordOpportunityScanner() {
             })}
           </div>
 
-          <div className="text-center">
-            <button className={BTN_PRIMARY}>Get Full Keyword Plan</button>
-            <p className="mt-3 text-sm text-white/60">
-              Unlock personalized keyword strategies + ranking tracker
-            </p>
+          {results.length > 5 && (
+            <div className="mb-6 p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+              <span className="text-white/60">...and {results.length - 5} more high-value keyword opportunities</span>
+            </div>
+          )}
+
+          {/* Locked Competitor Analysis */}
+          <div className={LOCKED_CONTENT}>
+            <div className={LOCKED_OVERLAY}>
+              <div className="text-center">
+                <svg className="w-12 h-12 text-emerald-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <p className="text-white font-semibold text-lg">Competitor Gap Analysis Locked</p>
+                <p className="text-white/70 text-sm mt-1">See keywords your competitors rank for but you don't</p>
+              </div>
+            </div>
+            <div className="blur-sm pointer-events-none select-none space-y-3">
+              <div className="h-14 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded"></div>
+              <div className="h-14 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded"></div>
+              <div className="h-14 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded"></div>
+            </div>
           </div>
+
+          {/* Meeting CTA */}
+          <MeetingCTACard
+            title="Dominate Your Market with Data-Driven Keywords"
+            description="Get a complete keyword strategy with ranking tracker, competitor analysis, and content roadmap tailored to your business."
+            benefits={[
+              "50+ high-value keyword opportunities analyzed",
+              "Competitor gap analysis with actionable insights",
+              "Monthly keyword tracking & ranking reports",
+              "Content optimization roadmap for quick wins"
+            ]}
+            featureName="Keyword Strategy"
+            urgencyMessage="First 5 bookings get free content calendar template"
+          />
         </div>
       )}
 
       {results && results.length === 0 && !error && (
-        <div className="p-12 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 text-center">
-          <div className="text-5xl mb-4">🚀</div>
-          <h3 className="text-2xl font-bold text-white mb-3">Ready to Build Your Online Presence?</h3>
-          <p className="text-lg text-white/80 mb-6 max-w-2xl mx-auto">
-            Your website doesn't have enough organic traffic data yet — but that's exactly what we help you fix!
-            Let's get you ranking for the keywords that bring customers to your door.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className={BTN_PRIMARY}>
-              Get Your Custom SEO Strategy
-            </button>
-            <a href="#start" className="text-blue-400 hover:text-blue-300 font-medium">
-              Learn How We Can Help →
-            </a>
+        <div>
+          <div className="p-12 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 text-center mb-8">
+            <div className="text-5xl mb-4">🚀</div>
+            <h3 className="text-2xl font-bold text-white mb-3">Ready to Build Your Online Presence?</h3>
+            <p className="text-lg text-white/80 mb-2 max-w-2xl mx-auto">
+              Your website doesn't have enough organic traffic data yet — but that's exactly what we help you fix!
+            </p>
           </div>
-          <p className="mt-6 text-sm text-white/60">
-            We specialize in helping local businesses dominate their market with proven SEO tactics
-          </p>
+
+          {/* Meeting CTA for no-data scenario */}
+          <MeetingCTACard
+            title="Let's Build Your Keyword Strategy from Scratch"
+            description="No data? No problem. We'll research your market, find untapped opportunities, and create a roadmap to dominate local search."
+            benefits={[
+              "Deep-dive market & competitor keyword research",
+              "Custom keyword targeting strategy for your niche",
+              "Content plan to rank for high-intent searches",
+              "Monthly tracking to measure your growth"
+            ]}
+            featureName="Keyword Strategy"
+            urgencyMessage="New businesses get priority onboarding slots"
+          />
         </div>
       )}
     </div>
