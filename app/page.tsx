@@ -38,7 +38,7 @@ const GRID_GAP = "gap-8 md:gap-12";
 
 // surface tokens
 const CARD = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm";
-const CARD_INTERACTIVE = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_60px_rgba(52,211,153,0.4),0_0_100px_rgba(52,211,153,0.2)] hover:border-emerald-400/60 hover:bg-white/8";
+const CARD_INTERACTIVE = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_80px_rgba(52,211,153,0.6),0_0_120px_rgba(16,185,129,0.4),0_0_160px_rgba(16,185,129,0.2)] hover:border-emerald-400/80 hover:bg-white/8";
 
 // control tokens
 const INPUT = "h-12 w-full rounded-xl border border-white/10 bg-white/10 px-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
@@ -238,7 +238,7 @@ function SEOSnapshotSection() {
   return (
     <section className={`${CONTAINER} ${SECTION_Y}`}>
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
-      <div className="prelogin-module">
+      <div className="prelogin-module p-8">
         <div className={`${CARD_INTERACTIVE} ${loading ? 'neon-loading-border' : ''}`}>
           {loading && (
             <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
@@ -544,7 +544,7 @@ function CitationCoverageSection() {
   return (
     <section className={`${CONTAINER} ${SECTION_Y}`}>
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
-      <div className="feature-card">
+      <div className="feature-card p-8">
         <div className={`${CARD_INTERACTIVE} ${loading ? 'neon-loading-border' : ''}`}>
           {loading && (
             <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
@@ -1552,7 +1552,7 @@ export default function GMECityLanding() {
 
         {/* Feature Section 3: Keyword Opportunity Scanner */}
         <section className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="prelogin-module">
+          <div className="prelogin-module p-8">
             <div className={CARD_INTERACTIVE}>
               <div className="text-center mb-8">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Find High-Intent Keywords</h2>
