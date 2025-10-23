@@ -38,7 +38,7 @@ const GRID_GAP = "gap-8 md:gap-12";
 
 // surface tokens
 const CARD = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm";
-const CARD_INTERACTIVE = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(52,211,153,0.3)] hover:border-emerald-400/50 hover:bg-white/8";
+const CARD_INTERACTIVE = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_60px_rgba(52,211,153,0.4),0_0_100px_rgba(52,211,153,0.2)] hover:border-emerald-400/60 hover:bg-white/8";
 
 // control tokens
 const INPUT = "h-12 w-full rounded-xl border border-white/10 bg-white/10 px-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
