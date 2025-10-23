@@ -42,7 +42,7 @@ async function getPageSpeedData(url: string): Promise<any> {
   try {
     const cleanUrl = url.startsWith('http') ? url : `https://${url}`;
     const response = await fetch(
-      `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(cleanUrl)}&key=${GOOGLE_PSI_API_KEY}&strategy=desktop&category=performance&category=seo`
+      `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(cleanUrl)}&key=${GOOGLE_PSI_API_KEY}&strategy=desktop&category=performance&category=seo&category=accessibility&category=best-practices`
     );
 
     if (!response.ok) {
