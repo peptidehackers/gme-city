@@ -44,7 +44,7 @@ const CARD_GLOW = "absolute -inset-2 bg-emerald-500/30 rounded-2xl blur-xl opaci
 // control tokens
 const INPUT = "h-12 w-full rounded-xl border border-white/10 bg-white/10 px-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
 const BTN = "h-12 px-6 rounded-xl font-semibold transition-all duration-200";
-const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-400/20`;
+const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-400/20 flex items-center justify-center text-base font-bold`;
 const BTN_GHOST = `${BTN} border border-white/20 hover:bg-white/10 hover:border-white/30`;
 
 // progress bar
@@ -1489,7 +1489,7 @@ export default function GMECityLanding() {
             <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">SEO Snapshot</button>
             <button onClick={() => citationsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">Citations</button>
             <button onClick={() => keywordsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">Keywords</button>
-            <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} ml-2`}>Start free audit</a>
+            <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} ml-2`}>Start Free Audit</a>
           </nav>
           <button aria-label="Open menu" className="md:hidden p-2 rounded-lg border border-white/20" onClick={() => setMobileOpen(v => !v)}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
@@ -1500,7 +1500,7 @@ export default function GMECityLanding() {
                 <button onClick={() => { seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">SEO Snapshot</button>
                 <button onClick={() => { citationsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Citations</button>
                 <button onClick={() => { keywordsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Keywords</button>
-                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); setMobileOpen(false); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} text-center`}>Start free audit</a>
+                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); setMobileOpen(false); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} text-center`}>Start Free Audit</a>
               </div>
             </div>
           )}
@@ -1516,7 +1516,7 @@ export default function GMECityLanding() {
               <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start free audit</a>
+                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start Free Audit</a>
                 <a href="#schema" onClick={(e) => { e.preventDefault(); setTab("schema"); }} className={BTN_GHOST}>Build schema</a>
               </div>
               <div className="mt-6 text-sm text-white/70">No login. No credit card. Save your plan as a PDF when you are done.</div>
