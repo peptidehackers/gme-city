@@ -221,12 +221,12 @@ async function checkGoogleBusinessProfile(
             const improvements: string[] = [];
 
             // 1. PROFILE EXISTENCE & VERIFICATION
-            positives.push(`✓ Profile exists and is discoverable on Google Maps`);
+            positives.push(`Profile active on Google Maps`);
 
             if (bestMatch.is_claimed === true) {
-              positives.push(`✓ You have claimed ownership - can manage listing directly`);
+              positives.push(`Claimed and verified`);
             } else if (bestMatch.is_claimed === false) {
-              improvements.push(`⚠ Profile exists but unclaimed - Claim it immediately to control your listing, respond to reviews, and update information`);
+              improvements.push(`Unclaimed profile - claim it to manage listing & respond to reviews`);
             }
 
             // 2. RATING & REVIEW ANALYSIS
@@ -234,39 +234,39 @@ async function checkGoogleBusinessProfile(
             const reviewCount = bestMatch.rating?.votes_count || 0;
 
             if (rating >= 4.5) {
-              positives.push(`✓ Excellent rating of ${rating}/5.0 - above 4.5 benchmark for local rankings`);
+              positives.push(`Excellent ${rating}/5.0 rating (above 4.5 benchmark)`);
             } else if (rating >= 4.0) {
-              positives.push(`✓ Good rating of ${rating}/5.0 - meets 4.0+ quality threshold`);
+              positives.push(`Good ${rating}/5.0 rating (meets 4.0+ threshold)`);
             } else if (rating >= 3.0) {
-              improvements.push(`⚠ Rating of ${rating}/5.0 is below 4.0 benchmark - Focus on customer experience and encourage satisfied customers to leave reviews`);
+              improvements.push(`${rating}/5.0 rating below 4.0 benchmark - focus on customer experience`);
             } else if (rating > 0) {
-              improvements.push(`⚠ Critical: ${rating}/5.0 rating hurts visibility - Address customer concerns immediately and implement review recovery strategy`);
+              improvements.push(`Critical: ${rating}/5.0 rating hurts visibility - address concerns immediately`);
             }
 
             if (reviewCount >= 50) {
-              positives.push(`✓ Strong review volume: ${reviewCount} reviews builds significant trust and ranking power`);
+              positives.push(`Strong ${reviewCount} reviews (builds trust & ranking power)`);
             } else if (reviewCount >= 10) {
-              positives.push(`✓ Moderate review count: ${reviewCount} reviews shows established presence`);
-              improvements.push(`📈 Opportunity: Aim for 50+ reviews to match top competitors - Set up automated review request system after purchases/appointments`);
+              positives.push(`${reviewCount} reviews (established presence)`);
+              improvements.push(`Target 50+ reviews - set up automated request system`);
             } else if (reviewCount > 0) {
-              improvements.push(`⚠ Only ${reviewCount} reviews - Need 10+ minimum for credibility. Google prioritizes businesses with consistent review volume`);
+              improvements.push(`Only ${reviewCount} reviews - need 10+ minimum for credibility`);
             } else {
-              improvements.push(`⚠ Critical: No reviews yet - First 10 reviews are crucial. Start with recent happy customers and make review process easy (QR code, text link)`);
+              improvements.push(`No reviews - first 10 are crucial (use QR codes/text links)`);
             }
 
             // 3. VISUAL CONTENT ANALYSIS
             const photoCount = bestMatch.total_photos || 0;
             if (photoCount >= 20) {
-              positives.push(`✓ Excellent visual content: ${photoCount} photos - Exceeds 20-photo benchmark for engagement`);
+              positives.push(`${photoCount} photos (exceeds 20-photo benchmark)`);
             } else if (photoCount >= 10) {
-              positives.push(`✓ Good photo presence: ${photoCount} photos meets 10+ minimum`);
-              improvements.push(`📈 Opportunity: Add more photos (exterior, interior, team, services) - Businesses with 20+ photos get 35% more requests`);
+              positives.push(`${photoCount} photos (meets 10+ minimum)`);
+              improvements.push(`Add more photos - 20+ photos get 35% more requests`);
             } else if (photoCount >= 5) {
-              improvements.push(`⚠ Limited photos: Only ${photoCount} - Upload at least 10 high-quality images covering: storefront, interior, products/services, and team`);
+              improvements.push(`Only ${photoCount} photos - upload 10+ covering storefront, interior, team`);
             } else if (photoCount > 0) {
-              improvements.push(`⚠ Very few photos (${photoCount}) - Critical for trust and ranking. Add exterior, interior, product shots, and team photos immediately`);
+              improvements.push(`Very few photos (${photoCount}) - add exterior, interior, products, team`);
             } else {
-              improvements.push(`⚠ Critical: No photos - Listings with photos get 42% more direction requests. Start with 10 quality images (exterior, interior, products, team)`);
+              improvements.push(`No photos - get 42% more requests with 10+ quality images`);
             }
 
             // 4. BUSINESS INFORMATION COMPLETENESS
@@ -277,31 +277,31 @@ async function checkGoogleBusinessProfile(
             const hasCategory = bestMatch.category;
 
             if (hasDescription) {
-              positives.push(`✓ Business description present - helps Google understand your services`);
+              positives.push(`Business description added`);
             } else {
-              improvements.push(`⚠ Missing business description - Add 250+ word description with keywords about services, location, and unique value`);
+              improvements.push(`Missing description - add 250+ words with service keywords`);
             }
 
             if (hasHours) {
-              positives.push(`✓ Business hours listed - customers know when you're open`);
+              positives.push(`Business hours listed`);
             } else {
-              improvements.push(`⚠ No business hours listed - Add accurate hours including special hours for holidays`);
+              improvements.push(`No hours listed - add accurate schedule including holidays`);
             }
 
             if (hasWebsite) {
-              positives.push(`✓ Website link present - drives traffic and builds authority`);
+              positives.push(`Website link present`);
             } else {
-              improvements.push(`📈 Opportunity: Add website link to drive traffic and improve conversion`);
+              improvements.push(`Add website link to drive traffic`);
             }
 
             if (hasPhone) {
-              positives.push(`✓ Phone number listed - enables direct customer contact`);
+              positives.push(`Phone number listed`);
             } else {
-              improvements.push(`⚠ No phone number - Critical for local businesses to enable click-to-call`);
+              improvements.push(`No phone number - critical for click-to-call`);
             }
 
             if (hasCategory) {
-              positives.push(`✓ Primary category set: "${bestMatch.category}"`);
+              positives.push(`Category: "${bestMatch.category}"`);
             }
 
             return {
