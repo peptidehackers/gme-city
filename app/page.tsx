@@ -349,8 +349,7 @@ function SEOSnapshotSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLD
   return (
     <section ref={sectionRef} className={`${CONTAINER} ${SECTION_Y}`}>
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
-      <div className="prelogin-module p-8 group">
-        <div className={FEATURE_CARD_GLOW}></div>
+      <div className="prelogin-module p-8">
         <div className={`${CARD_INTERACTIVE} ${loading ? 'neon-loading-border' : ''}`}>
           {loading && (
             <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
@@ -731,8 +730,7 @@ function CitationCoverageSection({ sectionRef }: { sectionRef?: React.RefObject<
   return (
     <section ref={sectionRef} className={`${CONTAINER} ${SECTION_Y}`}>
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
-      <div className="feature-card p-8 group">
-        <div className={FEATURE_CARD_GLOW}></div>
+      <div className="feature-card p-8">
         <div className={`${CARD_INTERACTIVE} ${loading ? 'neon-loading-border' : ''}`}>
           {loading && (
             <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
@@ -1855,8 +1853,7 @@ export default function GMECityLanding() {
 
         {/* Feature Section 3: Keyword Opportunity Scanner */}
         <section ref={keywordsRef} className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="prelogin-module p-8 group">
-            <div className={FEATURE_CARD_GLOW}></div>
+          <div className="prelogin-module p-8">
             <div className={CARD_INTERACTIVE}>
               <div className="text-center mb-8">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Find High-Intent Keywords</h2>
