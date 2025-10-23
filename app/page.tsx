@@ -2080,64 +2080,14 @@ export default function GMECityLanding() {
                     )}
                   </>
                 )}
-                <div className="mt-6 space-y-3">
-                  <div className="flex flex-wrap gap-3">
-                    <button className={BTN_PRIMARY}>Book a strategy call</button>
-                    <button className={BTN_GHOST} onClick={() => setShowSaveModal(true)}>
-                      {savedAuditId ? '✓ Saved' : 'Save audit'}
-                    </button>
-                    <button className={BTN_GHOST} onClick={doPrint}>Save as PDF</button>
-                    <button className={BTN_GHOST} onClick={() => setShowEmailModal(true)}>Email report</button>
-                    <button className={BTN_GHOST} onClick={generateShareableLink}>Share link</button>
-                    <button className={BTN_GHOST} onClick={() => setShowZapierModal(true)}>Send to Zapier</button>
-                    <button className={BTN_GHOST} onClick={() => setShowWhiteLabelModal(true)}>White-label</button>
-                  </div>
-                  {printMsg && <span className="text-sm text-white/60">{printMsg}</span>}
-                  {savedAuditId && <span className="text-sm text-emerald-400">Audit ID: {savedAuditId.substring(0, 8)}...</span>}
+                <div className="mt-6">
+                  <button
+                    className={`${BTN_PRIMARY} w-full flex items-center justify-center gap-2`}
+                    onClick={() => window.open('https://calendly.com/your-booking-link', '_blank')}
+                  >
+                    Book a Call with us to Help
+                  </button>
                 </div>
-
-                {/* Monitoring Upsell */}
-                {!hasActiveMonitoring && (
-                  <div className="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                          </svg>
-                          <h4 className="font-semibold text-emerald-300">Never Miss a Change</h4>
-                        </div>
-                        <p className="text-sm text-white/80 mb-3">
-                          Get automated weekly reports tracking your score, reviews, and competitor movements. Stay ahead with instant alerts.
-                        </p>
-                        <ul className="text-sm text-white/70 space-y-1 mb-4">
-                          <li>• Weekly score change reports via email</li>
-                          <li>• Instant alerts if reviews drop below threshold</li>
-                          <li>• Notifications when competitors pass you in Local Pack</li>
-                          <li>• Track ranking changes automatically</li>
-                        </ul>
-                        <div className="flex items-center gap-3">
-                          <button className={BTN_PRIMARY} onClick={() => setShowMonitoringModal(true)}>
-                            Enable Monitoring - $29/month
-                          </button>
-                          <span className="text-xs text-white/60">Cancel anytime</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {hasActiveMonitoring && (
-                  <div className="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4">
-                    <div className="flex items-center gap-2 text-emerald-300">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="font-semibold">Monitoring Active</span>
-                      <span className="text-white/60 text-sm ml-auto">Next report in 3 days</span>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           )}
