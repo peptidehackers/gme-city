@@ -539,13 +539,31 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
 
 // Citation Coverage Check Component (GBP Focus)
 function CitationCoverageCheck() {
-  const [formData, setFormData] = useState({ businessName: "", city: "", zip: "" });
+  const [formData, setFormData] = useState({
+    businessName: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    phone: "",
+    category: ""
+  });
   const [results, setResults] = useState<{
     hasGBP: boolean;
-    gbpData?: { name: string; rating: number; reviewCount: number };
+    gbpData?: { name: string; rating: number; reviewCount: number; address?: string; phone?: string };
     insights: string[];
   } | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Helper: Format phone number as 123-456-7890
+  const formatPhoneNumber = (value: string): string => {
+    const cleaned = value.replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+    if (match) {
+      return [match[1], match[2], match[3]].filter(Boolean).join('-');
+    }
+    return value;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -557,8 +575,12 @@ function CitationCoverageCheck() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           business_name: formData.businessName,
+          address: formData.address || undefined,
           city: formData.city,
-          zip: formData.zip
+          state: formData.state,
+          zip: formData.zip,
+          phone: formData.phone || undefined,
+          category: formData.category || undefined
         })
       });
 
@@ -585,29 +607,57 @@ function CitationCoverageCheck() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <form onSubmit={handleSubmit} className="grid sm:grid-cols-3 gap-4 mb-8">
+      <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4 mb-8">
         <input
           className={INPUT}
-          placeholder="Business Name"
+          placeholder="Business Name *"
           value={formData.businessName}
           onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
           required
         />
         <input
           className={INPUT}
-          placeholder="City"
+          placeholder="Street Address (optional)"
+          value={formData.address}
+          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+        />
+        <input
+          className={INPUT}
+          placeholder="City *"
           value={formData.city}
           onChange={(e) => setFormData({ ...formData, city: e.target.value })}
           required
         />
         <input
           className={INPUT}
-          placeholder="ZIP Code"
+          placeholder="State * (e.g., CA)"
+          value={formData.state}
+          onChange={(e) => setFormData({ ...formData, state: e.target.value.toUpperCase() })}
+          maxLength={2}
+          required
+        />
+        <input
+          className={INPUT}
+          placeholder="ZIP Code *"
           value={formData.zip}
           onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
           required
         />
-        <button type="submit" className={`${BTN_PRIMARY} sm:col-span-3`} disabled={loading}>
+        <input
+          className={INPUT}
+          placeholder="Phone Number (optional)"
+          type="tel"
+          value={formData.phone}
+          onChange={(e) => setFormData({ ...formData, phone: formatPhoneNumber(e.target.value) })}
+          maxLength={12}
+        />
+        <input
+          className={`${INPUT} sm:col-span-2`}
+          placeholder="Business Category (optional, e.g., 'dentist', 'plumber', 'restaurant')"
+          value={formData.category}
+          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+        />
+        <button type="submit" className={`${BTN_PRIMARY} sm:col-span-2`} disabled={loading}>
           {loading ? "Checking..." : "Check My Google Business Profile"}
         </button>
       </form>
@@ -638,6 +688,8 @@ function CitationCoverageCheck() {
                   <div className="text-white/80 mb-3">
                     <p className="font-medium">{results.gbpData.name}</p>
                     <p>⭐ {results.gbpData.rating}/5.0 ({results.gbpData.reviewCount} reviews)</p>
+                    {results.gbpData.address && <p className="text-sm">📍 {results.gbpData.address}</p>}
+                    {results.gbpData.phone && <p className="text-sm">📞 {results.gbpData.phone}</p>}
                   </div>
                 )}
                 <ul className="space-y-2 text-white/70">

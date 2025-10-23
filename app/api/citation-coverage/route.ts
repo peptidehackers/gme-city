@@ -15,7 +15,8 @@ interface GBPCheckRequest {
   address?: string;
   city: string;
   zip: string;
-  state?: string;
+  state: string;
+  category?: string;
   country?: string;
   gbp_url?: string; // Optional: user can provide GBP URL
 }
@@ -35,14 +36,103 @@ interface GBPCheckResponse {
 }
 
 // =====================================================
+// HELPER FUNCTIONS
+// =====================================================
+
+// Calculate string similarity (Levenshtein distance-based)
+function calculateSimilarity(str1: string, str2: string): number {
+  const s1 = str1.toLowerCase().trim();
+  const s2 = str2.toLowerCase().trim();
+
+  if (s1 === s2) return 100;
+  if (s1.length === 0 || s2.length === 0) return 0;
+
+  // Simple approach: check if one contains the other
+  if (s1.includes(s2) || s2.includes(s1)) return 85;
+
+  // Count matching words
+  const words1 = s1.split(/\s+/);
+  const words2 = s2.split(/\s+/);
+  const matchingWords = words1.filter(w => words2.some(w2 => w2.includes(w) || w.includes(w2)));
+  const similarity = (matchingWords.length / Math.max(words1.length, words2.length)) * 100;
+
+  return similarity;
+}
+
+// Normalize phone number for comparison
+function normalizePhone(phone: string): string {
+  return phone.replace(/\D/g, '');
+}
+
+// Check if business matches search criteria
+function isBusinessMatch(
+  business: any,
+  searchName: string,
+  searchZip: string,
+  searchPhone?: string,
+  searchAddress?: string
+): { match: boolean; confidence: number; reasons: string[] } {
+  let confidence = 0;
+  const reasons: string[] = [];
+
+  // Check name similarity
+  const nameSimilarity = calculateSimilarity(business.title || '', searchName);
+  if (nameSimilarity >= 70) {
+    confidence += 40;
+    reasons.push(`Name match: ${nameSimilarity.toFixed(0)}%`);
+  } else {
+    reasons.push(`Name mismatch (${nameSimilarity.toFixed(0)}% similar)`);
+    return { match: false, confidence, reasons };
+  }
+
+  // Check ZIP code if address is available
+  if (business.address) {
+    const addressHasZip = business.address.includes(searchZip);
+    if (addressHasZip) {
+      confidence += 30;
+      reasons.push('ZIP code verified');
+    } else {
+      reasons.push('ZIP code not found in address');
+    }
+  }
+
+  // Check phone if provided
+  if (searchPhone && business.phone) {
+    const normalizedSearch = normalizePhone(searchPhone);
+    const normalizedBusiness = normalizePhone(business.phone);
+    if (normalizedSearch === normalizedBusiness) {
+      confidence += 20;
+      reasons.push('Phone number verified');
+    } else {
+      reasons.push('Phone number mismatch');
+    }
+  }
+
+  // Check address if provided
+  if (searchAddress && business.address) {
+    const addressSimilarity = calculateSimilarity(business.address, searchAddress);
+    if (addressSimilarity >= 60) {
+      confidence += 10;
+      reasons.push('Address matches');
+    }
+  }
+
+  // Consider it a match if confidence is at least 40% (name match only)
+  return { match: confidence >= 40, confidence, reasons };
+}
+
+// =====================================================
 // GOOGLE BUSINESS PROFILE CHECK
 // =====================================================
 
 async function checkGoogleBusinessProfile(
   businessName: string,
   city: string,
+  state: string,
   zip: string,
-  state?: string,
+  address?: string,
+  phone?: string,
+  category?: string,
   gbpUrl?: string
 ): Promise<GBPCheckResponse> {
 
@@ -70,9 +160,17 @@ async function checkGoogleBusinessProfile(
 
   // Otherwise, search for GBP via DataForSEO
   try {
-    console.log(`Searching Google Maps for: ${businessName} ${city}`);
+    // Build search query - simpler approach without quotes
+    // Google Maps search is more forgiving than exact matching
+    let searchQuery = businessName;
+    if (address) {
+      searchQuery += ` ${address}`;
+    }
+    searchQuery += ` ${city} ${state}`;
+    if (category) searchQuery += ` ${category}`;
 
-    const searchQuery = `${businessName} ${city}`;
+    console.log(`Searching Google Maps for: ${searchQuery}`);
+    console.log(`Location: ${city}, ${state} ${zip}`);
 
     const response = await fetch(`${DATAFORSEO_API_ENDPOINT}/serp/google/maps/live/advanced`, {
       method: 'POST',
@@ -83,7 +181,8 @@ async function checkGoogleBusinessProfile(
       body: JSON.stringify([{
         keyword: searchQuery,
         location_code: 2840, // USA
-        language_code: 'en'
+        language_code: 'en',
+        depth: 10 // Get up to 10 results to find best match
       }])
     });
 
@@ -98,27 +197,59 @@ async function checkGoogleBusinessProfile(
         console.log('Items found:', items.length);
 
         if (items.length > 0) {
-          const business = items[0];
-          console.log('Found business:', business.title, 'Rating:', business.rating?.value, 'Reviews:', business.rating?.votes_count);
+          // Find best matching business
+          let bestMatch: any = null;
+          let bestConfidence = 0;
+          let matchReasons: string[] = [];
 
-          return {
-            found: true,
-            hasGBP: true,
-            gbpData: {
-              name: business.title || businessName,
-              rating: business.rating?.value || 0,
-              reviewCount: business.rating?.votes_count || 0,
-              address: business.address || '',
-              phone: business.phone || ''
-            },
-            insights: [
-              `Found Google Business Profile: ${business.title}`,
-              `Rating: ${business.rating?.value || 0}/5 with ${business.rating?.votes_count || 0} reviews`,
-              business.rating?.votes_count < 10 ? 'Get more reviews to improve local rankings' : 'Strong review count',
+          for (const business of items) {
+            const matchResult = isBusinessMatch(business, businessName, zip, phone, address);
+            console.log(`Checking: ${business.title} - Match: ${matchResult.match}, Confidence: ${matchResult.confidence}%`);
+
+            if (matchResult.match && matchResult.confidence > bestConfidence) {
+              bestMatch = business;
+              bestConfidence = matchResult.confidence;
+              matchReasons = matchResult.reasons;
+            }
+          }
+
+          if (bestMatch) {
+            console.log(`Best match found: ${bestMatch.title} (${bestConfidence}% confidence)`);
+
+            const insights = [
+              `Found Google Business Profile: ${bestMatch.title}`,
+              `Match confidence: ${bestConfidence.toFixed(0)}%`,
+              `Rating: ${bestMatch.rating?.value || 0}/5 with ${bestMatch.rating?.votes_count || 0} reviews`,
+              bestMatch.rating?.votes_count < 10 ? 'Get more reviews to improve local rankings' : 'Strong review count',
               'Schedule a call with GMB City for a complete 40-citation audit'
-            ],
-            score: 100
-          };
+            ];
+
+            return {
+              found: true,
+              hasGBP: true,
+              gbpData: {
+                name: bestMatch.title || businessName,
+                rating: bestMatch.rating?.value || 0,
+                reviewCount: bestMatch.rating?.votes_count || 0,
+                address: bestMatch.address || '',
+                phone: bestMatch.phone || ''
+              },
+              insights,
+              score: 100
+            };
+          } else {
+            // Found results but no good match
+            return {
+              found: false,
+              hasGBP: false,
+              insights: [
+                `Found ${items.length} business(es) but none matched your criteria closely enough`,
+                'Try providing more details (address, phone number) for better matching',
+                'Or contact GMB City for a manual verification'
+              ],
+              score: 0
+            };
+          }
         }
       }
     }
@@ -159,23 +290,26 @@ export async function POST(request: NextRequest) {
     const body: GBPCheckRequest = await request.json();
 
     // Validate required fields
-    const { business_name, city, zip } = body;
+    const { business_name, city, state, zip } = body;
 
-    if (!business_name || !city || !zip) {
+    if (!business_name || !city || !state || !zip) {
       return NextResponse.json(
-        { error: 'Missing required fields: business_name, city, zip' },
+        { error: 'Missing required fields: business_name, city, state, zip' },
         { status: 400 }
       );
     }
 
-    console.log('Starting GBP check for:', business_name);
+    console.log('Starting GBP check for:', business_name, `${city}, ${state}`);
 
     const startTime = Date.now();
     const result = await checkGoogleBusinessProfile(
       business_name,
       city,
+      state,
       zip,
-      body.state,
+      body.address,
+      body.phone,
+      body.category,
       body.gbp_url
     );
     const duration = Date.now() - startTime;
