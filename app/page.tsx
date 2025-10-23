@@ -2027,7 +2027,7 @@ export default function GMECityLanding() {
             <div className={`grid lg:grid-cols-2 ${GRID_GAP}`}>
               <div className={CARD}>
                 <div className="mb-4">
-                  <h2 className="text-2xl font-semibold tracking-tight">Instant Google Business Profile audit</h2>
+                  <h2 className="text-2xl font-semibold tracking-tight">Instant Google Business Profile Audit</h2>
                   <p className="mt-1 text-white/70 text-sm">Enter your business details to get your automated GBP audit</p>
                 </div>
                 <GBPAuditForm onAuditComplete={setAudit} onLoadingChange={setAuditLoading} onDataLoaded={setHasAuditData} />
@@ -2056,13 +2056,13 @@ export default function GMECityLanding() {
                 ) : (
                   <>
                     <div className="flex items-center justify-between text-sm">
-                      <h3 className="text-xl font-semibold">Score and priorities</h3>
+                      <h3 className="text-xl font-semibold">Score and Priorities</h3>
                       <span className={`px-2.5 py-1 rounded-lg ${score >= 80 ? "bg-emerald-500/20 text-emerald-300" : score >= 60 ? "bg-yellow-500/20 text-yellow-300" : "bg-red-500/20 text-red-300"}`}>{score >= 80 ? "Great" : score >= 60 ? "Okay" : "Needs work"}</span>
                     </div>
                     <div className={`mt-4 ${PROGRESS_BG}`}>
                       <div className={PROGRESS_FG} style={{ width: `${score}%` }} />
                     </div>
-                    <h3 className="text-xl font-semibold mt-6">Action plan</h3>
+                    <h3 className="text-xl font-semibold mt-6">Action Plan</h3>
                     {tasks.length === 0 ? (
                       <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/80">Perfect score! No action items needed</div>
                     ) : (
