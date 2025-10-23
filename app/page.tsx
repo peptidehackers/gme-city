@@ -714,7 +714,7 @@ function CitationCoverageCheck({ onLoadingChange }: { onLoadingChange: (loading:
         </button>
       </form>
 
-      {results && (
+      {results && !loading && (
         <div>
           {/* Business Info Header */}
           {results.gbpData && (
