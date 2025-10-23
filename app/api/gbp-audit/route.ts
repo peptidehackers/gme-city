@@ -265,7 +265,7 @@ async function performGBPAudit(
       hasServices: false, // Default to false - assume needs improvement
       hasBookingLink: !!bestMatch.book_online_url,
       hasDuplicateListing: false, // Default to false - rare issue
-      napConsistent: true // Default to true - assume consistent unless we can verify otherwise
+      napConsistent: false // Default to false - should be verified across citations, not assumed
     };
 
     console.log('[GBP Audit] Audit data compiled:', auditData);
