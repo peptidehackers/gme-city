@@ -370,14 +370,14 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
             <div className="grid sm:grid-cols-2 gap-4">
               <input
                 className={INPUT}
-                placeholder="Business Name"
+                placeholder="Business Name *"
                 value={formData.businessName}
                 onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
                 required
               />
               <input
                 className={INPUT}
-                placeholder="Website URL (e.g., example.com)"
+                placeholder="Website URL * (e.g., example.com)"
                 type="text"
                 value={formData.websiteUrl}
                 onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
@@ -386,28 +386,28 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
               />
               <input
                 className={INPUT}
-                placeholder="Business Category / Services"
+                placeholder="Business Category / Services *"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 required
               />
               <input
                 className={INPUT}
-                placeholder="Street Address"
+                placeholder="Street Address *"
                 value={formData.street}
                 onChange={(e) => setFormData({ ...formData, street: e.target.value })}
                 required
               />
               <input
                 className={INPUT}
-                placeholder="City"
+                placeholder="City *"
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 required
               />
               <input
                 className={INPUT}
-                placeholder="ZIP Code"
+                placeholder="ZIP Code *"
                 value={formData.zip}
                 onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
                 required
@@ -424,7 +424,7 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
             <div className="grid sm:grid-cols-2 gap-4">
               <input
                 className={INPUT}
-                placeholder="Phone Number (123-456-7890)"
+                placeholder="Phone Number (optional)"
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: formatPhoneNumber(e.target.value) })}
@@ -432,7 +432,7 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
               />
               <input
                 className={INPUT}
-                placeholder="Email (optional, for results delivery)"
+                placeholder="Email (optional)"
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -801,8 +801,9 @@ function CitationCoverageCheck({ onLoadingChange }: { onLoadingChange: (loading:
 // Keyword Opportunity Scanner Component
 function KeywordOpportunityScanner() {
   const [formData, setFormData] = useState({ websiteUrl: "", category: "", city: "", competitorUrl: "" });
-  const [results, setResults] = useState<{ keyword: string; volume: number; ranking?: number }[] | null>(null);
+  const [results, setResults] = useState<{ keyword: string; volume: number; ranking?: number; opportunity?: string }[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Helper: Add https:// prefix if missing
   const normalizeUrl = (value: string): string => {
@@ -817,23 +818,35 @@ function KeywordOpportunityScanner() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    // TODO: Replace with actual API call to /api/keywords
-    setTimeout(() => {
-      const category = formData.category || "plumber";
-      const city = formData.city || "Encino";
+    try {
+      const response = await fetch('/api/keywords', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          website: formData.websiteUrl,
+          category: formData.category,
+          city: formData.city,
+          competitorUrl: formData.competitorUrl || undefined
+        })
+      });
 
-      const mockKeywords = [
-        { keyword: `emergency ${category} ${city.toLowerCase()}`, volume: 140, ranking: 8 },
-        { keyword: `${category} near me`, volume: 320, ranking: undefined },
-        { keyword: `best ${category} ${city.toLowerCase()}`, volume: 180, ranking: undefined },
-        { keyword: `${category} ${city.toLowerCase()} reviews`, volume: 90, ranking: undefined },
-        { keyword: `24/7 ${category} ${city.toLowerCase()}`, volume: 110, ranking: undefined },
-      ];
+      const data = await response.json();
 
-      setResults(mockKeywords);
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to fetch keywords');
+      }
+
+      // Set results even if empty (to show the motivational fallback)
+      setResults(data.keywords || []);
+    } catch (err) {
+      console.error('Error fetching keywords:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch keywords');
+      setResults(null);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -841,7 +854,7 @@ function KeywordOpportunityScanner() {
       <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4 mb-8">
         <input
           className={`${INPUT} sm:col-span-2`}
-          placeholder="Website URL (e.g., example.com)"
+          placeholder="Website URL * (e.g., example.com)"
           type="text"
           value={formData.websiteUrl}
           onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
@@ -850,16 +863,17 @@ function KeywordOpportunityScanner() {
         />
         <input
           className={INPUT}
-          placeholder="Business Category / Services"
+          placeholder="Business Category / Services *"
           value={formData.category}
           onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           required
         />
         <input
           className={INPUT}
-          placeholder="City or Location (optional)"
+          placeholder="City *"
           value={formData.city}
           onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+          required
         />
         <input
           className={`${INPUT} sm:col-span-2`}
@@ -874,28 +888,60 @@ function KeywordOpportunityScanner() {
         </button>
       </form>
 
-      {results && (
+      {error && (
+        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-center">
+          {error}
+        </div>
+      )}
+
+      {results && results.length > 0 && (
         <div>
           <div className="space-y-3 mb-8">
-            {results.map((kw, idx) => (
-              <div
-                key={idx}
-                className="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between gap-4"
-              >
-                <div className="flex-1">
-                  <div className="font-medium text-white">{kw.keyword}</div>
-                  {kw.ranking && (
-                    <div className="mt-1 text-sm text-yellow-400">
-                      You're currently ranking #{kw.ranking} for this keyword
+            {results.map((kw, idx) => {
+              // Determine color based on opportunity type
+              const getOpportunityColor = () => {
+                if (kw.opportunity === 'ranking') {
+                  return 'border-emerald-500/30 bg-emerald-500/5'; // Green - already ranking well
+                } else if (kw.opportunity === 'improve') {
+                  return 'border-yellow-500/30 bg-yellow-500/5'; // Yellow - can improve
+                } else {
+                  return 'border-blue-500/30 bg-blue-500/5'; // Blue - keyword gap
+                }
+              };
+
+              const getOpportunityBadge = () => {
+                if (kw.opportunity === 'ranking') {
+                  return <span className="text-xs px-2 py-1 rounded bg-emerald-500/20 text-emerald-400">Ranking Well</span>;
+                } else if (kw.opportunity === 'improve') {
+                  return <span className="text-xs px-2 py-1 rounded bg-yellow-500/20 text-yellow-400">Can Improve</span>;
+                } else {
+                  return <span className="text-xs px-2 py-1 rounded bg-blue-500/20 text-blue-400">Opportunity</span>;
+                }
+              };
+
+              return (
+                <div
+                  key={idx}
+                  className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${getOpportunityColor()}`}
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="font-medium text-white">{kw.keyword}</div>
+                      {getOpportunityBadge()}
                     </div>
-                  )}
+                    {kw.ranking && (
+                      <div className="text-sm text-white/70">
+                        Currently ranking #{kw.ranking}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-semibold text-white">{kw.volume.toLocaleString()}</div>
+                    <div className="text-xs text-white/60">searches/mo</div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-semibold text-emerald-400">{kw.volume}</div>
-                  <div className="text-xs text-white/60">searches/mo</div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="text-center">
@@ -904,6 +950,28 @@ function KeywordOpportunityScanner() {
               Unlock personalized keyword strategies + ranking tracker
             </p>
           </div>
+        </div>
+      )}
+
+      {results && results.length === 0 && !error && (
+        <div className="p-12 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 text-center">
+          <div className="text-5xl mb-4">🚀</div>
+          <h3 className="text-2xl font-bold text-white mb-3">Ready to Build Your Online Presence?</h3>
+          <p className="text-lg text-white/80 mb-6 max-w-2xl mx-auto">
+            Your website doesn't have enough organic traffic data yet — but that's exactly what we help you fix!
+            Let's get you ranking for the keywords that bring customers to your door.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button className={BTN_PRIMARY}>
+              Get Your Custom SEO Strategy
+            </button>
+            <a href="#start" className="text-blue-400 hover:text-blue-300 font-medium">
+              Learn How We Can Help →
+            </a>
+          </div>
+          <p className="mt-6 text-sm text-white/60">
+            We specialize in helping local businesses dominate their market with proven SEO tactics
+          </p>
         </div>
       )}
     </div>
