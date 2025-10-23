@@ -1281,6 +1281,156 @@ function KeywordOpportunityScanner() {
   );
 }
 
+// GBP Audit Form Component
+function GBPAuditForm({ onAuditComplete, onLoadingChange }: {
+  onAuditComplete: (audit: AuditInput) => void;
+  onLoadingChange: (loading: boolean) => void;
+}) {
+  const [formData, setFormData] = useState({
+    businessName: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    phone: ""
+  });
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // Helper: Format phone number
+  const formatPhoneNumber = (value: string): string => {
+    const cleaned = value.replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+    if (match) {
+      return [match[1], match[2], match[3]].filter(Boolean).join('-');
+    }
+    return value;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    onLoadingChange(true);
+
+    try {
+      const response = await fetch('/api/gbp-audit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          business_name: formData.businessName,
+          address: formData.address || undefined,
+          city: formData.city,
+          state: formData.state,
+          zip: formData.zip,
+          phone: formData.phone || undefined
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch audit data');
+      }
+
+      const data = await response.json();
+
+      if (!data.success || !data.found) {
+        setError(data.error || 'No Google Business Profile found. Try adding more details like address or phone number.');
+        return;
+      }
+
+      if (data.auditData) {
+        onAuditComplete(data.auditData);
+      }
+    } catch (err) {
+      console.error('GBP audit error:', err);
+      setError('Unable to fetch audit data. Please try again.');
+    } finally {
+      setLoading(false);
+      onLoadingChange(false);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
+        <input
+          className={INPUT}
+          placeholder="Business Name *"
+          value={formData.businessName}
+          onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+          required
+          disabled={loading}
+        />
+        <input
+          className={INPUT}
+          placeholder="Street Address (optional)"
+          value={formData.address}
+          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+          disabled={loading}
+        />
+        <input
+          className={INPUT}
+          placeholder="City *"
+          value={formData.city}
+          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+          required
+          disabled={loading}
+        />
+        <input
+          className={INPUT}
+          placeholder="State * (e.g., CA)"
+          value={formData.state}
+          onChange={(e) => setFormData({ ...formData, state: e.target.value.toUpperCase() })}
+          maxLength={2}
+          required
+          disabled={loading}
+        />
+        <input
+          className={INPUT}
+          placeholder="ZIP Code *"
+          value={formData.zip}
+          onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
+          maxLength={10}
+          required
+          disabled={loading}
+        />
+        <input
+          className={INPUT}
+          placeholder="Phone (optional)"
+          value={formData.phone}
+          onChange={(e) => setFormData({ ...formData, phone: formatPhoneNumber(e.target.value) })}
+          disabled={loading}
+        />
+        <div className="sm:col-span-2">
+          <button
+            type="submit"
+            disabled={loading}
+            className={`${BTN_PRIMARY} w-full flex items-center justify-center gap-2`}
+          >
+            {loading ? (
+              <>
+                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Analyzing Your Profile...
+              </>
+            ) : (
+              'Get My Audit'
+            )}
+          </button>
+        </div>
+      </form>
+
+      {error && (
+        <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+          {error}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ---------------------- UI ----------------------
 export default function GMECityLanding() {
   const auditRef = useRef<HTMLDivElement | null>(null);
@@ -1306,7 +1456,8 @@ export default function GMECityLanding() {
     hasDuplicateListing: false,
     napConsistent: true,
   });
-  const { score, breakdown } = computeScore(audit);
+  const [auditLoading, setAuditLoading] = useState(false);
+  const { score, breakdown} = computeScore(audit);
   const animatedScore = useAnimatedNumber(score);
   const tasks = taskList(audit);
 
@@ -1870,87 +2021,33 @@ export default function GMECityLanding() {
           {tab === "audit" && (
             <div className={`grid lg:grid-cols-2 ${GRID_GAP}`}>
               <div className={CARD}>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h2 className="text-2xl font-semibold tracking-tight">Instant Google Business Profile audit</h2>
-                    <p className="mt-1 text-white/70 text-sm">Fill the form. Your score updates live.</p>
-                  </div>
-                  <button
-                    className={`${BTN_GHOST} text-xs flex items-center gap-2`}
-                    onClick={() => setShowGMBModal(true)}
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    Import from GMB
-                  </button>
+                <div className="mb-4">
+                  <h2 className="text-2xl font-semibold tracking-tight">Instant Google Business Profile audit</h2>
+                  <p className="mt-1 text-white/70 text-sm">Enter your business details to get your automated GBP audit</p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-                  <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Business name</span>
-                    <input className={INPUT} value={audit.businessName} onChange={(e) => setAudit(a => ({ ...a, businessName: e.target.value }))} />
-                  </label>
-                  <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">City</span>
-                    <input className={INPUT} value={audit.city} onChange={(e) => setAudit(a => ({ ...a, city: e.target.value }))} />
-                  </label>
-                  <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Primary category</span>
-                    <input className={INPUT} value={audit.primaryCategory} onChange={(e) => setAudit(a => ({ ...a, primaryCategory: e.target.value }))} />
-                  </label>
-
-                  <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Review count</span>
-                    <input type="number" className={INPUT} value={audit.reviewCount} min={0} onChange={(e) => setAudit(a => ({ ...a, reviewCount: Math.floor(parseNumberInput(e.target.value, 0)) }))} />
-                  </label>
-                  <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Average rating</span>
-                    <input type="number" step="0.1" min={1} max={5} className={INPUT} value={audit.rating} onChange={(e) => setAudit(a => ({ ...a, rating: parseRatingInput(e.target.value) }))} />
-                  </label>
-                  <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Photos added last 30 days</span>
-                    <input type="number" min={0} className={INPUT} value={audit.photosLast30d} onChange={(e) => setAudit(a => ({ ...a, photosLast30d: Math.floor(parseNumberInput(e.target.value, 0)) }))} />
-                  </label>
-                  <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Posts per month</span>
-                    <input type="number" min={0} className={INPUT} value={audit.postsPerMonth} onChange={(e) => setAudit(a => ({ ...a, postsPerMonth: Math.floor(parseNumberInput(e.target.value, 0)) }))} />
-                  </label>
-
-                  {/* Toggles */}
-                  {([
-                    ["Website linked", "hasWebsite"],
-                    ["Hours set", "hasHours"],
-                    ["Services filled", "hasServices"],
-                    ["Booking link present", "hasBookingLink"],
-                    ["Q and A present", "hasQA"],
-                    ["Duplicate listing exists", "hasDuplicateListing"],
-                    ["NAP consistent across citations", "napConsistent"],
-                  ] as const).map(([label, key]) => (
-                    <label key={String(key)} className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
-                      <span className="text-white/80">{label}</span>
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-label={label}
-                        aria-checked={(audit as any)[key] ? true : false}
-                        tabIndex={0}
-                        onKeyDown={(ev) => {
-                          if (ev.key === "Enter" || ev.key === " ") {
-                            ev.preventDefault();
-                            setAudit(a => ({ ...a, [key]: !(a as any)[key] } as any));
-                          }
-                        }}
-                        onClick={() => setAudit(a => ({ ...a, [key]: !(a as any)[key] } as any))}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${(audit as any)[key] ? "bg-emerald-400" : "bg-white/20"}`}
-                      >
-                        <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition ${(audit as any)[key] ? "translate-x-5" : "translate-x-1"}`} />
-                      </button>
-                    </label>
-                  ))}
-                </div>
+                <GBPAuditForm onAuditComplete={setAudit} onLoadingChange={setAuditLoading} />
               </div>
 
-              <div className={CARD}>
+              <div className={`relative ${CARD} ${auditLoading ? 'neon-loading-border' : ''}`}>
+                <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
+                {auditLoading && (
+                  <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+                    <defs>
+                      <linearGradient id="emeraldGradientAudit" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#10b981" />
+                        <stop offset="50%" stopColor="#34d399" />
+                        <stop offset="100%" stopColor="#6ee7b7" />
+                      </linearGradient>
+                      <linearGradient id="emeraldGlowGradientAudit" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="rgba(16, 185, 129, 0.6)" />
+                        <stop offset="50%" stopColor="rgba(52, 211, 153, 0.8)" />
+                        <stop offset="100%" stopColor="rgba(110, 231, 183, 0.6)" />
+                      </linearGradient>
+                    </defs>
+                    <rect className="border-glow-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" stroke="url(#emeraldGlowGradientAudit)" />
+                    <rect className="border-trail-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" stroke="url(#emeraldGradientAudit)" />
+                  </svg>
+                )}
                 <div className="flex items-center justify-between text-sm">
                   <h3 className="text-xl font-semibold">Score and priorities</h3>
                   <span className={`px-2.5 py-1 rounded-lg ${score >= 80 ? "bg-emerald-500/20 text-emerald-300" : score >= 60 ? "bg-yellow-500/20 text-yellow-300" : "bg-red-500/20 text-red-300"}`}>{score >= 80 ? "Great" : score >= 60 ? "Okay" : "Needs work"}</span>
@@ -2034,6 +2131,22 @@ export default function GMECityLanding() {
                 )}
               </div>
             </div>
+          )}
+
+          {/* GBP Audit CTA */}
+          {tab === "audit" && audit.businessName && (
+            <MeetingCTACard
+              title="Ready to Dominate Local Search?"
+              description="Your audit reveals exactly where you stand. Now let's build a custom action plan to crush your competition and own your local market."
+              benefits={[
+                "Personalized GBP optimization roadmap based on your audit",
+                "Competitor gap analysis & ranking strategy",
+                "Review generation system to boost trust & visibility",
+                "Monthly tracking & optimization to maintain #1 rankings"
+              ]}
+              featureName="GBP Optimization"
+              urgencyMessage="Book your strategy call this week to get priority implementation"
+            />
           )}
 
           {tab === "compare" && (
