@@ -218,10 +218,8 @@ async function checkGoogleBusinessProfile(
 
             const insights = [
               `Found Google Business Profile: ${bestMatch.title}`,
-              `Match confidence: ${bestConfidence.toFixed(0)}%`,
               `Rating: ${bestMatch.rating?.value || 0}/5 with ${bestMatch.rating?.votes_count || 0} reviews`,
-              bestMatch.rating?.votes_count < 10 ? 'Get more reviews to improve local rankings' : 'Strong review count',
-              'Schedule a call with GMB City for a complete 40-citation audit'
+              bestMatch.rating?.votes_count < 10 ? 'Get more reviews to improve local rankings' : 'Strong review count'
             ];
 
             return {
