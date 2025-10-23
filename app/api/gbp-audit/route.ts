@@ -27,7 +27,7 @@ interface GBPAuditResponse {
     primaryCategory: string;
     reviewCount: number;
     rating: number;
-    photosLast30d: number;
+    totalPhotos: number;
     hasQA: boolean;
     postsPerMonth: number;
     hasWebsite: boolean;
@@ -183,6 +183,14 @@ async function performGBPAudit(
 
     console.log(`[GBP Audit] Found match: ${bestMatch.title} (${bestConfidence}% confidence)`);
 
+    // Debug: Log available fields to check for services
+    console.log('[GBP Audit] Available fields:', {
+      has_place_topics: !!bestMatch.place_topics,
+      place_topics_length: bestMatch.place_topics?.length || 0,
+      has_service_options: !!bestMatch.service_options,
+      service_options_keys: bestMatch.service_options ? Object.keys(bestMatch.service_options) : [],
+    });
+
     // Step 2: Get additional data from Business Data API (Q&A and Posts)
     let hasQA = false;
     let postsPerMonth = 0;
@@ -249,18 +257,26 @@ async function performGBPAudit(
     }
 
     // Step 3: Build audit data from API response
+
+    // Try to detect if business has services listed
+    // Check place_topics (services are often listed here) or service_options
+    const hasServices = !!(
+      (bestMatch.place_topics && bestMatch.place_topics.length > 0) ||
+      (bestMatch.service_options && Object.keys(bestMatch.service_options).length > 0)
+    );
+
     const auditData = {
       businessName: bestMatch.title || businessName,
       city: bestMatch.address_info?.city || city,
       primaryCategory: bestMatch.category || 'Unknown',
       reviewCount: bestMatch.rating?.votes_count || 0,
       rating: bestMatch.rating?.value || 0,
-      photosLast30d: bestMatch.total_photos || 0, // Note: This is total photos, not last 30 days
+      totalPhotos: bestMatch.total_photos || 0, // Total photos on profile
       hasQA,
       postsPerMonth,
       hasWebsite: !!(bestMatch.domain || bestMatch.url),
       hasHours: !!(bestMatch.work_hours?.timetable),
-      hasServices: false, // Default to false - assume needs improvement
+      hasServices,
       hasBookingLink: !!bestMatch.book_online_url,
     };
 

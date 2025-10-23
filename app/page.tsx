@@ -16,7 +16,7 @@ type AuditInput = {
   primaryCategory: string;
   reviewCount: number;
   rating: number; // 1..5
-  photosLast30d: number;
+  totalPhotos: number;
   hasQA: boolean;
   postsPerMonth: number;
   hasWebsite: boolean;
@@ -142,9 +142,8 @@ export function computeScore(a: AuditInput) {
   breakdown["Reviews"] = reviewQty + reviewQuality;
 
   // Photos (15 points max) - Visual engagement
-  // We get total photos, not last 30 days, so scale accordingly
-  // 0-30+ photos on linear scale
-  const photos = clamp(a.photosLast30d * 0.5, 0, 15);
+  // 0-30+ total photos on linear scale (0.5 points per photo)
+  const photos = clamp(a.totalPhotos * 0.5, 0, 15);
   breakdown["Photos"] = photos;
 
   // Posts (10 points max) - Freshness signal
@@ -176,8 +175,8 @@ export function taskList(a: AuditInput) {
     tasks.push({ title: "Set business hours", why: "Basic requirement that affects visibility and user experience", impact: "High" });
 
   // MEDIUM IMPACT: Visual content and engagement
-  if (a.photosLast30d < 20)
-    tasks.push({ title: `Upload more photos (currently ${a.photosLast30d})`, why: "Aim for 20-30 high-quality photos covering exterior, interior, products, team", impact: "Medium" });
+  if (a.totalPhotos < 20)
+    tasks.push({ title: `Upload more photos (currently ${a.totalPhotos})`, why: "Aim for 20-30 high-quality photos covering exterior, interior, products, team", impact: "Medium" });
 
   if (a.postsPerMonth < 4)
     tasks.push({ title: a.postsPerMonth === 0 ? "Start posting weekly" : `Post more frequently (currently ${a.postsPerMonth}/month)`, why: "4+ posts/month keeps profile fresh and shows Google you're active", impact: "Medium" });
@@ -1470,7 +1469,7 @@ export default function GMECityLanding() {
     primaryCategory: "",
     reviewCount: 0,
     rating: 0,
-    photosLast30d: 0,
+    totalPhotos: 0,
     hasQA: false,
     postsPerMonth: 0,
     hasWebsite: false,
@@ -1584,7 +1583,7 @@ export default function GMECityLanding() {
           primary_category: audit.primaryCategory,
           review_count: audit.reviewCount,
           rating: audit.rating,
-          photos_last_30d: audit.photosLast30d,
+          total_photos: audit.totalPhotos,
           has_qa: audit.hasQA,
           posts_per_month: audit.postsPerMonth,
           has_website: audit.hasWebsite,
@@ -1776,7 +1775,7 @@ export default function GMECityLanding() {
         primaryCategory: result.data.primaryCategory,
         reviewCount: result.data.reviewCount,
         rating: result.data.rating,
-        photosLast30d: result.data.photosLast30d,
+        totalPhotos: result.data.totalPhotos,
         hasQA: result.data.hasQA,
         postsPerMonth: result.data.postsPerMonth,
         hasWebsite: result.data.hasWebsite,
@@ -1902,7 +1901,7 @@ export default function GMECityLanding() {
       primaryCategory: "Personal injury attorney",
       reviewCount: 45,
       rating: 4.7,
-      photosLast30d: 5,
+      totalPhotos: 5,
       hasQA: true,
       postsPerMonth: 3,
       hasWebsite: true,
@@ -1916,7 +1915,7 @@ export default function GMECityLanding() {
       primaryCategory: "Personal injury attorney",
       reviewCount: 120,
       rating: 4.8,
-      photosLast30d: 10,
+      totalPhotos: 10,
       hasQA: true,
       postsPerMonth: 6,
       hasWebsite: true,
@@ -2241,15 +2240,15 @@ export default function GMECityLanding() {
                     </tr>
 
                     <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Photos (Last 30d)</td>
+                      <td className="p-3 text-white/80">Total Photos</td>
                       <td className="text-center p-3 bg-emerald-500/5">
-                        <span className="font-semibold">{audit.photosLast30d}</span>
+                        <span className="font-semibold">{audit.totalPhotos}</span>
                       </td>
                       {competitors.map((comp, idx) => {
-                        const isAhead = audit.photosLast30d > comp.photosLast30d;
+                        const isAhead = audit.totalPhotos > comp.totalPhotos;
                         return (
                           <td key={idx} className={`text-center p-3 font-semibold ${isAhead ? 'text-red-400' : 'text-emerald-400'}`}>
-                            {comp.photosLast30d}
+                            {comp.totalPhotos}
                           </td>
                         );
                       })}
@@ -2365,8 +2364,8 @@ export default function GMECityLanding() {
                           {ratingDiff < 0 && (
                             <li className="text-emerald-400">Need to improve rating by {Math.abs(ratingDiff).toFixed(1)} stars</li>
                           )}
-                          {audit.photosLast30d < comp.photosLast30d && (
-                            <li className="text-emerald-400">Add {comp.photosLast30d - audit.photosLast30d} more photos/month</li>
+                          {audit.totalPhotos < comp.totalPhotos && (
+                            <li className="text-emerald-400">Add {comp.totalPhotos - audit.totalPhotos} more photos</li>
                           )}
                           {audit.postsPerMonth < comp.postsPerMonth && (
                             <li className="text-emerald-400">Increase posting to {comp.postsPerMonth} posts/month</li>
