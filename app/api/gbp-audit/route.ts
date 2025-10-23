@@ -34,8 +34,6 @@ interface GBPAuditResponse {
     hasHours: boolean;
     hasServices: boolean;
     hasBookingLink: boolean;
-    hasDuplicateListing: boolean;
-    napConsistent: boolean;
   };
   error?: string;
 }
@@ -264,8 +262,6 @@ async function performGBPAudit(
       hasHours: !!(bestMatch.work_hours?.timetable),
       hasServices: false, // Default to false - assume needs improvement
       hasBookingLink: !!bestMatch.book_online_url,
-      hasDuplicateListing: false, // Default to false - rare issue
-      napConsistent: false // Default to false - should be verified across citations, not assumed
     };
 
     console.log('[GBP Audit] Audit data compiled:', auditData);

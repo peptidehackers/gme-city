@@ -23,8 +23,6 @@ type AuditInput = {
   hasHours: boolean;
   hasServices: boolean;
   hasBookingLink: boolean;
-  hasDuplicateListing: boolean; // bad
-  napConsistent: boolean;
 };
 
 // ---------------------- Global switches ----------------------
@@ -126,25 +124,33 @@ export function computeScore(a: AuditInput) {
   let score = 0;
   const breakdown: Record<string, number> = {};
 
+  // Profile Completeness (35 points max)
+  // Essential elements that show up in our API data
   const baseCompleteness =
-    (a.hasWebsite ? 10 : 0) +
-    (a.hasHours ? 10 : 0) +
-    (a.hasServices ? 10 : 0) +
-    (a.hasBookingLink ? 8 : 0) +
-    (a.hasQA ? 7 : 0) +
-    (a.napConsistent ? 15 : 0) +
-    (!a.hasDuplicateListing ? 15 : 0);
+    (a.hasWebsite ? 10 : 0) +       // Critical for conversions
+    (a.hasHours ? 10 : 0) +         // Basic profile requirement
+    (a.hasBookingLink ? 5 : 0) +    // Direct conversion path
+    (a.hasQA ? 5 : 0) +             // Engagement signal
+    (a.hasServices ? 5 : 0);        // Category relevance
   breakdown["Profile completeness"] = baseCompleteness;
 
-  const reviewQty = clamp(Math.log10(Math.max(1, a.reviewCount)) * 12, 0, 24);
-  const reviewQuality = clamp(((a.rating - 3.5) / 1.5) * 20, 0, 20);
+  // Reviews (40 points max) - Most important ranking factor
+  // Quantity: 0-100+ reviews on log scale (0-25 points)
+  const reviewQty = clamp(Math.log10(Math.max(1, a.reviewCount)) * 12.5, 0, 25);
+  // Quality: 3.5-5.0 rating (0-15 points)
+  const reviewQuality = clamp(((a.rating - 3.5) / 1.5) * 15, 0, 15);
   breakdown["Reviews"] = reviewQty + reviewQuality;
 
-  const photosFreshness = clamp(a.photosLast30d * 2, 0, 14);
-  breakdown["Photos freshness"] = photosFreshness;
+  // Photos (15 points max) - Visual engagement
+  // We get total photos, not last 30 days, so scale accordingly
+  // 0-30+ photos on linear scale
+  const photos = clamp(a.photosLast30d * 0.5, 0, 15);
+  breakdown["Photos"] = photos;
 
-  const posts = clamp(a.postsPerMonth * 2.5, 0, 15);
-  breakdown["Posts cadence"] = posts;
+  // Posts (10 points max) - Freshness signal
+  // 0-4+ posts per month
+  const posts = clamp(a.postsPerMonth * 2.5, 0, 10);
+  breakdown["Posts"] = posts;
 
   score = Object.values(breakdown).reduce((s, n) => s + n, 0);
   score = clamp(Math.round(score));
@@ -153,24 +159,38 @@ export function computeScore(a: AuditInput) {
 
 export function taskList(a: AuditInput) {
   const tasks: { title: string; why: string; impact: "High" | "Medium" | "Low" }[] = [];
-  if (!a.napConsistent)
-    tasks.push({ title: "Fix NAP consistency across top citations", why: "Mismatched name, address, or phone drags down trust and rankings", impact: "High" });
-  if (a.hasDuplicateListing)
-    tasks.push({ title: "Remove or merge duplicate Google listings", why: "Dupes split reviews and confuse Maps, killing visibility", impact: "High" });
-  if (a.reviewCount < 100)
-    tasks.push({ title: "Run a compliant review campaign until you hit 100+", why: "Volume plus velocity beats similar competitors in dense markets", impact: "High" });
-  if (a.rating < 4.6)
-    tasks.push({ title: "Lift average rating to 4.6+", why: "Map pack winners almost always sit above 4.6", impact: "High" });
-  if (a.photosLast30d < 8)
-    tasks.push({ title: "Upload 8 to 12 fresh geo-tagged photos this month", why: "Fresh media is a relevance signal and raises CTR", impact: "Medium" });
+
+  // HIGH IMPACT: Reviews are the #1 ranking factor
+  if (a.reviewCount < 50)
+    tasks.push({ title: `Get to 50+ reviews (currently ${a.reviewCount})`, why: "Reviews are the #1 local ranking factor - aim for 50 minimum, 100+ to dominate", impact: "High" });
+  else if (a.reviewCount < 100)
+    tasks.push({ title: `Scale to 100+ reviews (currently ${a.reviewCount})`, why: "Volume beats competitors - 100+ reviews signals authority and trust", impact: "High" });
+
+  if (a.rating < 4.5)
+    tasks.push({ title: `Improve rating to 4.5+ (currently ${a.rating.toFixed(1)})`, why: "Map pack winners average 4.5+. Focus on customer experience and recovery", impact: "High" });
+
+  // HIGH IMPACT: Basic profile completeness
+  if (!a.hasWebsite)
+    tasks.push({ title: "Add website to your profile", why: "Critical for credibility and conversions - users expect to see your site", impact: "High" });
+  if (!a.hasHours)
+    tasks.push({ title: "Set business hours", why: "Basic requirement that affects visibility and user experience", impact: "High" });
+
+  // MEDIUM IMPACT: Visual content and engagement
+  if (a.photosLast30d < 20)
+    tasks.push({ title: `Upload more photos (currently ${a.photosLast30d})`, why: "Aim for 20-30 high-quality photos covering exterior, interior, products, team", impact: "Medium" });
+
   if (a.postsPerMonth < 4)
-    tasks.push({ title: "Publish weekly Google Posts", why: "Consistent offers and FAQs increase conversions and keep the profile active", impact: "Medium" });
+    tasks.push({ title: a.postsPerMonth === 0 ? "Start posting weekly" : `Post more frequently (currently ${a.postsPerMonth}/month)`, why: "4+ posts/month keeps profile fresh and shows Google you're active", impact: "Medium" });
+
   if (!a.hasServices)
-    tasks.push({ title: "Fill Services with keyword rich but natural language", why: "Services ties search terms to your profile and improves topical coverage", impact: "Medium" });
+    tasks.push({ title: "Add services section", why: "Services help match searches and provide keyword-rich content", impact: "Medium" });
+
+  // LOW IMPACT: Nice to have
   if (!a.hasQA)
-    tasks.push({ title: "Seed and answer five Q and A items", why: "You control the narrative and preempt objections", impact: "Low" });
+    tasks.push({ title: "Start Q&A section", why: "Seed 5-10 questions to control narrative and answer common objections", impact: "Low" });
   if (!a.hasBookingLink)
-    tasks.push({ title: "Add booking or lead link", why: "Shortens the path from discovery to contact", impact: "Low" });
+    tasks.push({ title: "Add booking/contact link", why: "Direct path to conversion - reduces friction for ready buyers", impact: "Low" });
+
   return tasks;
 }
 
@@ -1457,8 +1477,6 @@ export default function GMECityLanding() {
     hasHours: false,
     hasServices: false,
     hasBookingLink: false,
-    hasDuplicateListing: false,
-    napConsistent: false,
   });
   const [auditLoading, setAuditLoading] = useState(false);
   const [hasAuditData, setHasAuditData] = useState(false);
@@ -1573,8 +1591,6 @@ export default function GMECityLanding() {
           has_hours: audit.hasHours,
           has_services: audit.hasServices,
           has_booking_link: audit.hasBookingLink,
-          has_duplicate_listing: audit.hasDuplicateListing,
-          nap_consistent: audit.napConsistent,
           score,
           breakdown,
           tasks,
@@ -1767,8 +1783,6 @@ export default function GMECityLanding() {
         hasHours: result.data.hasHours,
         hasServices: result.data.hasServices,
         hasBookingLink: result.data.hasBookingLink,
-        hasDuplicateListing: result.data.hasDuplicateListing,
-        napConsistent: result.data.napConsistent,
       });
 
       alert("✅ GMB data imported successfully!");
@@ -1895,8 +1909,6 @@ export default function GMECityLanding() {
       hasHours: true,
       hasServices: true,
       hasBookingLink: true,
-      hasDuplicateListing: false,
-      napConsistent: true,
     },
     {
       businessName: "Competitor B",
@@ -1911,8 +1923,6 @@ export default function GMECityLanding() {
       hasHours: true,
       hasServices: true,
       hasBookingLink: true,
-      hasDuplicateListing: false,
-      napConsistent: true,
     },
   ]);
 
@@ -2319,22 +2329,6 @@ export default function GMECityLanding() {
                         return (
                           <td key={idx} className={`text-center p-3 font-semibold ${isBehind ? 'text-emerald-400' : isAhead ? 'text-red-400' : ''}`}>
                             {comp.hasQA ? '✓' : '✗'}
-                          </td>
-                        );
-                      })}
-                    </tr>
-
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">NAP Consistent</td>
-                      <td className="text-center p-3 bg-emerald-500/5">
-                        <span className="font-semibold">{audit.napConsistent ? '✓' : '✗'}</span>
-                      </td>
-                      {competitors.map((comp, idx) => {
-                        const isAhead = audit.napConsistent && !comp.napConsistent;
-                        const isBehind = !audit.napConsistent && comp.napConsistent;
-                        return (
-                          <td key={idx} className={`text-center p-3 font-semibold ${isBehind ? 'text-emerald-400' : isAhead ? 'text-red-400' : ''}`}>
-                            {comp.napConsistent ? '✓' : '✗'}
                           </td>
                         );
                       })}
