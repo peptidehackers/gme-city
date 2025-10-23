@@ -233,7 +233,7 @@ function parseRatingInput(raw: string) {
 // ---------------------- Feature Components ----------------------
 
 // SEO Snapshot Score Section Wrapper (with neon loading effect on card)
-function SEOSnapshotSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLDivElement> }) {
+function SEOSnapshotSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLDivElement | null> }) {
   const [loading, setLoading] = useState(false);
 
   return (
@@ -540,7 +540,7 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
 }
 
 // Citation Coverage Section Wrapper with Loading Animation
-function CitationCoverageSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLDivElement> }) {
+function CitationCoverageSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLDivElement | null> }) {
   const [loading, setLoading] = useState(false);
 
   return (
