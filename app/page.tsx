@@ -2028,26 +2028,7 @@ export default function GMECityLanding() {
                 <GBPAuditForm onAuditComplete={setAudit} onLoadingChange={setAuditLoading} />
               </div>
 
-              <div className={`relative ${CARD} ${auditLoading ? 'neon-loading-border' : ''}`}>
-                <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
-                {auditLoading && (
-                  <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
-                    <defs>
-                      <linearGradient id="emeraldGradientAudit" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#10b981" />
-                        <stop offset="50%" stopColor="#34d399" />
-                        <stop offset="100%" stopColor="#6ee7b7" />
-                      </linearGradient>
-                      <linearGradient id="emeraldGlowGradientAudit" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="rgba(16, 185, 129, 0.6)" />
-                        <stop offset="50%" stopColor="rgba(52, 211, 153, 0.8)" />
-                        <stop offset="100%" stopColor="rgba(110, 231, 183, 0.6)" />
-                      </linearGradient>
-                    </defs>
-                    <rect className="border-glow-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" stroke="url(#emeraldGlowGradientAudit)" />
-                    <rect className="border-trail-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" stroke="url(#emeraldGradientAudit)" />
-                  </svg>
-                )}
+              <div className={CARD}>
                 {!audit.businessName && !auditLoading ? (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
                     <div className="w-16 h-16 rounded-full bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center mb-4">
