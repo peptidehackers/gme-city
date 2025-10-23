@@ -1442,19 +1442,19 @@ export default function GMECityLanding() {
   // Audit state
   const [audit, setAudit] = useState<AuditInput>({
     businessName: "",
-    city: "Los Angeles",
-    primaryCategory: "Personal injury attorney",
-    reviewCount: 18,
-    rating: 4.3,
-    photosLast30d: 2,
+    city: "",
+    primaryCategory: "",
+    reviewCount: 0,
+    rating: 0,
+    photosLast30d: 0,
     hasQA: false,
-    postsPerMonth: 1,
-    hasWebsite: true,
-    hasHours: true,
+    postsPerMonth: 0,
+    hasWebsite: false,
+    hasHours: false,
     hasServices: false,
     hasBookingLink: false,
     hasDuplicateListing: false,
-    napConsistent: true,
+    napConsistent: false,
   });
   const [auditLoading, setAuditLoading] = useState(false);
   const { score, breakdown} = computeScore(audit);
@@ -2048,28 +2048,42 @@ export default function GMECityLanding() {
                     <rect className="border-trail-stroke" x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="16" stroke="url(#emeraldGradientAudit)" />
                   </svg>
                 )}
-                <div className="flex items-center justify-between text-sm">
-                  <h3 className="text-xl font-semibold">Score and priorities</h3>
-                  <span className={`px-2.5 py-1 rounded-lg ${score >= 80 ? "bg-emerald-500/20 text-emerald-300" : score >= 60 ? "bg-yellow-500/20 text-yellow-300" : "bg-red-500/20 text-red-300"}`}>{score >= 80 ? "Great" : score >= 60 ? "Okay" : "Needs work"}</span>
-                </div>
-                <div className={`mt-4 ${PROGRESS_BG}`}>
-                  <div className={PROGRESS_FG} style={{ width: `${score}%` }} />
-                </div>
-                <h3 className="text-xl font-semibold mt-6">Action plan</h3>
-                {tasks.length === 0 ? (
-                  <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/80">Perfect score! No action items needed</div>
+                {!audit.businessName && !auditLoading ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <div className="w-16 h-16 rounded-full bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center mb-4">
+                      <svg className="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-2">Ready to See Your Score?</h3>
+                    <p className="text-white/70 max-w-sm">Enter your business details on the left to get your instant GBP audit with personalized action plan</p>
+                  </div>
                 ) : (
-                  <ul className="mt-4 space-y-4">
-                    {tasks.map((t, i) => (
-                      <li key={i} className="rounded-xl border border-white/10 p-4 md:p-5">
-                        <div className="flex items-center justify-between gap-4">
-                          <div className="font-medium">{t.title}</div>
-                          <span className={`text-xs px-2.5 py-1 rounded-lg ${t.impact === "High" ? "bg-red-500/20 text-red-300" : t.impact === "Medium" ? "bg-yellow-500/20 text-yellow-300" : "bg-emerald-500/20 text-emerald-300"}`}>{t.impact}</span>
-                        </div>
-                        <p className="mt-1 text-sm text-white/70">{t.why}</p>
-                      </li>
-                    ))}
-                  </ul>
+                  <>
+                    <div className="flex items-center justify-between text-sm">
+                      <h3 className="text-xl font-semibold">Score and priorities</h3>
+                      <span className={`px-2.5 py-1 rounded-lg ${score >= 80 ? "bg-emerald-500/20 text-emerald-300" : score >= 60 ? "bg-yellow-500/20 text-yellow-300" : "bg-red-500/20 text-red-300"}`}>{score >= 80 ? "Great" : score >= 60 ? "Okay" : "Needs work"}</span>
+                    </div>
+                    <div className={`mt-4 ${PROGRESS_BG}`}>
+                      <div className={PROGRESS_FG} style={{ width: `${score}%` }} />
+                    </div>
+                    <h3 className="text-xl font-semibold mt-6">Action plan</h3>
+                    {tasks.length === 0 ? (
+                      <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/80">Perfect score! No action items needed</div>
+                    ) : (
+                      <ul className="mt-4 space-y-4">
+                        {tasks.map((t, i) => (
+                          <li key={i} className="rounded-xl border border-white/10 p-4 md:p-5">
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="font-medium">{t.title}</div>
+                              <span className={`text-xs px-2.5 py-1 rounded-lg ${t.impact === "High" ? "bg-red-500/20 text-red-300" : t.impact === "Medium" ? "bg-yellow-500/20 text-yellow-300" : "bg-emerald-500/20 text-emerald-300"}`}>{t.impact}</span>
+                            </div>
+                            <p className="mt-1 text-sm text-white/70">{t.why}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
                 )}
                 <div className="mt-6 space-y-3">
                   <div className="flex flex-wrap gap-3">
