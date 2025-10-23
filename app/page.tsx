@@ -22,7 +22,6 @@ type AuditInput = {
   hasWebsite: boolean;
   hasHours: boolean;
   hasServices: boolean;
-  hasBookingLink: boolean;
 };
 
 // ---------------------- Global switches ----------------------
@@ -129,8 +128,7 @@ export function computeScore(a: AuditInput) {
   const baseCompleteness =
     (a.hasWebsite ? 10 : 0) +       // Critical for conversions
     (a.hasHours ? 10 : 0) +         // Basic profile requirement
-    (a.hasBookingLink ? 5 : 0) +    // Direct conversion path
-    (a.hasQA ? 5 : 0) +             // Engagement signal
+    (a.hasQA ? 10 : 0) +            // Engagement signal
     (a.hasServices ? 5 : 0);        // Category relevance
   breakdown["Profile completeness"] = baseCompleteness;
 
@@ -187,8 +185,6 @@ export function taskList(a: AuditInput) {
   // LOW IMPACT: Nice to have
   if (!a.hasQA)
     tasks.push({ title: "Start Q&A section", why: "Seed 5-10 questions to control narrative and answer common objections", impact: "Low" });
-  if (!a.hasBookingLink)
-    tasks.push({ title: "Add booking/contact link", why: "Direct path to conversion - reduces friction for ready buyers", impact: "Low" });
 
   return tasks;
 }
@@ -1475,7 +1471,6 @@ export default function GMECityLanding() {
     hasWebsite: false,
     hasHours: false,
     hasServices: false,
-    hasBookingLink: false,
   });
   const [auditLoading, setAuditLoading] = useState(false);
   const [hasAuditData, setHasAuditData] = useState(false);
@@ -1589,7 +1584,6 @@ export default function GMECityLanding() {
           has_website: audit.hasWebsite,
           has_hours: audit.hasHours,
           has_services: audit.hasServices,
-          has_booking_link: audit.hasBookingLink,
           score,
           breakdown,
           tasks,
@@ -1781,7 +1775,6 @@ export default function GMECityLanding() {
         hasWebsite: result.data.hasWebsite,
         hasHours: result.data.hasHours,
         hasServices: result.data.hasServices,
-        hasBookingLink: result.data.hasBookingLink,
       });
 
       alert("✅ GMB data imported successfully!");
@@ -1907,7 +1900,6 @@ export default function GMECityLanding() {
       hasWebsite: true,
       hasHours: true,
       hasServices: true,
-      hasBookingLink: true,
     },
     {
       businessName: "Competitor B",
@@ -1921,7 +1913,6 @@ export default function GMECityLanding() {
       hasWebsite: true,
       hasHours: true,
       hasServices: true,
-      hasBookingLink: true,
     },
   ]);
 
@@ -2296,22 +2287,6 @@ export default function GMECityLanding() {
                         return (
                           <td key={idx} className={`text-center p-3 font-semibold ${isBehind ? 'text-emerald-400' : isAhead ? 'text-red-400' : ''}`}>
                             {comp.hasServices ? '✓' : '✗'}
-                          </td>
-                        );
-                      })}
-                    </tr>
-
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Booking Link</td>
-                      <td className="text-center p-3 bg-emerald-500/5">
-                        <span className="font-semibold">{audit.hasBookingLink ? '✓' : '✗'}</span>
-                      </td>
-                      {competitors.map((comp, idx) => {
-                        const isAhead = audit.hasBookingLink && !comp.hasBookingLink;
-                        const isBehind = !audit.hasBookingLink && comp.hasBookingLink;
-                        return (
-                          <td key={idx} className={`text-center p-3 font-semibold ${isBehind ? 'text-emerald-400' : isAhead ? 'text-red-400' : ''}`}>
-                            {comp.hasBookingLink ? '✓' : '✗'}
                           </td>
                         );
                       })}

@@ -33,7 +33,6 @@ interface GBPAuditResponse {
     hasWebsite: boolean;
     hasHours: boolean;
     hasServices: boolean;
-    hasBookingLink: boolean;
   };
   error?: string;
 }
@@ -183,12 +182,14 @@ async function performGBPAudit(
 
     console.log(`[GBP Audit] Found match: ${bestMatch.title} (${bestConfidence}% confidence)`);
 
-    // Debug: Log available fields to check for services
+    // Debug: Log available fields to check for services and booking
     console.log('[GBP Audit] Available fields:', {
       has_place_topics: !!bestMatch.place_topics,
       place_topics_length: bestMatch.place_topics?.length || 0,
       has_service_options: !!bestMatch.service_options,
       service_options_keys: bestMatch.service_options ? Object.keys(bestMatch.service_options) : [],
+      has_book_online_url: !!bestMatch.book_online_url,
+      book_online_url_value: bestMatch.book_online_url || 'not found',
     });
 
     // Step 2: Get additional data from Business Data API (Q&A and Posts)
@@ -277,7 +278,6 @@ async function performGBPAudit(
       hasWebsite: !!(bestMatch.domain || bestMatch.url),
       hasHours: !!(bestMatch.work_hours?.timetable),
       hasServices,
-      hasBookingLink: !!bestMatch.book_online_url,
     };
 
     console.log('[GBP Audit] Audit data compiled:', auditData);
