@@ -347,7 +347,6 @@ function calculateLocalScore(data: {
   hasInternalLinks: boolean;
   hasAltText: boolean;
   hasKeywordRelevance: boolean;
-  citationCount: number;
 }): { score: number; insights: string[] } {
   let score = 0;
   const insights: string[] = [];
@@ -438,16 +437,17 @@ function calculateLocalScore(data: {
     insights.push('No internal links or location-specific content found');
   }
 
-  // Alt text on homepage images (5 points)
+  // Alt text on homepage images (7 points - increased from 5, absorbed citation points)
   if (data.hasAltText) {
-    score += 5;
+    score += 7;
   } else {
     insights.push('Most images missing alt text attributes');
   }
 
-  // Citation presence (2 points - reduced since GBP is primary signal)
-  const citationScore = Math.min(2, (data.citationCount / 10) * 2);
-  score += citationScore;
+  // Note: Citation checking removed. GBP (Google Business Profile) is the primary
+  // local citation signal and is already weighted heavily in the score above.
+  // Additional citations across directories like Yelp, YellowPages, etc. would
+  // require API integration or advanced scraping tools (Puppeteer).
 
   return { score: Math.round(score), insights };
 }
@@ -587,10 +587,7 @@ export async function POST(request: NextRequest) {
     // 4. Get organic keywords (optional, for future enhancement)
     // const keywordData = await getOrganicKeywords(body.website, body.category);
 
-    // 5. Mock citation check (replace with actual BrightLocal API call if needed)
-    const mockCitationCount = Math.floor(Math.random() * 6) + 4; // 4-10 citations
-
-    // 6. Analyze local signals
+    // 5. Analyze local signals (Note: Citation checking removed - GBP is primary signal)
     const hasSchema = homepageData?.hasSchema || psiData?.lighthouseResult?.audits?.['structured-data']?.score === 1;
     const phoneValid = isValidUSPhone(body.phone);
     const hasCityName = homepageData?.rawHtml ? containsCityName(homepageData.rawHtml, body.city) : false;
@@ -610,8 +607,7 @@ export async function POST(request: NextRequest) {
       hasCategoryKeyword,
       hasInternalLinks,
       hasAltText,
-      hasKeywordRelevance: false, // TODO: Implement DataForSEO keyword matching
-      citationCount: mockCitationCount
+      hasKeywordRelevance: false // TODO: Implement DataForSEO keyword matching
     });
 
     const onsiteResult = calculateOnsiteScore(psiData, homepageData);
