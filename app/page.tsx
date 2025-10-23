@@ -272,39 +272,31 @@ function MeetingCTACard({
   calendlyUrl = "https://calendly.com/peptidehackers-info/30min"
 }: MeetingCTAProps) {
   return (
-    <div className="my-12">
-      <div className={CTA_CARD}>
-        <div className={CTA_CARD_GLOW}></div>
+    <div className="my-8">
+      <div className="relative rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/10 via-black/40 to-emerald-500/5 p-6 backdrop-blur-sm overflow-hidden">
+        {/* Subtle glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/5 via-transparent to-emerald-400/5 pointer-events-none"></div>
 
         <div className="relative z-10">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-400/40 border-2 border-emerald-400/60 text-emerald-300 text-base font-bold mb-5 shadow-lg shadow-emerald-400/20">
-              <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              Unlock Your Complete {featureName} Analysis
-            </div>
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-4">{title}</h3>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">{description}</p>
+          <div className="text-center mb-5">
+            <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
+            <p className="text-base text-white/70 max-w-xl mx-auto">{description}</p>
           </div>
 
-          {/* Benefits Grid */}
-          <div className="grid md:grid-cols-2 gap-5 mb-10">
-            {benefits.map((benefit, idx) => (
-              <div key={idx} className="group relative flex items-start gap-4 p-6 rounded-xl bg-gradient-to-br from-emerald-500/20 via-teal-500/10 to-emerald-500/5 border-2 border-emerald-400/40 hover:border-emerald-400/70 hover:scale-[1.03] transition-all duration-200 hover:shadow-2xl hover:shadow-emerald-400/30 backdrop-blur-sm">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center group-hover:bg-emerald-400/30 group-hover:border-emerald-400/60 transition-all duration-200">
-                  <svg className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          {/* Benefits - show first 3 only */}
+          {benefits.length > 0 && (
+            <div className="mb-5 space-y-2 max-w-lg mx-auto">
+              {benefits.slice(0, 3).map((benefit, idx) => (
+                <div key={idx} className="flex items-start gap-2 text-sm">
+                  <svg className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
+                  <span className="text-white/80">{benefit}</span>
                 </div>
-                <span className="text-white font-semibold text-base leading-relaxed">{benefit}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent mb-10"></div>
+              ))}
+            </div>
+          )}
 
           {/* CTA Button */}
           <div className="text-center">
@@ -312,42 +304,13 @@ function MeetingCTACard({
               href={calendlyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 px-10 py-5 rounded-xl bg-emerald-400 text-black text-xl font-bold hover:bg-emerald-500 transition-all duration-200 shadow-xl shadow-emerald-400/30 hover:shadow-2xl hover:shadow-emerald-400/40 hover:scale-110"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-emerald-400 text-black text-base font-semibold hover:bg-emerald-500 transition-all duration-200 shadow-lg shadow-emerald-400/20 hover:shadow-xl hover:shadow-emerald-400/30 hover:scale-105"
             >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               Book Your Free Strategy Call
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
             </a>
-
-            {/* Urgency message */}
-            <div className="mt-5 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-orange-500/20 border border-orange-500/30">
-              <svg className="w-4 h-4 text-orange-300 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-orange-300 font-semibold text-sm">{urgencyMessage}</span>
-            </div>
-          </div>
-
-          {/* Social Proof */}
-          <div className="mt-10 p-6 bg-white/5 rounded-xl border border-white/10 text-center">
-            <div className="flex items-center justify-center gap-1 mb-3">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <svg key={star} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-            <p className="text-white/80 text-base italic mb-2">"These insights helped us increase our local calls by 47% in just 60 days!"</p>
-            <div className="flex items-center justify-center gap-2">
-              <p className="text-white/60 text-sm">- James K., Local Business Owner</p>
-              <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-            </div>
           </div>
         </div>
       </div>
@@ -2080,13 +2043,18 @@ export default function GMECityLanding() {
                     )}
                   </>
                 )}
-                <div className="mt-6">
-                  <button
-                    className={`${BTN_PRIMARY} w-full flex items-center justify-center gap-2`}
-                    onClick={() => window.open('https://calendly.com/peptidehackers-info/30min', '_blank')}
+                <div className="mt-6 text-center">
+                  <a
+                    href="https://calendly.com/peptidehackers-info/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-emerald-400 text-black text-base font-semibold hover:bg-emerald-500 transition-all duration-200 shadow-lg shadow-emerald-400/20 hover:shadow-xl hover:shadow-emerald-400/30 hover:scale-105"
                   >
-                    Book a Call with us to Help
-                  </button>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Book Your Free Strategy Call
+                  </a>
                 </div>
               </div>
             </div>
