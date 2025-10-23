@@ -551,7 +551,8 @@ function CitationCoverageCheck() {
   const [results, setResults] = useState<{
     hasGBP: boolean;
     gbpData?: { name: string; rating: number; reviewCount: number; address?: string; phone?: string };
-    insights: string[];
+    positives: string[];
+    improvements: string[];
   } | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -592,13 +593,15 @@ function CitationCoverageCheck() {
       setResults({
         hasGBP: data.hasGBP,
         gbpData: data.gbpData,
-        insights: data.insights || []
+        positives: data.positives || [],
+        improvements: data.improvements || []
       });
     } catch (error) {
       console.error('GBP check error:', error);
       setResults({
         hasGBP: false,
-        insights: ['Unable to verify Google Business Profile. Please try again.']
+        positives: [],
+        improvements: ['Unable to verify Google Business Profile. Please try again.']
       });
     } finally {
       setLoading(false);
@@ -664,43 +667,73 @@ function CitationCoverageCheck() {
 
       {results && (
         <div>
-          {/* GBP Status Card */}
-          <div className={`p-6 rounded-xl border mb-6 ${
-            results.hasGBP
-              ? "bg-emerald-500/10 border-emerald-500/30"
-              : "bg-red-500/10 border-red-500/30"
-          }`}>
-            <div className="flex items-start gap-4">
-              {results.hasGBP ? (
-                <svg className="w-12 h-12 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              ) : (
-                <svg className="w-12 h-12 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
-              <div className="flex-1">
-                <h3 className="text-xl font-bold mb-2">
-                  {results.hasGBP ? "Google Business Profile Found!" : "No Google Business Profile Found"}
-                </h3>
-                {results.gbpData && (
-                  <div className="text-white/80 mb-3">
-                    <p className="font-medium">{results.gbpData.name}</p>
-                    <p>⭐ {results.gbpData.rating}/5.0 ({results.gbpData.reviewCount} reviews)</p>
-                    {results.gbpData.address && <p className="text-sm">📍 {results.gbpData.address}</p>}
-                    {results.gbpData.phone && <p className="text-sm">📞 {results.gbpData.phone}</p>}
-                  </div>
+          {/* Business Info Header */}
+          {results.gbpData && (
+            <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6">
+              <div className="flex items-start gap-4">
+                {results.hasGBP ? (
+                  <svg className="w-12 h-12 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-12 h-12 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 )}
-                <ul className="space-y-2 text-white/70">
-                  {results.insights.map((insight, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-emerald-400 mt-1">•</span>
-                      <span>{insight}</span>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold mb-2">{results.gbpData.name}</h3>
+                  <p className="text-white/80">⭐ {results.gbpData.rating}/5.0 ({results.gbpData.reviewCount} reviews)</p>
+                  {results.gbpData.address && <p className="text-white/70 text-sm mt-1">📍 {results.gbpData.address}</p>}
+                  {results.gbpData.phone && <p className="text-white/70 text-sm">📞 {results.gbpData.phone}</p>}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Two-Column Results */}
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            {/* Positives Column */}
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+              <h4 className="text-lg font-bold text-emerald-400 mb-4 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                What's Working
+              </h4>
+              {results.positives.length > 0 ? (
+                <ul className="space-y-3">
+                  {results.positives.map((positive, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-white/80">
+                      <span className="text-emerald-400 mt-1">✓</span>
+                      <span>{positive}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              ) : (
+                <p className="text-white/50 italic">No positive signals detected</p>
+              )}
+            </div>
+
+            {/* Improvements Column */}
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+              <h4 className="text-lg font-bold text-red-400 mb-4 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                Needs Attention
+              </h4>
+              {results.improvements.length > 0 ? (
+                <ul className="space-y-3">
+                  {results.improvements.map((improvement, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-white/80">
+                      <span className="text-red-400 mt-1">⚠</span>
+                      <span>{improvement}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-white/50 italic">Everything looks great!</p>
+              )}
             </div>
           </div>
 

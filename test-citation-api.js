@@ -71,11 +71,25 @@ async function testCitationAPI() {
       console.log(`Phone: ${result.gbpData.phone || 'N/A'}\n`);
     }
 
-    console.log('💡 INSIGHTS');
-    console.log('===========');
-    result.insights.forEach((insight, i) => {
-      console.log(`${i + 1}. ${insight}`);
-    });
+    console.log('✅ WHAT\'S WORKING');
+    console.log('=================');
+    if (result.positives && result.positives.length > 0) {
+      result.positives.forEach((positive, i) => {
+        console.log(`${i + 1}. ✓ ${positive}`);
+      });
+    } else {
+      console.log('No positive signals detected');
+    }
+
+    console.log('\n⚠️  NEEDS ATTENTION');
+    console.log('==================');
+    if (result.improvements && result.improvements.length > 0) {
+      result.improvements.forEach((improvement, i) => {
+        console.log(`${i + 1}. ⚠ ${improvement}`);
+      });
+    } else {
+      console.log('Everything looks great!');
+    }
 
   } catch (error) {
     console.error('❌ Test failed:', error.message);

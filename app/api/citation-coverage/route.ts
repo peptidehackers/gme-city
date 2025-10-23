@@ -31,7 +31,8 @@ interface GBPCheckResponse {
     address?: string;
     phone?: string;
   };
-  insights: string[];
+  positives: string[];
+  improvements: string[];
   score: number; // 0-100
 }
 
@@ -149,11 +150,11 @@ async function checkGoogleBusinessProfile(
     return {
       found: true,
       hasGBP: true,
-      insights: [
+      positives: [
         'Google Business Profile URL provided',
-        'Your business has a verified Google Business Profile',
-        'Schedule a call with GMB City to optimize your GBP for better local rankings'
+        'Your business has a verified Google Business Profile'
       ],
+      improvements: [],
       score: 100
     };
   }
@@ -216,27 +217,45 @@ async function checkGoogleBusinessProfile(
           if (bestMatch) {
             console.log(`Best match found: ${bestMatch.title} (${bestConfidence}% confidence)`);
 
-            const insights = [
-              `Found Google Business Profile: ${bestMatch.title}`,
-              `Rating: ${bestMatch.rating?.value || 0}/5 with ${bestMatch.rating?.votes_count || 0} reviews`,
-              bestMatch.rating?.votes_count < 10 ? 'Get more reviews to improve local rankings' : 'Strong review count'
-            ];
+            const positives: string[] = [];
+            const improvements: string[] = [];
 
-            // Add verification status insight
-            if (bestMatch.is_claimed === false) {
-              insights.push('⚠️ Profile is not claimed - claim it to manage your listing');
-            } else if (bestMatch.is_claimed === true) {
-              insights.push('✓ Profile is claimed and verified');
+            // Profile found
+            positives.push(`Google Business Profile verified`);
+
+            // Rating analysis
+            const rating = bestMatch.rating?.value || 0;
+            const reviewCount = bestMatch.rating?.votes_count || 0;
+
+            if (rating >= 4.0) {
+              positives.push(`Strong rating: ${rating}/5.0`);
+            } else if (rating > 0) {
+              improvements.push(`Rating is ${rating}/5.0 - work on improving customer satisfaction`);
             }
 
-            // Add photo count insight
-            const photoCount = bestMatch.total_photos || 0;
-            if (photoCount === 0) {
-              insights.push('📸 No photos - add images to improve engagement by 35%');
-            } else if (photoCount < 10) {
-              insights.push(`📸 ${photoCount} photos - add more to boost visibility`);
+            if (reviewCount >= 10) {
+              positives.push(`${reviewCount} reviews - good social proof`);
+            } else if (reviewCount > 0) {
+              improvements.push(`Only ${reviewCount} reviews - get more to build trust`);
             } else {
-              insights.push(`📸 ${photoCount} photos - good visual presence`);
+              improvements.push(`No reviews yet - start collecting customer feedback`);
+            }
+
+            // Verification status
+            if (bestMatch.is_claimed === true) {
+              positives.push('Profile is claimed and verified');
+            } else if (bestMatch.is_claimed === false) {
+              improvements.push('Profile not claimed - claim it to manage your listing');
+            }
+
+            // Photo count
+            const photoCount = bestMatch.total_photos || 0;
+            if (photoCount >= 10) {
+              positives.push(`${photoCount} photos - good visual presence`);
+            } else if (photoCount > 0) {
+              improvements.push(`Only ${photoCount} photos - add more to boost engagement`);
+            } else {
+              improvements.push('No photos - add images to improve engagement by 35%');
             }
 
             return {
@@ -249,7 +268,8 @@ async function checkGoogleBusinessProfile(
                 address: bestMatch.address || '',
                 phone: bestMatch.phone || ''
               },
-              insights,
+              positives,
+              improvements,
               score: 100
             };
           } else {
@@ -257,10 +277,11 @@ async function checkGoogleBusinessProfile(
             return {
               found: false,
               hasGBP: false,
-              insights: [
+              positives: [],
+              improvements: [
                 `Found ${items.length} business(es) but none matched your criteria closely enough`,
                 'Try providing more details (address, phone number) for better matching',
-                'Or contact GMB City for a manual verification'
+                'Contact GMB City for a manual verification'
               ],
               score: 0
             };
@@ -273,7 +294,8 @@ async function checkGoogleBusinessProfile(
     return {
       found: false,
       hasGBP: false,
-      insights: [
+      positives: [],
+      improvements: [
         'No Google Business Profile found',
         'Critical: You need a Google Business Profile to rank in local search',
         'Contact GMB City to set up and optimize your Google Business Profile'
@@ -286,7 +308,8 @@ async function checkGoogleBusinessProfile(
     return {
       found: false,
       hasGBP: false,
-      insights: [
+      positives: [],
+      improvements: [
         'Unable to verify Google Business Profile',
         'This check requires a valid business name and location',
         'Contact GMB City for a manual audit'
