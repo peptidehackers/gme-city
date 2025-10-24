@@ -1799,6 +1799,102 @@ export default function GMECityLanding() {
     }
   };
 
+  // Complete Audit Modal state
+  const [showCompleteAuditModal, setShowCompleteAuditModal] = useState(false);
+  const [completeAuditForm, setCompleteAuditForm] = useState({
+    email: "",
+    phone: "",
+    businessName: "",
+    website: "",
+    street: "",
+    city: "",
+    zip: "",
+    category: "",
+    consent: false
+  });
+  const [completeAuditLoading, setCompleteAuditLoading] = useState(false);
+  const [completeAuditSuccess, setCompleteAuditSuccess] = useState(false);
+
+  // Helper: Format phone number as (123) 456-7890
+  const formatPhone = (value: string): string => {
+    const cleaned = value.replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+    if (match) {
+      const parts = [match[1], match[2], match[3]].filter(Boolean);
+      if (parts.length === 0) return '';
+      if (parts.length === 1) return `(${parts[0]}`;
+      if (parts.length === 2) return `(${parts[0]}) ${parts[1]}`;
+      return `(${parts[0]}) ${parts[1]}-${parts[2]}`;
+    }
+    return value;
+  };
+
+  // Helper: Normalize URL
+  const normalizeURL = (value: string): string => {
+    const trimmed = value.trim();
+    if (!trimmed) return '';
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    return `https://${trimmed}`;
+  };
+
+  const submitCompleteAudit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!completeAuditForm.consent) {
+      alert("Please agree to receive your audit results via email");
+      return;
+    }
+
+    setCompleteAuditLoading(true);
+    try {
+      const response = await fetch('/api/complete-audit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: completeAuditForm.email,
+          phone: completeAuditForm.phone,
+          businessName: completeAuditForm.businessName,
+          website: completeAuditForm.website,
+          street: completeAuditForm.street,
+          city: completeAuditForm.city,
+          zip: completeAuditForm.zip,
+          category: completeAuditForm.category,
+          consent: completeAuditForm.consent
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate complete audit');
+      }
+
+      setCompleteAuditSuccess(true);
+      // Reset form after 5 seconds
+      setTimeout(() => {
+        setShowCompleteAuditModal(false);
+        setCompleteAuditSuccess(false);
+        setCompleteAuditForm({
+          email: "",
+          phone: "",
+          businessName: "",
+          website: "",
+          street: "",
+          city: "",
+          zip: "",
+          category: "",
+          consent: false
+        });
+      }, 5000);
+    } catch (error: any) {
+      console.error('Complete audit error:', error);
+      alert(`Failed to generate audit: ${error.message}`);
+    } finally {
+      setCompleteAuditLoading(false);
+    }
+  };
+
   const testZapierWebhook = async () => {
     if (!zapierWebhookUrl.trim()) {
       alert("Please enter webhook URL first");
@@ -1933,9 +2029,10 @@ export default function GMECityLanding() {
             <div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
-              <div className="mt-8 max-w-prose">
+              <div className="mt-8 max-w-prose space-y-3">
+                {/* Primary CTA: Complete Audit */}
                 <button
-                  onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  onClick={() => setShowCompleteAuditModal(true)}
                   className="group relative w-full px-8 py-5 bg-emerald-400 text-black text-lg font-bold rounded-xl overflow-hidden transition-all duration-300 hover:bg-emerald-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-emerald-400/50 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-emerald-400/50"
                 >
                   {/* Background glow effect */}
@@ -1943,14 +2040,27 @@ export default function GMECityLanding() {
 
                   {/* Button text */}
                   <span className="relative z-10 flex items-center justify-center gap-2">
-                    Start Free Audit
+                    Get Complete Audit Report
                     <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </span>
                 </button>
+
+                {/* Secondary: Individual audits */}
+                <button
+                  onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="w-full px-6 py-3 border-2 border-white/20 text-white text-base font-semibold rounded-xl transition-all duration-200 hover:bg-white/10 hover:border-white/30"
+                >
+                  Or Try Individual Audits
+                </button>
               </div>
-              <div className="mt-6 text-sm text-white/70">No login. No credit card. Save your plan as a PDF when you are done.</div>
+              <div className="mt-6 flex items-center gap-2 text-sm text-white/70">
+                <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>All 4 audits in one PDF • Emailed in 2 minutes • $500 value, free today</span>
+              </div>
             </div>
             <div className="relative">
               <div className="absolute -inset-6 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-3xl blur-xl" />
@@ -3255,6 +3365,281 @@ ${schemaJson}
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Complete Audit Modal */}
+      {showCompleteAuditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-gray-900 to-black border border-emerald-400/30 rounded-2xl shadow-2xl">
+            {/* Close button */}
+            <button
+              onClick={() => setShowCompleteAuditModal(false)}
+              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+            >
+              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {!completeAuditSuccess ? (
+              <form onSubmit={submitCompleteAudit} className="p-8">
+                {/* Header */}
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-400/10 border border-emerald-400/30 mb-4">
+                    <svg className="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h2 className="text-3xl font-extrabold text-white mb-2">Complete SEO Audit</h2>
+                  <p className="text-white/70">Get all 4 comprehensive audits emailed to you</p>
+                  <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-400/10 border border-emerald-400/20">
+                    <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-sm font-semibold text-emerald-400">$500 Value • 100% Free</span>
+                  </div>
+                </div>
+
+                {/* Form fields */}
+                <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                  {/* Email */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      className={INPUT}
+                      placeholder="you@company.com"
+                      value={completeAuditForm.email}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, email: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  {/* Phone */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      className={INPUT}
+                      placeholder="(555) 123-4567"
+                      value={completeAuditForm.phone}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, phone: formatPhone(e.target.value) })}
+                      maxLength={14}
+                      required
+                    />
+                  </div>
+
+                  {/* Business Name */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      Business Name *
+                    </label>
+                    <input
+                      type="text"
+                      className={INPUT}
+                      placeholder="ABC Company LLC"
+                      value={completeAuditForm.businessName}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, businessName: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  {/* Website */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      Website URL *
+                    </label>
+                    <input
+                      type="text"
+                      className={INPUT}
+                      placeholder="example.com"
+                      value={completeAuditForm.website}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, website: e.target.value })}
+                      onBlur={(e) => setCompleteAuditForm({ ...completeAuditForm, website: normalizeURL(e.target.value) })}
+                      required
+                    />
+                  </div>
+
+                  {/* Street Address */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      Street Address *
+                    </label>
+                    <input
+                      type="text"
+                      className={INPUT}
+                      placeholder="123 Main Street"
+                      value={completeAuditForm.street}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, street: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  {/* City */}
+                  <div>
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      City *
+                    </label>
+                    <input
+                      type="text"
+                      className={INPUT}
+                      placeholder="Los Angeles"
+                      value={completeAuditForm.city}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, city: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  {/* ZIP */}
+                  <div>
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      ZIP Code *
+                    </label>
+                    <input
+                      type="text"
+                      className={INPUT}
+                      placeholder="90012"
+                      value={completeAuditForm.zip}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, zip: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  {/* Category */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      Business Category / Services *
+                    </label>
+                    <input
+                      type="text"
+                      className={INPUT}
+                      placeholder="e.g., Personal Injury Attorney, Plumber, Restaurant"
+                      value={completeAuditForm.category}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, category: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  {/* Consent */}
+                  <div className="sm:col-span-2">
+                    <label className="flex items-start gap-3 text-sm text-white/80 cursor-pointer p-4 rounded-xl border border-white/10 hover:bg-white/5 transition-colors">
+                      <input
+                        type="checkbox"
+                        className="mt-1"
+                        checked={completeAuditForm.consent}
+                        onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, consent: e.target.checked })}
+                        required
+                      />
+                      <span>
+                        I agree to receive my complete audit report via email and consent to be contacted about local SEO services
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* What's included */}
+                <div className="mb-6 p-4 rounded-xl bg-emerald-400/5 border border-emerald-400/20">
+                  <h3 className="text-sm font-semibold text-emerald-400 mb-3">Your Complete Report Includes:</h3>
+                  <div className="grid sm:grid-cols-2 gap-2 text-xs text-white/70">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>SEO Snapshot (Local + On-site)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>Citation Coverage Analysis</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>Keyword Opportunities</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>Google Business Profile Audit</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit button */}
+                <button
+                  type="submit"
+                  disabled={completeAuditLoading}
+                  className={`${BTN_PRIMARY} w-full py-4 text-lg relative`}
+                >
+                  {completeAuditLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Generating Your Complete Audit...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      Get My Complete Audit Report
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </span>
+                  )}
+                </button>
+
+                <p className="mt-4 text-center text-xs text-white/60">
+                  Your report will be emailed within 2-3 minutes
+                </p>
+              </form>
+            ) : (
+              // Success state
+              <div className="p-8 text-center">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-400/20 border-4 border-emerald-400 mb-6">
+                  <svg className="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h2 className="text-3xl font-extrabold text-white mb-4">Check Your Email!</h2>
+                <p className="text-lg text-white/80 mb-2">
+                  Your complete audit report is on its way to:
+                </p>
+                <p className="text-xl font-semibold text-emerald-400 mb-6">
+                  {completeAuditForm.email}
+                </p>
+                <div className="p-6 rounded-xl bg-white/5 border border-white/10 mb-6">
+                  <div className="flex items-start gap-4 text-left">
+                    <svg className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div className="text-sm text-white/70">
+                      <p className="font-semibold text-white mb-2">What's Next?</p>
+                      <ul className="space-y-1">
+                        <li>• Your comprehensive report will arrive in 2-3 minutes</li>
+                        <li>• Check your spam folder if you don't see it</li>
+                        <li>• We'll also call you to discuss your results</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowCompleteAuditModal(false)}
+                  className={BTN_PRIMARY}
+                >
+                  Got It, Thanks!
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
