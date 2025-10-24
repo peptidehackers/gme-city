@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
       const resend = new Resend(process.env.RESEND_API_KEY);
 
       await resend.emails.send({
-        from: 'GMB City Reports <reports@gme.city>',
+        from: 'GMB City Reports <reports@gmb.city>',
         to: email,
         subject: `Complete Local SEO Audit - ${businessName}`,
         html: reportHTML,
