@@ -47,6 +47,15 @@ function Footer() {
                 (424) 283-2608
               </a>
             </div>
+            <div className="flex items-center justify-center md:justify-end gap-2 text-white/80">
+              <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div className="text-sm">
+                <div>Mon-Fri: 6AM - 5PM</div>
+                <div>Sat: 9AM - 3PM | Sun: Closed</div>
+              </div>
+            </div>
           </div>
         </div>
 
