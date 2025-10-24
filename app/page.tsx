@@ -34,8 +34,8 @@ const SECTION_Y = "py-16 md:py-24";
 const GRID_GAP = "gap-8 md:gap-12";
 
 // surface tokens
-const CARD = "rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm";
-const CARD_INTERACTIVE = "relative rounded-2xl border border-white/10 bg-white/5 p-8 md:p-10 shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:border-emerald-400/80 hover:bg-white/8";
+const CARD = "rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-black/20 backdrop-blur-sm";
+const CARD_INTERACTIVE = "relative rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:border-emerald-400/80 hover:bg-white/8";
 const CARD_GLOW = "absolute -inset-2 bg-emerald-500/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10";
 const FEATURE_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none";
 
@@ -50,9 +50,9 @@ const PROGRESS_BG = "h-2 w-full rounded-full bg-white/10";
 const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 
 // High-urgency CTA tokens
-const CTA_CARD = "relative rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/5 via-transparent to-emerald-500/5 p-10 shadow-2xl shadow-black/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1";
+const CTA_CARD = "relative rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/5 via-transparent to-emerald-500/5 p-6 sm:p-8 md:p-10 shadow-2xl shadow-black/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1";
 const CTA_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-60";
-const LOCKED_CONTENT = "relative rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 overflow-hidden backdrop-blur-sm";
+const LOCKED_CONTENT = "relative rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-4 sm:p-6 overflow-hidden backdrop-blur-sm";
 const LOCKED_OVERLAY = "absolute inset-0 flex items-center justify-center";
 
 // ---------------------- CSS Animations ----------------------
@@ -273,7 +273,7 @@ function MeetingCTACard({
 }: MeetingCTAProps) {
   return (
     <div className="my-8">
-      <div className="relative rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/10 via-black/40 to-emerald-500/5 p-6 backdrop-blur-sm overflow-hidden">
+      <div className="relative rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/10 via-black/40 to-emerald-500/5 p-4 sm:p-6 backdrop-blur-sm overflow-hidden">
         {/* Subtle glow effect */}
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/5 via-transparent to-emerald-400/5 pointer-events-none"></div>
 
@@ -327,7 +327,7 @@ function SEOSnapshotSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLD
   return (
     <section ref={sectionRef} className={`${CONTAINER} ${SECTION_Y}`}>
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
-      <div className="prelogin-module p-8">
+      <div className="prelogin-module p-4 sm:p-6 md:p-8">
         <div className={`${CARD_INTERACTIVE} ${loading ? 'neon-loading-border' : ''}`}>
           {loading && (
             <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
@@ -348,7 +348,7 @@ function SEOSnapshotSection({ sectionRef }: { sectionRef?: React.RefObject<HTMLD
             </svg>
           )}
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Get Your Complete SEO Snapshot</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Get Your Complete SEO Snapshot</h2>
             <p className="mt-3 text-white/70 max-w-2xl mx-auto">See your Local SEO and Onsite SEO scores with detailed issue breakdown</p>
           </div>
           <SEOSnapshotScore onLoadingChange={setLoading} />
@@ -551,9 +551,9 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
       ) : (
         <div>
           <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div className="text-center p-8 rounded-2xl bg-white/5 border border-white/10">
+            <div className="text-center p-4 sm:p-6 md:p-8 rounded-2xl bg-white/5 border border-white/10">
               <div className="text-sm text-white/60 mb-2">Local SEO</div>
-              <div className="text-6xl font-black bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 {results.localScore}
               </div>
               <div className="text-white/60 mt-1">/ 100</div>
@@ -561,9 +561,9 @@ function SEOSnapshotScore({ onLoadingChange }: { onLoadingChange: (loading: bool
                 <div className={PROGRESS_FG} style={{ width: `${results.localScore}%` }} />
               </div>
             </div>
-            <div className="text-center p-8 rounded-2xl bg-white/5 border border-white/10">
+            <div className="text-center p-4 sm:p-6 md:p-8 rounded-2xl bg-white/5 border border-white/10">
               <div className="text-sm text-white/60 mb-2">Onsite SEO</div>
-              <div className="text-6xl font-black bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-br from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 {results.onsiteScore}
               </div>
               <div className="text-white/60 mt-1">/ 100</div>
@@ -708,7 +708,7 @@ function CitationCoverageSection({ sectionRef }: { sectionRef?: React.RefObject<
   return (
     <section ref={sectionRef} className={`${CONTAINER} ${SECTION_Y}`}>
       <style dangerouslySetInnerHTML={{ __html: neonAnimationStyles }} />
-      <div className="feature-card p-8">
+      <div className="feature-card p-4 sm:p-6 md:p-8">
         <div className={`${CARD_INTERACTIVE} ${loading ? 'neon-loading-border' : ''}`}>
           {loading && (
             <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
@@ -729,7 +729,7 @@ function CitationCoverageSection({ sectionRef }: { sectionRef?: React.RefObject<
             </svg>
           )}
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Citation Coverage Checker</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Citation Coverage Checker</h2>
             <p className="mt-3 text-white/70 max-w-2xl mx-auto">Verify your Google Business Profile presence instantly — the #1 ranking factor for local search</p>
           </div>
           <CitationCoverageCheck onLoadingChange={setLoading} />
@@ -1931,7 +1931,7 @@ export default function GMECityLanding() {
           <div className="absolute inset-0 opacity-90 md:opacity-100 bg-[radial-gradient(900px_400px_at_50%_-10%,rgba(16,185,129,0.25),transparent_60%)]" />
           <div className={`${CONTAINER} grid md:grid-cols-2 ${GRID_GAP} items-center`}>
             <div>
-              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start Free Audit</a>
@@ -1944,7 +1944,7 @@ export default function GMECityLanding() {
               <div className={`${CARD} relative`}>
                 <div className="text-sm text-white/70">Live score</div>
                 <div className="mt-2 flex items-end gap-4">
-                  <div className="text-6xl md:text-7xl font-black tracking-tight transition-all duration-500 will-change-auto">{animatedScore}</div>
+                  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight transition-all duration-500 will-change-auto">{animatedScore}</div>
                   <div className="pb-2 text-white/60">out of 100</div>
                 </div>
                 <div className="mt-4 grid grid-cols-2 gap-4 text-sm md:text-base">
@@ -1972,10 +1972,10 @@ export default function GMECityLanding() {
 
         {/* Feature Section 3: Keyword Opportunity Scanner */}
         <section ref={keywordsRef} className={`${CONTAINER} ${SECTION_Y}`}>
-          <div className="prelogin-module p-8">
+          <div className="prelogin-module p-4 sm:p-6 md:p-8">
             <div className={CARD_INTERACTIVE}>
               <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Find High-Intent Keywords</h2>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Find High-Intent Keywords</h2>
                 <p className="mt-3 text-white/70 max-w-2xl mx-auto">Discover the keywords your competitors are ranking for</p>
               </div>
 
@@ -2276,7 +2276,7 @@ export default function GMECityLanding() {
             <div className="space-y-8">
               {/* Hero Section */}
               <div className={CARD}>
-                <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">Citation Builder</h2>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">Citation Builder</h2>
                 <p className="mt-3 text-lg text-white/80 max-w-3xl">
                   Take your NAP once. Get finished listings everywhere. Your data prefilled. Your progress tracked. Your listings fixed.
                 </p>

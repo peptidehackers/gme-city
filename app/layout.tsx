@@ -45,8 +45,8 @@ export const metadata: Metadata = {
 function Footer() {
   return (
     <footer className="border-t border-white/10 bg-black/50 backdrop-blur-sm mt-16">
-      <div className="container mx-auto px-6 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
           {/* Business Name */}
           <div className="text-center md:text-left">
             <h3 className="text-xl font-bold text-white mb-2">GMB City</h3>
@@ -54,13 +54,13 @@ function Footer() {
           </div>
 
           {/* NAP Information */}
-          <div className="text-center md:text-right space-y-2">
+          <div className="text-center md:text-right space-y-1.5 sm:space-y-2">
             <div className="flex items-center justify-center md:justify-end gap-2 text-white/80">
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span className="text-sm">
+              <span className="text-xs sm:text-sm">
                 2029 Century Park E Suite 430, Los Angeles, CA 90067
               </span>
             </div>
@@ -84,7 +84,7 @@ function Footer() {
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <div className="text-sm">
+              <div className="text-xs sm:text-sm">
                 <div>Mon-Fri: 6AM - 5PM</div>
                 <div>Sat: 9AM - 3PM | Sun: Closed</div>
               </div>

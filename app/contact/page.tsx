@@ -31,16 +31,16 @@ export default function Contact() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-6 py-16">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Contact Us</h1>
-        <p className="mt-4 text-lg text-white/70">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-12 md:py-16">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">Contact Us</h1>
+        <p className="mt-4 text-base sm:text-lg text-white/70">
           Have questions about Local SEO? Want to discuss a strategy for your business? We're here to help.
         </p>
 
-        <div className="mt-12 grid md:grid-cols-2 gap-10">
+        <div className="mt-8 sm:mt-12 grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10">
           {/* Contact Form */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-2xl font-semibold mb-6">Send us a message</h2>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Send us a message</h2>
 
             {submitted ? (
               <div className="rounded-xl bg-emerald-500/20 border border-emerald-500/30 p-4 text-emerald-300">
@@ -108,8 +108,8 @@ export default function Contact() {
 
           {/* Contact Info */}
           <div className="space-y-6">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="text-xl font-semibold mb-4">Get in Touch</h3>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Get in Touch</h3>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
@@ -144,8 +144,8 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="text-xl font-semibold mb-4">What We Offer</h3>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">What We Offer</h3>
               <ul className="space-y-3 text-white/80">
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-400 mt-1">✓</span>
@@ -174,7 +174,7 @@ export default function Contact() {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
               <h3 className="text-xl font-semibold mb-3">Quick Links</h3>
               <div className="space-y-2">
                 <a href="/" className="block text-emerald-400 hover:underline">← Back to Audit Tool</a>
@@ -186,8 +186,8 @@ export default function Contact() {
         </div>
       </main>
 
-      <footer className="border-t border-white/10 mt-16">
-        <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4">
+      <footer className="border-t border-white/10 mt-12 sm:mt-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4">
           <div>© {new Date().getFullYear()} GMB City. Local SEO that ships.</div>
           <div className="flex gap-6">
             <a href="/privacy" className="hover:text-white">Privacy</a>
