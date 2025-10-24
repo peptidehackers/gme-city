@@ -26,11 +26,11 @@ export const metadata: Metadata = {
     description: "Free Google Business Profile audit tool. Discover optimization opportunities, boost local rankings, and dominate Google Maps search.",
     images: [
       {
-        url: "/og-image.svg",
+        url: "/og-image.png",
         width: 1200,
-        height: 630,
+        height: 1200,
         alt: "GMB City - Get Ranked on Google Today",
-        type: "image/svg+xml",
+        type: "image/png",
       },
     ],
   },
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "GMB City - Get Ranked on Google Today",
     description: "Free Google Business Profile audit tool. Discover optimization opportunities and boost your local rankings.",
-    images: ["/og-image.svg"],
+    images: ["/og-image.png"],
   },
   icons: {
     icon: [
