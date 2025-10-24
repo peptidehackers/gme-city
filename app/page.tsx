@@ -42,7 +42,7 @@ const FEATURE_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/2
 // control tokens
 const INPUT = "h-12 w-full rounded-xl border border-white/10 bg-white/10 px-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
 const BTN = "h-12 px-6 rounded-xl font-semibold transition-all duration-200";
-const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-400/20 flex items-center justify-center text-base font-bold`;
+const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-400/20 hover:scale-105 active:scale-95 flex items-center justify-center text-base font-bold cursor-pointer`;
 const BTN_GHOST = `${BTN} border border-white/20 hover:bg-white/10 hover:border-white/30`;
 
 // progress bar
@@ -1933,9 +1933,10 @@ export default function GMECityLanding() {
             <div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start Free Audit</a>
-                <a href="#schema" onClick={(e) => { e.preventDefault(); setTab("schema"); }} className={BTN_GHOST}>Build schema</a>
+              <div className="mt-8">
+                <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className={BTN_PRIMARY}>
+                  Start Free Audit
+                </button>
               </div>
               <div className="mt-6 text-sm text-white/70">No login. No credit card. Save your plan as a PDF when you are done.</div>
             </div>
