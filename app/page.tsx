@@ -1933,10 +1933,10 @@ export default function GMECityLanding() {
             <div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
-              <div className="mt-8">
+              <div className="mt-8 max-w-prose">
                 <button
                   onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                  className="group relative px-8 py-4 bg-emerald-400 text-black text-lg font-bold rounded-xl overflow-hidden transition-all duration-300 hover:bg-emerald-500 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-400/50 active:scale-95 focus:outline-none focus:ring-4 focus:ring-emerald-400/50"
+                  className="group relative w-full px-8 py-5 bg-emerald-400 text-black text-lg font-bold rounded-xl overflow-hidden transition-all duration-300 hover:bg-emerald-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-emerald-400/50 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-emerald-400/50"
                 >
                   {/* Background glow effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
