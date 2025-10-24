@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://gme.city",
+    url: "https://www.gmb.city",
     siteName: "GMB City",
     title: "GMB City - Get Ranked on Google Today",
     description: "Free Google Business Profile audit tool. Discover optimization opportunities, boost local rankings, and dominate Google Maps search.",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     title: "GMB City",
     statusBarStyle: "black-translucent",
   },
-  metadataBase: new URL("https://gme.city"),
+  metadataBase: new URL("https://www.gmb.city"),
 };
 
 function Footer() {
