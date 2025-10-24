@@ -1934,9 +1934,7 @@ export default function GMECityLanding() {
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
               <div className="mt-8">
-                <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className={BTN_PRIMARY}>
-                  Start Free Audit
-                </button>
+                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start Free Audit</a>
               </div>
               <div className="mt-6 text-sm text-white/70">No login. No credit card. Save your plan as a PDF when you are done.</div>
             </div>
