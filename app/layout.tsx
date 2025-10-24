@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     description: "Free Google Business Profile audit tool. Discover optimization opportunities, boost local rankings, and dominate Google Maps search.",
     images: [
       {
-        url: "/og-image-new.svg",
+        url: "/og-image-final.svg",
         width: 1200,
         height: 630,
         alt: "GMB City - Get Ranked on Google Today",
@@ -38,12 +38,19 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "GMB City - Get Ranked on Google Today",
     description: "Free Google Business Profile audit tool. Discover optimization opportunities and boost your local rankings.",
-    images: ["/og-image-new.svg"],
+    images: ["/og-image-final.svg"],
   },
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" }
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    title: "GMB City",
+    statusBarStyle: "black-translucent",
   },
   metadataBase: new URL("https://gme.city"),
 };
