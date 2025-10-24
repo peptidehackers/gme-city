@@ -1,17 +1,45 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Dark background for contrast in light tabs -->
-  <rect width="32" height="32" fill="#0a0a0a" rx="4"/>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Favicon - Pin Icon Only -->
 
-  <!-- Location Pin in bright emerald -->
-  <g transform="translate(16, 10)">
-    <path d="M0 -6C-3 -6 -5.5 -3.5 -5.5 -0.5C-5.5 1 -4.5 2.5 -3 3.5L0 8L3 3.5C4.5 2.5 5.5 1 5.5 -0.5C5.5 -3.5 3 -6 0 -6Z" fill="#10b981"/>
-    <circle cx="0" cy="-0.5" r="3" fill="white"/>
+  <defs>
+    <!-- Emerald gradient for pin -->
+    <linearGradient id="pinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
 
-    <!-- Simple bars -->
-    <g transform="translate(-1.5, -2.5)">
-      <rect x="0.3" y="1.5" width="0.8" height="1.5" rx="0.2" fill="#059669"/>
-      <rect x="1.3" y="0.8" width="0.8" height="2.2" rx="0.2" fill="#059669"/>
-      <rect x="2.3" y="1.2" width="0.8" height="1.8" rx="0.2" fill="#059669"/>
+    <!-- Bar gradients -->
+    <linearGradient id="barGrad1" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="barGrad2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="barGrad3" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark background -->
+  <rect width="64" height="64" fill="#0a0a0a" rx="8"/>
+
+  <!-- Location Pin centered -->
+  <g transform="translate(32, 32)">
+    <path d="M0 -20C-10 -20 -18 -12 -18 -2C-18 2 -16 6 -12 9.5L0 24L12 9.5C16 6 18 2 18 -2C18 -12 10 -20 0 -20Z" fill="url(#pinGrad)"/>
+    <path d="M0 -20C-10 -20 -18 -12 -18 -2C-18 2 -16 6 -12 9.5L0 24L12 9.5C16 6 18 2 18 -2C18 -12 10 -20 0 -20Z"
+          fill="none" stroke="#047857" stroke-width="0.5" opacity="0.3"/>
+
+    <circle cx="0" cy="-2" r="11" fill="white"/>
+
+    <g transform="translate(-5.5, -7)">
+      <rect x="1" y="5" width="2.5" height="5" rx="0.5" fill="url(#barGrad1)"/>
+      <rect x="4.5" y="2" width="2.5" height="8" rx="0.5" fill="url(#barGrad2)"/>
+      <rect x="4.75" y="2.25" width="0.75" height="2.5" rx="0.25" fill="white" opacity="0.3"/>
+      <rect x="8" y="3.5" width="2.5" height="6.5" rx="0.5" fill="url(#barGrad3)"/>
     </g>
   </g>
 </svg>
