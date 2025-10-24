@@ -1443,7 +1443,7 @@ export default function GMECityLanding() {
 
   // Schema state
   const [schemaForm, setSchemaForm] = useState({
-    name: "GME City",
+    name: "GMB City",
     url: "https://gme.city",
     phone: "+1 310 555 1212",
     street1: "123 Example Blvd",
@@ -1470,7 +1470,7 @@ export default function GMECityLanding() {
   const [shareableLink, setShareableLink] = useState("");
   const [showWhiteLabelModal, setShowWhiteLabelModal] = useState(false);
   const [whiteLabelConfig, setWhiteLabelConfig] = useState({
-    brandName: "GME City",
+    brandName: "GMB City",
     brandColor: "#10b981",
     logoUrl: "",
   });
@@ -1901,7 +1901,7 @@ export default function GMECityLanding() {
         <div className={`${CONTAINER} py-3 md:py-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400" />
-            <span className="text-lg font-semibold tracking-tight">GME City</span>
+            <span className="text-lg font-semibold tracking-tight">GMB City</span>
           </div>
           <nav className="hidden md:flex items-center gap-2 text-sm">
             <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">SEO Snapshot</button>
@@ -2692,7 +2692,7 @@ ${schemaJson}
         {/* Footer */}
         <footer className="border-t border-white/10">
           <div className={`${CONTAINER} py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4`}>
-            <div>© {new Date().getFullYear()} GME City. Local SEO that ships.</div>
+            <div>© {new Date().getFullYear()} GMB City. Local SEO that ships.</div>
             <div className="flex gap-6">
               <a href="/privacy" className="hover:text-white transition">Privacy</a>
               <a href="/terms" className="hover:text-white transition">Terms</a>
@@ -2845,7 +2845,7 @@ ${schemaJson}
                 Save settings
               </button>
               <button className={BTN_GHOST} onClick={() => {
-                setWhiteLabelConfig({ brandName: "GME City", brandColor: "#10b981", logoUrl: "" });
+                setWhiteLabelConfig({ brandName: "GMB City", brandColor: "#10b981", logoUrl: "" });
                 setShowWhiteLabelModal(false);
               }}>
                 Reset to default

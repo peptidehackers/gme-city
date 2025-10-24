@@ -8,7 +8,7 @@ export default function PrivacyPolicy() {
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400" />
-            <span className="text-lg font-semibold tracking-tight">GME City</span>
+            <span className="text-lg font-semibold tracking-tight">GMB City</span>
           </a>
         </div>
       </header>
@@ -21,7 +21,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-3">Introduction</h2>
             <p>
-              GME City ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Local SEO audit tool and related services.
+              GMB City ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Local SEO audit tool and related services.
             </p>
           </section>
 
@@ -141,7 +141,7 @@ export default function PrivacyPolicy() {
 
       <footer className="border-t border-white/10 mt-16">
         <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4">
-          <div>© {new Date().getFullYear()} GME City. Local SEO that ships.</div>
+          <div>© {new Date().getFullYear()} GMB City. Local SEO that ships.</div>
           <div className="flex gap-6">
             <a href="/privacy" className="hover:text-white">Privacy</a>
             <a href="/terms" className="hover:text-white">Terms</a>

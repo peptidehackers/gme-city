@@ -142,7 +142,7 @@ export async function GET(req: NextRequest) {
     // Send test payload
     const testPayload = {
       test: true,
-      message: "GME City webhook test",
+      message: "GMB City webhook test",
       timestamp: new Date().toISOString(),
       businessName: "Test Business",
       score: 75,

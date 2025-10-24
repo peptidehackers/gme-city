@@ -24,7 +24,7 @@ function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           {/* Business Name */}
           <div className="text-center md:text-left">
-            <h3 className="text-xl font-bold text-white mb-2">GME City</h3>
+            <h3 className="text-xl font-bold text-white mb-2">GMB City</h3>
             <p className="text-sm text-white/60">Local SEO Solutions</p>
           </div>
 
@@ -52,7 +52,7 @@ function Footer() {
 
         {/* Copyright */}
         <div className="mt-6 pt-6 border-t border-white/10 text-center text-sm text-white/60">
-          © {new Date().getFullYear()} GME City. All rights reserved.
+          © {new Date().getFullYear()} GMB City. All rights reserved.
         </div>
       </div>
     </footer>

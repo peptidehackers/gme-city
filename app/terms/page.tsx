@@ -8,7 +8,7 @@ export default function TermsOfService() {
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400" />
-            <span className="text-lg font-semibold tracking-tight">GME City</span>
+            <span className="text-lg font-semibold tracking-tight">GMB City</span>
           </a>
         </div>
       </header>
@@ -21,13 +21,13 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-3">Agreement to Terms</h2>
             <p>
-              By accessing or using GME City's Local SEO audit tool and related services (the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service.
+              By accessing or using GMB City's Local SEO audit tool and related services (the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-3">Description of Service</h2>
-            <p className="mb-3">GME City provides:</p>
+            <p className="mb-3">GMB City provides:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li><strong>Instant GBP Audit:</strong> A scoring algorithm that evaluates Google Business Profile optimization</li>
               <li><strong>LocalBusiness Schema Generator:</strong> Tools to create JSON-LD structured data markup</li>
@@ -84,7 +84,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-3">Intellectual Property</h2>
             <p className="mb-3">
-              All content, features, and functionality of the Service, including but not limited to text, graphics, logos, algorithms, and software, are owned by GME City and protected by copyright, trademark, and other intellectual property laws.
+              All content, features, and functionality of the Service, including but not limited to text, graphics, logos, algorithms, and software, are owned by GMB City and protected by copyright, trademark, and other intellectual property laws.
             </p>
             <p>
               You may not copy, modify, distribute, sell, or lease any part of our Service without express written permission.
@@ -126,7 +126,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-3">Indemnification</h2>
             <p>
-              You agree to indemnify, defend, and hold harmless GME City, its officers, directors, employees, and agents from any claims, liabilities, damages, losses, or expenses (including legal fees) arising from:
+              You agree to indemnify, defend, and hold harmless GMB City, its officers, directors, employees, and agents from any claims, liabilities, damages, losses, or expenses (including legal fees) arising from:
             </p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>Your use of the Service</li>
@@ -176,7 +176,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-3">Entire Agreement</h2>
             <p>
-              These Terms, along with our Privacy Policy, constitute the entire agreement between you and GME City regarding the Service and supersede any prior agreements.
+              These Terms, along with our Privacy Policy, constitute the entire agreement between you and GMB City regarding the Service and supersede any prior agreements.
             </p>
           </section>
 
@@ -195,7 +195,7 @@ export default function TermsOfService() {
 
       <footer className="border-t border-white/10 mt-16">
         <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4">
-          <div>© {new Date().getFullYear()} GME City. Local SEO that ships.</div>
+          <div>© {new Date().getFullYear()} GMB City. Local SEO that ships.</div>
           <div className="flex gap-6">
             <a href="/privacy" className="hover:text-white">Privacy</a>
             <a href="/terms" className="hover:text-white">Terms</a>

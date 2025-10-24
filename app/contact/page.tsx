@@ -26,7 +26,7 @@ export default function Contact() {
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400" />
-            <span className="text-lg font-semibold tracking-tight">GME City</span>
+            <span className="text-lg font-semibold tracking-tight">GMB City</span>
           </a>
         </div>
       </header>
@@ -188,7 +188,7 @@ export default function Contact() {
 
       <footer className="border-t border-white/10 mt-16">
         <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4">
-          <div>© {new Date().getFullYear()} GME City. Local SEO that ships.</div>
+          <div>© {new Date().getFullYear()} GMB City. Local SEO that ships.</div>
           <div className="flex gap-6">
             <a href="/privacy" className="hover:text-white">Privacy</a>
             <a href="/terms" className="hover:text-white">Terms</a>
