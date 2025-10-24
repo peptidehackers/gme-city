@@ -1802,6 +1802,7 @@ export default function GMECityLanding() {
   // Complete Audit Modal state
   const [showCompleteAuditModal, setShowCompleteAuditModal] = useState(false);
   const [completeAuditForm, setCompleteAuditForm] = useState({
+    name: "",
     email: "",
     phone: "",
     businessName: "",
@@ -1853,6 +1854,7 @@ export default function GMECityLanding() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          name: completeAuditForm.name,
           email: completeAuditForm.email,
           phone: completeAuditForm.phone,
           businessName: completeAuditForm.businessName,
@@ -1876,6 +1878,7 @@ export default function GMECityLanding() {
         setShowCompleteAuditModal(false);
         setCompleteAuditSuccess(false);
         setCompleteAuditForm({
+          name: "",
           email: "",
           phone: "",
           businessName: "",
@@ -3372,7 +3375,7 @@ ${schemaJson}
       {/* Complete Audit Modal */}
       {showCompleteAuditModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-gray-900 to-black border border-emerald-400/30 rounded-2xl shadow-2xl">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-gradient-to-br from-gray-900 to-black border border-emerald-400/30 rounded-2xl shadow-2xl">
             {/* Close button */}
             <button
               onClick={() => setShowCompleteAuditModal(false)}
@@ -3384,26 +3387,65 @@ ${schemaJson}
             </button>
 
             {!completeAuditSuccess ? (
-              <form onSubmit={submitCompleteAudit} className="p-8">
+              <form onSubmit={submitCompleteAudit} className="p-8 max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-400/10 border border-emerald-400/30 mb-4">
-                    <svg className="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  {/* Value Badge */}
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-400/20 border border-emerald-400/40 mb-4">
+                    <svg className="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
+                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">$500 Value • 100% Free</span>
                   </div>
-                  <h2 className="text-3xl font-extrabold text-white mb-2">Complete SEO Audit</h2>
-                  <p className="text-white/70">Get all 4 comprehensive audits emailed to you</p>
-                  <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-400/10 border border-emerald-400/20">
-                    <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-sm font-semibold text-emerald-400">$500 Value • 100% Free</span>
+
+                  {/* Main Headline */}
+                  <h2 className="text-4xl sm:text-5xl font-black text-white mb-3 leading-tight">
+                    Discover What's <span className="text-emerald-400">Holding You Back</span>
+                  </h2>
+
+                  {/* Subheadline */}
+                  <p className="text-lg text-white/80 mb-6 max-w-xl mx-auto leading-relaxed">
+                    Get a comprehensive analysis of your local SEO performance—including the exact issues preventing you from ranking #1
+                  </p>
+
+                  {/* What's Included - Compact */}
+                  <div className="grid grid-cols-2 gap-3 max-w-md mx-auto text-left">
+                    <div className="flex items-center gap-2 text-sm text-white/70">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                      <span>SEO Snapshot</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-white/70">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                      <span>Citation Coverage</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-white/70">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                      <span>Keyword Opportunities</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-white/70">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                      <span>GBP Analysis</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Form fields */}
                 <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                  {/* Name */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      className={INPUT}
+                      placeholder="John Smith"
+                      value={completeAuditForm.name}
+                      onChange={(e) => setCompleteAuditForm({ ...completeAuditForm, name: e.target.value })}
+                      required
+                    />
+                  </div>
+
                   {/* Email */}
                   <div className="sm:col-span-2">
                     <label className="block text-sm font-medium text-white/80 mb-2">
