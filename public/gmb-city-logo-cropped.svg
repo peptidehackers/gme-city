@@ -1,0 +1,112 @@
+<svg width="450" height="200" viewBox="40 60 520 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Horizontal - Light Mode with Reduced Glow - CROPPED -->
+
+  <defs>
+    <!-- Emerald gradient for pin -->
+    <linearGradient id="pinGradHL" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <!-- Subtle glow behind pin -->
+    <radialGradient id="pinGlowHL">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/>
+      <stop offset="70%" stop-color="#10b981" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Minimal dark text glow for GMB -->
+    <filter id="darkGlowHL">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle emerald text glow -->
+    <filter id="emeraldGlowHL">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feFlood flood-color="#10b981" flood-opacity="0.3"/>
+      <feComposite in2="coloredBlur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Pin shadow -->
+    <filter id="pinShadowHL">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Bar gradients -->
+    <linearGradient id="barGrad1HL" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="barGrad2HL" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="barGrad3HL" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Subtle background glow -->
+  <circle cx="120" cy="150" r="110" fill="url(#pinGlowHL)"/>
+
+  <!-- Location Pin -->
+  <g id="logo-icon" transform="translate(120, 150)" filter="url(#pinShadowHL)">
+    <path d="M0 -60C-30 -60 -54 -36 -54 -6C-54 6 -48 18 -36 28.5L0 72L36 28.5C48 18 54 6 54 -6C54 -36 30 -60 0 -60Z" fill="url(#pinGradHL)"/>
+    <path d="M0 -60C-30 -60 -54 -36 -54 -6C-54 6 -48 18 -36 28.5L0 72L36 28.5C48 18 54 6 54 -6C54 -36 30 -60 0 -60Z"
+          fill="none" stroke="#047857" stroke-width="1.5" opacity="0.25"/>
+
+    <circle cx="0" cy="-6" r="33" fill="white"/>
+    <circle cx="0" cy="-6" r="33" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+
+    <g transform="translate(-16.5, -21)">
+      <rect x="3" y="15" width="7.5" height="15" rx="1.5" fill="url(#barGrad1HL)"/>
+      <rect x="13.5" y="6" width="7.5" height="24" rx="1.5" fill="url(#barGrad2HL)"/>
+      <rect x="14.5" y="7" width="2.5" height="8" rx="0.8" fill="white" opacity="0.3"/>
+      <rect x="24" y="10.5" width="7.5" height="19.5" rx="1.5" fill="url(#barGrad3HL)"/>
+    </g>
+  </g>
+
+  <!-- Text -->
+  <g transform="translate(240, 130)">
+    <!-- GMB in DARK GRAY for light mode -->
+    <text x="0" y="0"
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="72"
+          font-weight="900"
+          fill="#1f2937"
+          text-anchor="start"
+          letter-spacing="-0.02em"
+          filter="url(#darkGlowHL)">
+      GMB
+    </text>
+
+    <text x="0" y="60"
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="54"
+          font-weight="800"
+          fill="#059669"
+          text-anchor="start"
+          letter-spacing="0.05em"
+          filter="url(#emeraldGlowHL)">
+      City
+    </text>
+  </g>
+</svg>

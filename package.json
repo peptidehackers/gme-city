@@ -5,18 +5,22 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start"
+    "start": "next start",
+    "email": "email dev --dir emails --port 3002"
   },
   "dependencies": {
+    "@react-email/components": "^0.5.7",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.76.1",
     "cheerio": "^1.1.2",
     "next": "15.5.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-email": "^4.3.1",
     "resend": "^6.2.2"
   },
   "devDependencies": {
+    "@react-email/preview-server": "^4.3.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

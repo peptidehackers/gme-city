@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "../../../lib/supabase";
-import { generatePremiumEmailHTML } from "./email-template";
+import { render } from '@react-email/components';
+import { CompleteAuditEmail } from "../../../emails/complete-audit";
 
 // POST /api/complete-audit
 // Runs all 4 audits and sends comprehensive email report
@@ -134,13 +135,15 @@ export async function POST(req: NextRequest) {
       keywords: keywordData ? "✓" : "✗"
     });
 
-    // 3. Generate comprehensive HTML report
-    const reportHTML = generatePremiumEmailHTML({
-      businessName,
-      seoData,
-      citationData,
-      keywordData
-    });
+    // 3. Generate comprehensive HTML report using React Email
+    const reportHTML = await render(
+      CompleteAuditEmail({
+        businessName,
+        seoData,
+        citationData,
+        keywordData
+      })
+    );
 
     // 4. Send email via Resend
     if (process.env.RESEND_API_KEY) {
