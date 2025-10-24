@@ -1934,7 +1934,21 @@ export default function GMECityLanding() {
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
               <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
               <div className="mt-8">
-                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={BTN_PRIMARY}>Start Free Audit</a>
+                <button
+                  onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="group relative px-8 py-4 bg-emerald-400 text-black text-lg font-bold rounded-xl overflow-hidden transition-all duration-300 hover:bg-emerald-500 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-400/50 active:scale-95 focus:outline-none focus:ring-4 focus:ring-emerald-400/50"
+                >
+                  {/* Background glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  {/* Button text */}
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    Start Free Audit
+                    <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </span>
+                </button>
               </div>
               <div className="mt-6 text-sm text-white/70">No login. No credit card. Save your plan as a PDF when you are done.</div>
             </div>
