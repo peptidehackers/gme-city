@@ -1,0 +1,31 @@
+<svg width="400" height="500" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Location Pin -->
+  <g id="location-pin">
+    <!-- Outer pin shape -->
+    <path d="M200 50C150 50 110 90 110 140C110 165 120 187 140 205L200 280L260 205C280 187 290 165 290 140C290 90 250 50 200 50Z" fill="#1e3a5f"/>
+
+    <!-- Inner white circle -->
+    <circle cx="200" cy="140" r="55" fill="white"/>
+
+    <!-- Bar chart inside (3 bars in emerald green) -->
+    <g id="bar-chart" transform="translate(170, 115)">
+      <!-- Left bar (shortest) -->
+      <rect x="5" y="25" width="12" height="25" rx="2" fill="#6ee7b7"/>
+
+      <!-- Middle bar (tallest) -->
+      <rect x="22" y="10" width="12" height="40" rx="2" fill="#6ee7b7"/>
+
+      <!-- Right bar (medium) -->
+      <rect x="39" y="18" width="12" height="32" rx="2" fill="#6ee7b7"/>
+    </g>
+  </g>
+
+  <!-- Text "GMB city" -->
+  <g id="text">
+    <!-- GMB -->
+    <text x="200" y="370" font-family="Arial, Helvetica, sans-serif" font-size="120" font-weight="800" fill="#1e3a5f" text-anchor="middle">GMB</text>
+
+    <!-- city -->
+    <text x="200" y="460" font-family="Arial, Helvetica, sans-serif" font-size="120" font-weight="800" fill="#1e3a5f" text-anchor="middle">city</text>
+  </g>
+</svg>

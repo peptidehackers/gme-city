@@ -1900,7 +1900,7 @@ export default function GMECityLanding() {
       <header className="sticky top-0 z-40 backdrop-blur bg-neutral-950/80 border-b border-white/10">
         <div className={`${CONTAINER} py-3 md:py-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400" />
+            <img src="/logo.svg" alt="GMB City Logo" className="h-10 w-auto" />
             <span className="text-lg font-semibold tracking-tight">GMB City</span>
           </div>
           <nav className="hidden md:flex items-center gap-2 text-sm">

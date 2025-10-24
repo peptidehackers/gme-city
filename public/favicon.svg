@@ -1,0 +1,25 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle for better visibility -->
+  <rect width="512" height="512" fill="white"/>
+
+  <!-- Location Pin (centered and larger) -->
+  <g id="location-pin" transform="translate(256, 200) scale(1.5)">
+    <!-- Outer pin shape -->
+    <path d="M0 -100C-35 -100 -65 -70 -65 -35C-65 -15 -57 3 -40 18L0 75L40 18C57 3 65 -15 65 -35C65 -70 35 -100 0 -100Z" fill="#1e3a5f"/>
+
+    <!-- Inner white circle -->
+    <circle cx="0" cy="-35" r="40" fill="white"/>
+
+    <!-- Bar chart inside -->
+    <g id="bar-chart" transform="translate(-22, -50)">
+      <!-- Left bar (shortest) -->
+      <rect x="4" y="18" width="10" height="20" rx="2" fill="#10b981"/>
+
+      <!-- Middle bar (tallest) -->
+      <rect x="17" y="8" width="10" height="30" rx="2" fill="#10b981"/>
+
+      <!-- Right bar (medium) -->
+      <rect x="30" y="13" width="10" height="25" rx="2" fill="#10b981"/>
+    </g>
+  </g>
+</svg>
