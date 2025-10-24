@@ -135,6 +135,14 @@ export async function POST(req: NextRequest) {
       keywords: keywordData ? "✓" : "✗"
     });
 
+    // Debug: Log actual data being passed to email
+    console.log("Email data:", {
+      businessName,
+      seoData: JSON.stringify(seoData, null, 2),
+      citationData: JSON.stringify(citationData, null, 2),
+      keywordData: JSON.stringify(keywordData, null, 2)
+    });
+
     // 3. Generate comprehensive HTML report using React Email
     const reportHTML = await render(
       CompleteAuditEmail({

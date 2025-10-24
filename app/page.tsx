@@ -2006,7 +2006,7 @@ export default function GMECityLanding() {
             <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">SEO Snapshot</button>
             <button onClick={() => citationsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">Citations</button>
             <button onClick={() => keywordsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">Keywords</button>
-            <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} ml-2`}>Start Free Audit</a>
+            <a href="https://calendly.com/peptidehackers-info/30min" target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} ml-2`}>Book with Us Now</a>
           </nav>
           <button aria-label="Open menu" className="md:hidden p-2 rounded-lg border border-white/20" onClick={() => setMobileOpen(v => !v)}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
@@ -2017,7 +2017,7 @@ export default function GMECityLanding() {
                 <button onClick={() => { seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">SEO Snapshot</button>
                 <button onClick={() => { citationsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Citations</button>
                 <button onClick={() => { keywordsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Keywords</button>
-                <a href="#seo-snapshot" onClick={(e) => { e.preventDefault(); setMobileOpen(false); seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); }} className={`${BTN_PRIMARY} text-center`}>Start Free Audit</a>
+                <a href="https://calendly.com/peptidehackers-info/30min" target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} text-center`}>Book with Us Now</a>
               </div>
             </div>
           )}
