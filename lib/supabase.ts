@@ -37,3 +37,40 @@ export type SavedAudit = {
   business_name: string;
   user_email?: string;
 };
+
+// Lead from complete audit form
+export type Lead = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  email: string;
+  phone: string;
+  business_name: string;
+  website: string;
+  street?: string;
+  city: string;
+  zip?: string;
+  category: string;
+  status: 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
+  source: string;
+  notes?: string;
+  assigned_to?: string;
+};
+
+// Complete audit results
+export type CompleteAudit = {
+  id: string;
+  created_at: string;
+  lead_id: string;
+  seo_local_score: number;
+  seo_onsite_score: number;
+  citation_coverage: number;
+  keyword_count: number;
+  report_sent: boolean;
+  report_sent_at?: string;
+  email_opened?: boolean;
+  email_opened_at?: string;
+  raw_seo_data?: any;
+  raw_citation_data?: any;
+  raw_keyword_data?: any;
+};
