@@ -30,12 +30,12 @@ export const API_ENABLED = true; // set to true when API keys are configured
 // ---------------------- Styling tokens ----------------------
 // layout tokens
 const CONTAINER = "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8";
-const SECTION_Y = "py-16 md:py-24";
-const GRID_GAP = "gap-8 md:gap-12";
+const SECTION_Y = "py-8 md:py-12";
+const GRID_GAP = "gap-4 md:gap-6";
 
 // surface tokens
-const CARD = "rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-black/20 backdrop-blur-sm";
-const CARD_INTERACTIVE = "relative rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:border-emerald-400/80 hover:bg-white/8";
+const CARD = "rounded-2xl border border-white/10 bg-black p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-black/20";
+const CARD_INTERACTIVE = "card-uniform-glow relative rounded-2xl border border-white/20 bg-black p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-black/20";
 const CARD_GLOW = "absolute -inset-2 bg-emerald-500/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10";
 const FEATURE_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none";
 
@@ -2000,7 +2000,6 @@ export default function GMECityLanding() {
         <div className={`${CONTAINER} py-3 md:py-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">
             <img src="/logo.svg" alt="GMB City Logo" className="h-12 w-auto sm:h-14" />
-            <span className="text-xl sm:text-2xl font-bold tracking-tight">GMB City</span>
           </div>
           <nav className="hidden md:flex items-center gap-2 text-sm">
             <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">SEO Snapshot</button>
@@ -2203,7 +2202,7 @@ export default function GMECityLanding() {
           )}
 
           {tab === "compare" && (
-            <div className="space-y-8">
+            <div className="space-y-4">
               <div className={CARD}>
                 <h2 className="text-2xl font-semibold tracking-tight">Competitor Comparison</h2>
                 <p className="mt-1 text-white/70 text-sm">See how you stack up against your top competitors</p>
@@ -2399,7 +2398,7 @@ export default function GMECityLanding() {
           )}
 
           {tab === "citations" && (
-            <div className="space-y-8">
+            <div className="space-y-4">
               {/* Hero Section */}
               <div className={CARD}>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">Citation Builder</h2>
