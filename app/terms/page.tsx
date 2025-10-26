@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { ThemeToggle } from "../../components/theme-toggle";
+import { ThemeLogo } from "../../components/theme-logo";
 
 export default function TermsOfService() {
   return (
@@ -8,7 +9,7 @@ export default function TermsOfService() {
       <header className="sticky top-0 z-40 backdrop-blur bg-white/80 dark:bg-neutral-950/80 border-b border-neutral-300 dark:border-white/10 transition-colors">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-3">
-            <img src="/logo.svg" alt="GMB City Logo" className="h-12 w-auto sm:h-14" />
+            <ThemeLogo className="h-12 w-auto sm:h-14" />
           </a>
           <ThemeToggle />
         </div>

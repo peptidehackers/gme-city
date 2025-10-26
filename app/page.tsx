@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { ThemeToggle } from "../components/theme-toggle";
+import { ThemeLogo } from "../components/theme-logo";
 
 // Drop this file into app/page.tsx in a Next.js 14 project
 // TailwindCSS recommended: https://tailwindcss.com/docs/guides/nextjs
@@ -2000,7 +2001,7 @@ export default function GMECityLanding() {
       <header className="sticky top-0 z-40 backdrop-blur bg-white/80 dark:bg-neutral-950/80 border-b border-neutral-300 dark:border-white/10 transition-colors">
         <div className={`${CONTAINER} py-3 md:py-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="GMB City Logo" className="h-12 w-auto sm:h-14" />
+            <ThemeLogo className="h-12 w-auto sm:h-14" />
           </div>
           <nav className="hidden md:flex items-center gap-2 text-sm">
             <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">SEO Snapshot</button>
