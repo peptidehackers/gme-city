@@ -2113,7 +2113,7 @@ export default function GMECityLanding() {
         <section id="start" ref={auditRef} className={`${CONTAINER} ${SECTION_Y}`}>
           {tab === "audit" && (
             <div className={`grid lg:grid-cols-2 ${GRID_GAP}`}>
-              <div className={CARD}>
+              <div className={CARD_INTERACTIVE}>
                 <div className="mb-4">
                   <h2 className="text-2xl font-semibold tracking-tight">Instant Google Business Profile Audit</h2>
                   <p className="mt-1 text-white/70 text-sm">Enter your business details to get your automated GBP audit</p>
@@ -2121,7 +2121,7 @@ export default function GMECityLanding() {
                 <GBPAuditForm onAuditComplete={setAudit} onLoadingChange={setAuditLoading} onDataLoaded={setHasAuditData} />
               </div>
 
-              <div className={CARD}>
+              <div className={CARD_INTERACTIVE}>
                 {!hasAuditData && !auditLoading ? (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
                     <div className="w-16 h-16 rounded-full bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center mb-4">
