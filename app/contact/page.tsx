@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { ThemeToggle } from "../../components/theme-toggle";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -21,24 +22,25 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-neutral-950 text-white">
-      <header className="sticky top-0 z-40 backdrop-blur bg-neutral-950/80 border-b border-white/10">
+    <div className="min-h-screen w-full bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors">
+      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 dark:bg-neutral-950/80 border-b border-neutral-300 dark:border-white/10 transition-colors">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-3">
             <img src="/logo.svg" alt="GMB City Logo" className="h-12 w-auto sm:h-14" />
           </a>
+          <ThemeToggle />
         </div>
       </header>
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-12 md:py-16">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">Contact Us</h1>
-        <p className="mt-4 text-base sm:text-lg text-white/70">
+        <p className="mt-4 text-base sm:text-lg text-neutral-600 dark:text-white/70">
           Have questions about Local SEO? Want to discuss a strategy for your business? We're here to help.
         </p>
 
         <div className="mt-8 sm:mt-12 grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10">
           {/* Contact Form */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
+          <div className="rounded-2xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 sm:p-6 transition-colors">
             <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Send us a message</h2>
 
             {submitted ? (
@@ -49,48 +51,48 @@ export default function Contact() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm text-white/80 mb-1">Your Name *</label>
+                  <label className="block text-sm text-neutral-700 dark:text-white/80 mb-1">Your Name *</label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-100 dark:bg-white/10 px-3 py-2 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-colors"
                     placeholder="John Smith"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm text-white/80 mb-1">Email Address *</label>
+                  <label className="block text-sm text-neutral-700 dark:text-white/80 mb-1">Email Address *</label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-100 dark:bg-white/10 px-3 py-2 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-colors"
                     placeholder="john@example.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm text-white/80 mb-1">Business Name</label>
+                  <label className="block text-sm text-neutral-700 dark:text-white/80 mb-1">Business Name</label>
                   <input
                     type="text"
                     value={formData.business}
                     onChange={(e) => setFormData({ ...formData, business: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-100 dark:bg-white/10 px-3 py-2 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-colors"
                     placeholder="ABC Law Firm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm text-white/80 mb-1">Message *</label>
+                  <label className="block text-sm text-neutral-700 dark:text-white/80 mb-1">Message *</label>
                   <textarea
                     required
                     rows={5}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-100 dark:bg-white/10 px-3 py-2 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-colors"
                     placeholder="Tell us about your Local SEO goals..."
                   />
                 </div>
@@ -107,7 +109,7 @@ export default function Contact() {
 
           {/* Contact Info */}
           <div className="space-y-6">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
+            <div className="rounded-2xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 sm:p-6 transition-colors">
               <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Get in Touch</h3>
 
               <div className="space-y-4">
@@ -116,7 +118,7 @@ export default function Contact() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <div>
-                    <p className="text-white/80 font-medium">Email</p>
+                    <p className="text-neutral-700 dark:text-white/80 font-medium">Email</p>
                     <a href="mailto:info@gmb.city" className="text-emerald-400 hover:underline">info@gmb.city</a>
                   </div>
                 </div>
@@ -126,7 +128,7 @@ export default function Contact() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                   </svg>
                   <div>
-                    <p className="text-white/80 font-medium">Website</p>
+                    <p className="text-neutral-700 dark:text-white/80 font-medium">Website</p>
                     <a href="https://gme.city" className="text-emerald-400 hover:underline">https://gme.city</a>
                   </div>
                 </div>
@@ -136,16 +138,16 @@ export default function Contact() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div>
-                    <p className="text-white/80 font-medium">Response Time</p>
-                    <p className="text-white/60">Within 24 hours</p>
+                    <p className="text-neutral-700 dark:text-white/80 font-medium">Response Time</p>
+                    <p className="text-neutral-500 dark:text-white/60">Within 24 hours</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
+            <div className="rounded-2xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 sm:p-6 transition-colors">
               <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">What We Offer</h3>
-              <ul className="space-y-3 text-white/80">
+              <ul className="space-y-3 text-neutral-700 dark:text-white/80">
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-400 mt-1">✓</span>
                   <span>Free Google Business Profile audits</span>
@@ -173,7 +175,7 @@ export default function Contact() {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-6">
+            <div className="rounded-2xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 sm:p-6 transition-colors">
               <h3 className="text-xl font-semibold mb-3">Quick Links</h3>
               <div className="space-y-2">
                 <a href="/" className="block text-emerald-400 hover:underline">← Back to Audit Tool</a>
@@ -185,13 +187,13 @@ export default function Contact() {
         </div>
       </main>
 
-      <footer className="border-t border-white/10 mt-12 sm:mt-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4">
+      <footer className="border-t border-neutral-300 dark:border-white/10 mt-12 sm:mt-16 transition-colors">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-10 text-sm text-neutral-600 dark:text-white/60 flex flex-wrap items-center justify-between gap-4">
           <div>© {new Date().getFullYear()} GMB City. Local SEO that ships.</div>
           <div className="flex gap-6">
-            <a href="/privacy" className="hover:text-white">Privacy</a>
-            <a href="/terms" className="hover:text-white">Terms</a>
-            <a href="/contact" className="hover:text-white">Contact</a>
+            <a href="/privacy" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Privacy</a>
+            <a href="/terms" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Terms</a>
+            <a href="/contact" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Contact</a>
           </div>
         </div>
       </footer>

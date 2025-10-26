@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "../lib/supabase";
+import { ThemeToggle } from "../components/theme-toggle";
 
 // Drop this file into app/page.tsx in a Next.js 14 project
 // TailwindCSS recommended: https://tailwindcss.com/docs/guides/nextjs
@@ -34,25 +35,25 @@ const SECTION_Y = "py-8 md:py-12";
 const GRID_GAP = "gap-4 md:gap-6";
 
 // surface tokens
-const CARD = "rounded-2xl border border-white/10 bg-black p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-black/20";
-const CARD_INTERACTIVE = "card-uniform-glow relative rounded-2xl border border-white/20 bg-black p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl shadow-black/20";
+const CARD = "rounded-2xl border border-neutral-300 dark:border-white/10 bg-white dark:bg-black p-4 sm:p-6 md:p-8 lg:p-10 shadow-lg dark:shadow-xl dark:shadow-black/20 transition-colors";
+const CARD_INTERACTIVE = "card-uniform-glow relative rounded-2xl border border-neutral-400 dark:border-white/20 p-4 sm:p-6 md:p-8 lg:p-10 shadow-lg dark:shadow-xl dark:shadow-black/20";
 const CARD_GLOW = "absolute -inset-2 bg-emerald-500/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10";
 const FEATURE_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none";
 
 // control tokens
-const INPUT = "h-12 w-full rounded-xl border border-white/10 bg-white/10 px-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
+const INPUT = "h-12 w-full rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-100 dark:bg-white/10 px-3 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
 const BTN = "h-12 px-6 rounded-xl font-semibold transition-all duration-200";
 const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-400/20 hover:scale-105 active:scale-95 flex items-center justify-center text-base font-bold cursor-pointer`;
-const BTN_GHOST = `${BTN} border border-white/20 hover:bg-white/10 hover:border-white/30`;
+const BTN_GHOST = `${BTN} border border-neutral-300 dark:border-white/20 hover:bg-neutral-100 dark:hover:bg-white/10 hover:border-neutral-400 dark:hover:border-white/30 transition-colors`;
 
 // progress bar
-const PROGRESS_BG = "h-2 w-full rounded-full bg-white/10";
+const PROGRESS_BG = "h-2 w-full rounded-full bg-neutral-200 dark:bg-white/10";
 const PROGRESS_FG = "h-2 rounded-full bg-emerald-400";
 
 // High-urgency CTA tokens
-const CTA_CARD = "relative rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/5 via-transparent to-emerald-500/5 p-6 sm:p-8 md:p-10 shadow-2xl shadow-black/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1";
+const CTA_CARD = "relative rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/5 via-transparent to-emerald-500/5 p-6 sm:p-8 md:p-10 shadow-lg dark:shadow-2xl dark:shadow-black/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1";
 const CTA_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-60";
-const LOCKED_CONTENT = "relative rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-4 sm:p-6 overflow-hidden backdrop-blur-sm";
+const LOCKED_CONTENT = "relative rounded-xl border border-neutral-300 dark:border-white/10 bg-gradient-to-br from-neutral-100/50 dark:from-white/5 to-neutral-50 dark:to-white/[0.02] p-4 sm:p-6 overflow-hidden backdrop-blur-sm transition-colors";
 const LOCKED_OVERLAY = "absolute inset-0 flex items-center justify-center";
 
 // ---------------------- CSS Animations ----------------------
@@ -1995,27 +1996,31 @@ export default function GMECityLanding() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-neutral-950 text-white">
-      <header className="sticky top-0 z-40 backdrop-blur bg-neutral-950/80 border-b border-white/10">
+    <div className="min-h-screen w-full bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors">
+      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 dark:bg-neutral-950/80 border-b border-neutral-300 dark:border-white/10 transition-colors">
         <div className={`${CONTAINER} py-3 md:py-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">
             <img src="/logo.svg" alt="GMB City Logo" className="h-12 w-auto sm:h-14" />
           </div>
           <nav className="hidden md:flex items-center gap-2 text-sm">
-            <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">SEO Snapshot</button>
-            <button onClick={() => citationsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">Citations</button>
-            <button onClick={() => keywordsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-white/10">Keywords</button>
+            <button onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">SEO Snapshot</button>
+            <button onClick={() => citationsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">Citations</button>
+            <button onClick={() => keywordsRef.current?.scrollIntoView({ behavior: "smooth" })} className="px-3 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">Keywords</button>
+            <ThemeToggle />
             <a href="https://calendly.com/peptidehackers-info/30min" target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} ml-2`}>Book with Us Now</a>
           </nav>
-          <button aria-label="Open menu" className="md:hidden p-2 rounded-lg border border-white/20" onClick={() => setMobileOpen(v => !v)}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
+            <button aria-label="Open menu" className="p-2 rounded-lg border border-neutral-300 dark:border-white/20 transition-colors" onClick={() => setMobileOpen(v => !v)}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            </button>
+          </div>
           {mobileOpen && (
-            <div className="md:hidden absolute top-full left-0 right-0 bg-neutral-900/95 border-b border-white/10 z-50">
+            <div className="md:hidden absolute top-full left-0 right-0 bg-neutral-100/95 dark:bg-neutral-900/95 border-b border-neutral-300 dark:border-white/10 z-50 transition-colors">
               <div className={`${CONTAINER} py-4 flex flex-col space-y-2 text-sm`}>
-                <button onClick={() => { seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">SEO Snapshot</button>
-                <button onClick={() => { citationsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Citations</button>
-                <button onClick={() => { keywordsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-white/10">Keywords</button>
+                <button onClick={() => { seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors">SEO Snapshot</button>
+                <button onClick={() => { citationsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors">Citations</button>
+                <button onClick={() => { keywordsRef.current?.scrollIntoView({ behavior: "smooth" }); setMobileOpen(false); }} className="text-left px-3 py-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors">Keywords</button>
                 <a href="https://calendly.com/peptidehackers-info/30min" target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} text-center`}>Book with Us Now</a>
               </div>
             </div>
@@ -2030,7 +2035,7 @@ export default function GMECityLanding() {
           <div className={`${CONTAINER} grid md:grid-cols-2 ${GRID_GAP} items-center`}>
             <div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
-              <p className="mt-5 text-lg text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
+              <p className="mt-5 text-lg text-neutral-700 dark:text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
               <div className="mt-8 max-w-prose space-y-3">
                 {/* Primary CTA: Complete Audit */}
                 <button
@@ -2052,12 +2057,12 @@ export default function GMECityLanding() {
                 {/* Secondary: Individual audits */}
                 <button
                   onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                  className="w-full px-6 py-3 border-2 border-white/20 text-white text-base font-semibold rounded-xl transition-all duration-200 hover:bg-white/10 hover:border-white/30"
+                  className="w-full px-6 py-3 border-2 border-neutral-400 dark:border-white/20 text-neutral-900 dark:text-white text-base font-semibold rounded-xl transition-all duration-200 hover:bg-neutral-100 dark:hover:bg-white/10 hover:border-neutral-500 dark:hover:border-white/30"
                 >
                   Or Try Individual Audits
                 </button>
               </div>
-              <div className="mt-6 flex items-center gap-2 text-sm text-white/70">
+              <div className="mt-6 flex items-center gap-2 text-sm text-neutral-600 dark:text-white/70">
                 <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
@@ -2067,23 +2072,23 @@ export default function GMECityLanding() {
             <div className="relative">
               <div className="absolute -inset-6 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-3xl blur-xl" />
               <div className={`${CARD} relative`}>
-                <div className="text-sm text-white/70">Live score</div>
+                <div className="text-sm text-neutral-600 dark:text-white/70">Live score</div>
                 <div className="mt-2 flex items-end gap-4">
                   <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight transition-all duration-500 will-change-auto">{animatedScore}</div>
-                  <div className="pb-2 text-white/60">out of 100</div>
+                  <div className="pb-2 text-neutral-500 dark:text-white/60">out of 100</div>
                 </div>
                 <div className="mt-4 grid grid-cols-2 gap-4 text-sm md:text-base">
                   {Object.entries(breakdown).map(([k, v]) => (
                     <div key={k} className="flex items-center justify-between gap-4">
-                      <span className="text-white/80">{k}</span>
-                      <span className="text-white/60">{Math.round(v)}</span>
+                      <span className="text-neutral-700 dark:text-white/80">{k}</span>
+                      <span className="text-neutral-500 dark:text-white/60">{Math.round(v)}</span>
                     </div>
                   ))}
                 </div>
                 <div className={`mt-4 ${PROGRESS_BG}`}>
                   <div className={PROGRESS_FG} style={{ width: `${score}%` }} />
                 </div>
-                <div className="mt-4 text-sm text-white/70">Improve the score by knocking out the tasks below</div>
+                <div className="mt-4 text-sm text-neutral-600 dark:text-white/70">Improve the score by knocking out the tasks below</div>
               </div>
             </div>
           </div>
@@ -2101,7 +2106,7 @@ export default function GMECityLanding() {
             <div className={CARD_INTERACTIVE}>
               <div className="text-center mb-8">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Find High-Intent Keywords</h2>
-                <p className="mt-3 text-white/70 max-w-2xl mx-auto">Discover the keywords your competitors are ranking for</p>
+                <p className="mt-3 text-neutral-600 dark:text-white/70 max-w-2xl mx-auto">Discover the keywords your competitors are ranking for</p>
               </div>
 
               <KeywordOpportunityScanner />
@@ -2116,7 +2121,7 @@ export default function GMECityLanding() {
               <div className={CARD_INTERACTIVE}>
                 <div className="mb-4">
                   <h2 className="text-2xl font-semibold tracking-tight">Instant Google Business Profile Audit</h2>
-                  <p className="mt-1 text-white/70 text-sm">Enter your business details to get your automated GBP audit</p>
+                  <p className="mt-1 text-neutral-600 dark:text-white/70 text-sm">Enter your business details to get your automated GBP audit</p>
                 </div>
                 <GBPAuditForm onAuditComplete={setAudit} onLoadingChange={setAuditLoading} onDataLoaded={setHasAuditData} />
               </div>
@@ -2129,8 +2134,8 @@ export default function GMECityLanding() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                       </svg>
                     </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Ready to See Your Score?</h3>
-                    <p className="text-white/70 max-w-sm">Enter your business details on the left to get your instant GBP audit with personalized action plan</p>
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">Ready to See Your Score?</h3>
+                    <p className="text-neutral-600 dark:text-white/70 max-w-sm">Enter your business details on the left to get your instant GBP audit with personalized action plan</p>
                   </div>
                 ) : auditLoading ? (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -2138,8 +2143,8 @@ export default function GMECityLanding() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <h3 className="text-xl font-semibold text-white mb-2">Analyzing Your Profile...</h3>
-                    <p className="text-white/70 max-w-sm">Fetching data from Google Maps & Business APIs</p>
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">Analyzing Your Profile...</h3>
+                    <p className="text-neutral-600 dark:text-white/70 max-w-sm">Fetching data from Google Maps & Business APIs</p>
                   </div>
                 ) : (
                   <>
@@ -2152,16 +2157,16 @@ export default function GMECityLanding() {
                     </div>
                     <h3 className="text-xl font-semibold mt-6">Action Plan</h3>
                     {tasks.length === 0 ? (
-                      <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/80">Perfect score! No action items needed</div>
+                      <div className="mt-4 rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 text-sm text-neutral-700 dark:text-white/80 transition-colors">Perfect score! No action items needed</div>
                     ) : (
                       <ul className="mt-4 space-y-4">
                         {tasks.map((t, i) => (
-                          <li key={i} className="rounded-xl border border-white/10 p-4 md:p-5">
+                          <li key={i} className="rounded-xl border border-neutral-300 dark:border-white/10 p-4 md:p-5 transition-colors">
                             <div className="flex items-center justify-between gap-4">
                               <div className="font-medium">{t.title}</div>
                               <span className={`text-xs px-2.5 py-1 rounded-lg ${t.impact === "High" ? "bg-red-500/20 text-red-300" : t.impact === "Medium" ? "bg-yellow-500/20 text-yellow-300" : "bg-emerald-500/20 text-emerald-300"}`}>{t.impact}</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/70">{t.why}</p>
+                            <p className="mt-1 text-sm text-neutral-600 dark:text-white/70">{t.why}</p>
                           </li>
                         ))}
                       </ul>
@@ -2205,31 +2210,31 @@ export default function GMECityLanding() {
             <div className="space-y-4">
               <div className={CARD}>
                 <h2 className="text-2xl font-semibold tracking-tight">Competitor Comparison</h2>
-                <p className="mt-1 text-white/70 text-sm">See how you stack up against your top competitors</p>
+                <p className="mt-1 text-neutral-600 dark:text-white/70 text-sm">See how you stack up against your top competitors</p>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-white/10">
-                      <th className="text-left p-3 text-white/80 font-semibold">Metric</th>
-                      <th className="text-center p-3 text-white/80 font-semibold bg-emerald-500/10">
+                    <tr className="border-b border-neutral-300 dark:border-white/10">
+                      <th className="text-left p-3 text-neutral-700 dark:text-white/80 font-semibold">Metric</th>
+                      <th className="text-center p-3 text-neutral-700 dark:text-white/80 font-semibold bg-emerald-500/10">
                         Your Business
-                        <div className="text-xs font-normal text-white/60 mt-1">{audit.businessName || "Your Business"}</div>
+                        <div className="text-xs font-normal text-neutral-500 dark:text-white/60 mt-1">{audit.businessName || "Your Business"}</div>
                       </th>
                       {competitors.map((comp, idx) => (
-                        <th key={idx} className="text-center p-3 text-white/80 font-semibold">
+                        <th key={idx} className="text-center p-3 text-neutral-700 dark:text-white/80 font-semibold">
                           {comp.businessName}
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-white/10 bg-white/5">
+                    <tr className="border-b border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 transition-colors">
                       <td className="p-3 font-semibold">Overall Score</td>
                       <td className="text-center p-3 bg-emerald-500/10">
                         <div className="text-2xl font-bold">{score}</div>
-                        <div className="text-xs text-white/60">/100</div>
+                        <div className="text-xs text-neutral-500 dark:text-white/60">/100</div>
                       </td>
                       {competitors.map((comp, idx) => {
                         const compScore = computeScore(comp).score;
@@ -2237,14 +2242,14 @@ export default function GMECityLanding() {
                         return (
                           <td key={idx} className="text-center p-3">
                             <div className={`text-2xl font-bold ${isAhead ? 'text-red-400' : 'text-emerald-400'}`}>{compScore}</div>
-                            <div className="text-xs text-white/60">/100</div>
+                            <div className="text-xs text-neutral-500 dark:text-white/60">/100</div>
                           </td>
                         );
                       })}
                     </tr>
 
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Review Count</td>
+                    <tr className="border-b border-neutral-300 dark:border-white/10 transition-colors">
+                      <td className="p-3 text-neutral-700 dark:text-white/80">Review Count</td>
                       <td className="text-center p-3 bg-emerald-500/5">
                         <span className="font-semibold">{audit.reviewCount}</span>
                       </td>
@@ -2258,8 +2263,8 @@ export default function GMECityLanding() {
                       })}
                     </tr>
 
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Average Rating</td>
+                    <tr className="border-b border-neutral-300 dark:border-white/10 transition-colors">
+                      <td className="p-3 text-neutral-700 dark:text-white/80">Average Rating</td>
                       <td className="text-center p-3 bg-emerald-500/5">
                         <span className="font-semibold">{audit.rating.toFixed(1)}★</span>
                       </td>
@@ -2273,8 +2278,8 @@ export default function GMECityLanding() {
                       })}
                     </tr>
 
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Total Photos</td>
+                    <tr className="border-b border-neutral-300 dark:border-white/10 transition-colors">
+                      <td className="p-3 text-neutral-700 dark:text-white/80">Total Photos</td>
                       <td className="text-center p-3 bg-emerald-500/5">
                         <span className="font-semibold">{audit.totalPhotos}</span>
                       </td>
@@ -2288,8 +2293,8 @@ export default function GMECityLanding() {
                       })}
                     </tr>
 
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Posts Per Month</td>
+                    <tr className="border-b border-neutral-300 dark:border-white/10 transition-colors">
+                      <td className="p-3 text-neutral-700 dark:text-white/80">Posts Per Month</td>
                       <td className="text-center p-3 bg-emerald-500/5">
                         <span className="font-semibold">{audit.postsPerMonth}</span>
                       </td>
@@ -2303,8 +2308,8 @@ export default function GMECityLanding() {
                       })}
                     </tr>
 
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Has Website</td>
+                    <tr className="border-b border-neutral-300 dark:border-white/10 transition-colors">
+                      <td className="p-3 text-neutral-700 dark:text-white/80">Has Website</td>
                       <td className="text-center p-3 bg-emerald-500/5">
                         <span className="font-semibold">{audit.hasWebsite ? '✓' : '✗'}</span>
                       </td>
@@ -2319,8 +2324,8 @@ export default function GMECityLanding() {
                       })}
                     </tr>
 
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Services Listed</td>
+                    <tr className="border-b border-neutral-300 dark:border-white/10 transition-colors">
+                      <td className="p-3 text-neutral-700 dark:text-white/80">Services Listed</td>
                       <td className="text-center p-3 bg-emerald-500/5">
                         <span className="font-semibold">{audit.hasServices ? '✓' : '✗'}</span>
                       </td>
@@ -2335,8 +2340,8 @@ export default function GMECityLanding() {
                       })}
                     </tr>
 
-                    <tr className="border-b border-white/10">
-                      <td className="p-3 text-white/80">Q&A Present</td>
+                    <tr className="border-b border-neutral-300 dark:border-white/10 transition-colors">
+                      <td className="p-3 text-neutral-700 dark:text-white/80">Q&A Present</td>
                       <td className="text-center p-3 bg-emerald-500/5">
                         <span className="font-semibold">{audit.hasQA ? '✓' : '✗'}</span>
                       </td>
@@ -2364,9 +2369,9 @@ export default function GMECityLanding() {
                     const ratingDiff = audit.rating - comp.rating;
 
                     return (
-                      <div key={idx} className="rounded-xl border border-white/10 bg-white/5 p-4">
-                        <div className="font-semibold text-white mb-2">vs {comp.businessName}</div>
-                        <ul className="space-y-1 text-white/70">
+                      <div key={idx} className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 transition-colors">
+                        <div className="font-semibold text-neutral-900 dark:text-white mb-2">vs {comp.businessName}</div>
+                        <ul className="space-y-1 text-neutral-600 dark:text-white/70">
                           <li>
                             {scoreDiff > 0 ? (
                               <span className="text-red-400">You're ahead by {scoreDiff} points</span>
@@ -2402,7 +2407,7 @@ export default function GMECityLanding() {
               {/* Hero Section */}
               <div className={CARD}>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">Citation Builder</h2>
-                <p className="mt-3 text-lg text-white/80 max-w-3xl">
+                <p className="mt-3 text-lg text-neutral-700 dark:text-white/80 max-w-3xl">
                   Take your NAP once. Get finished listings everywhere. Your data prefilled. Your progress tracked. Your listings fixed.
                 </p>
               </div>
@@ -2410,72 +2415,72 @@ export default function GMECityLanding() {
               {/* Progress Stats */}
               <div className="grid sm:grid-cols-4 gap-4">
                 <div className={`${CARD} p-6`}>
-                  <div className="text-white/60 text-sm mb-1">Progress</div>
+                  <div className="text-neutral-500 dark:text-white/60 text-sm mb-1">Progress</div>
                   <div className="text-3xl font-bold text-emerald-400">{citationStats.completed}/{citationStats.total}</div>
-                  <div className="text-xs text-white/60 mt-1">Complete</div>
+                  <div className="text-xs text-neutral-500 dark:text-white/60 mt-1">Complete</div>
                 </div>
                 <div className={`${CARD} p-6`}>
-                  <div className="text-white/60 text-sm mb-1">Consistency</div>
+                  <div className="text-neutral-500 dark:text-white/60 text-sm mb-1">Consistency</div>
                   <div className="text-3xl font-bold text-emerald-400">{citationStats.consistency}%</div>
-                  <div className="text-xs text-white/60 mt-1">Score</div>
+                  <div className="text-xs text-neutral-500 dark:text-white/60 mt-1">Score</div>
                 </div>
                 <div className={`${CARD} p-6`}>
-                  <div className="text-white/60 text-sm mb-1">Pending</div>
+                  <div className="text-neutral-500 dark:text-white/60 text-sm mb-1">Pending</div>
                   <div className="text-3xl font-bold text-yellow-400">{citationStats.pending}</div>
-                  <div className="text-xs text-white/60 mt-1">Codes needed</div>
+                  <div className="text-xs text-neutral-500 dark:text-white/60 mt-1">Codes needed</div>
                 </div>
                 <div className={`${CARD} p-6`}>
-                  <div className="text-white/60 text-sm mb-1">Last sync</div>
+                  <div className="text-neutral-500 dark:text-white/60 text-sm mb-1">Last sync</div>
                   <div className="text-xl font-bold">2 hrs</div>
-                  <div className="text-xs text-white/60 mt-1">ago</div>
+                  <div className="text-xs text-neutral-500 dark:text-white/60 mt-1">ago</div>
                 </div>
               </div>
 
               {/* NAP Form - Single Source of Truth */}
               <div className={CARD}>
                 <h3 className="text-2xl font-semibold mb-2">Single Source of Truth</h3>
-                <p className="text-white/70 text-sm mb-6">
+                <p className="text-neutral-600 dark:text-white/70 text-sm mb-6">
                   Enter your business details once. We'll use this exact data for all directory submissions.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Business Name *</span>
+                    <span className="text-neutral-700 dark:text-white/80">Business Name *</span>
                     <input className={INPUT} value={citationNAP.businessName} onChange={(e) => setCitationNAP(n => ({ ...n, businessName: e.target.value }))} placeholder="ABC Law Firm" />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Street Address *</span>
+                    <span className="text-neutral-700 dark:text-white/80">Street Address *</span>
                     <input className={INPUT} value={citationNAP.street} onChange={(e) => setCitationNAP(n => ({ ...n, street: e.target.value }))} placeholder="123 Main St" />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Suite/Unit</span>
+                    <span className="text-neutral-700 dark:text-white/80">Suite/Unit</span>
                     <input className={INPUT} value={citationNAP.suite} onChange={(e) => setCitationNAP(n => ({ ...n, suite: e.target.value }))} placeholder="Suite 200" />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">City *</span>
+                    <span className="text-neutral-700 dark:text-white/80">City *</span>
                     <input className={INPUT} value={citationNAP.city} onChange={(e) => setCitationNAP(n => ({ ...n, city: e.target.value }))} placeholder="Los Angeles" />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">State *</span>
+                    <span className="text-neutral-700 dark:text-white/80">State *</span>
                     <input className={INPUT} value={citationNAP.state} onChange={(e) => setCitationNAP(n => ({ ...n, state: e.target.value }))} placeholder="CA" />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">ZIP Code *</span>
+                    <span className="text-neutral-700 dark:text-white/80">ZIP Code *</span>
                     <input className={INPUT} value={citationNAP.zip} onChange={(e) => setCitationNAP(n => ({ ...n, zip: e.target.value }))} placeholder="90012" />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Phone *</span>
+                    <span className="text-neutral-700 dark:text-white/80">Phone *</span>
                     <input className={INPUT} value={citationNAP.phone} onChange={(e) => setCitationNAP(n => ({ ...n, phone: e.target.value }))} placeholder="(310) 555-1212" />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Website</span>
+                    <span className="text-neutral-700 dark:text-white/80">Website</span>
                     <input className={INPUT} value={citationNAP.website} onChange={(e) => setCitationNAP(n => ({ ...n, website: e.target.value }))} placeholder="https://example.com" />
                   </label>
                   <label className="grid gap-1 text-sm col-span-full">
-                    <span className="text-white/80">Primary Category *</span>
+                    <span className="text-neutral-700 dark:text-white/80">Primary Category *</span>
                     <input className={INPUT} value={citationNAP.category} onChange={(e) => setCitationNAP(n => ({ ...n, category: e.target.value }))} placeholder="Personal Injury Attorney" />
                   </label>
                   <label className="grid gap-1 text-sm col-span-full">
-                    <span className="text-white/80">Business Description</span>
+                    <span className="text-neutral-700 dark:text-white/80">Business Description</span>
                     <textarea rows={3} className={INPUT} value={citationNAP.description} onChange={(e) => setCitationNAP(n => ({ ...n, description: e.target.value }))} placeholder="Describe your business in 2-3 sentences..." />
                   </label>
                 </div>
@@ -2489,20 +2494,20 @@ export default function GMECityLanding() {
                 <h3 className="text-2xl font-semibold mb-6">Directory Checklist</h3>
                 <div className="space-y-2">
                   {directories.map((dir, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition">
+                    <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
                       <div className="flex items-center gap-4 flex-1">
                         <div className={`w-3 h-3 rounded-full ${
                           dir.status === "done" ? "bg-emerald-400" :
                           dir.status === "pending" ? "bg-yellow-400" :
                           dir.status === "submitted" ? "bg-blue-400" :
-                          "bg-white/20"
+                          "bg-neutral-300 dark:bg-white/20"
                         }`} />
                         <div className="flex-1">
                           <div className="font-semibold flex items-center gap-2">
                             {dir.name}
                             {dir.importance === "high" && <span className="text-xs px-2 py-0.5 rounded bg-red-500/20 text-red-300">High Priority</span>}
                           </div>
-                          <div className="text-xs text-white/60">{dir.category}</div>
+                          <div className="text-xs text-neutral-500 dark:text-white/60">{dir.category}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -2540,11 +2545,11 @@ export default function GMECityLanding() {
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-2xl font-bold">Done For You</h3>
-                      <p className="text-white/70 text-sm mt-1">We handle everything</p>
+                      <p className="text-neutral-600 dark:text-white/70 text-sm mt-1">We handle everything</p>
                     </div>
                     <div className="text-right">
                       <div className="text-3xl font-bold text-emerald-400">$349</div>
-                      <div className="text-xs text-white/60">per location</div>
+                      <div className="text-xs text-neutral-500 dark:text-white/60">per location</div>
                     </div>
                   </div>
                   <ul className="space-y-3 mb-6 text-sm">
@@ -2571,7 +2576,7 @@ export default function GMECityLanding() {
                   >
                     {selectedPlan === "done-for-you" ? "✓ Selected" : "Start done-for-you"}
                   </button>
-                  <div className="mt-4 text-xs text-white/60">
+                  <div className="mt-4 text-xs text-neutral-500 dark:text-white/60">
                     Optional: $49/month monitoring for change tracking and alerts
                   </div>
                 </div>
@@ -2580,11 +2585,11 @@ export default function GMECityLanding() {
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-2xl font-bold">Do It With You</h3>
-                      <p className="text-white/70 text-sm mt-1">We guide, you submit</p>
+                      <p className="text-neutral-600 dark:text-white/70 text-sm mt-1">We guide, you submit</p>
                     </div>
                     <div className="text-right">
                       <div className="text-3xl font-bold text-emerald-400">$199</div>
-                      <div className="text-xs text-white/60">one-time</div>
+                      <div className="text-xs text-neutral-500 dark:text-white/60">one-time</div>
                     </div>
                   </div>
                   <ul className="space-y-3 mb-6 text-sm">
@@ -2619,15 +2624,15 @@ export default function GMECityLanding() {
                 <div className="grid md:grid-cols-3 gap-6 text-center">
                   <div>
                     <div className="text-2xl font-bold text-emerald-400 mb-2">25+ sites</div>
-                    <div className="text-sm text-white/70">Most clients finish in week one</div>
+                    <div className="text-sm text-neutral-600 dark:text-white/70">Most clients finish in week one</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-emerald-400 mb-2">100%</div>
-                    <div className="text-sm text-white/70">You own every login and listing</div>
+                    <div className="text-sm text-neutral-600 dark:text-white/70">You own every login and listing</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-emerald-400 mb-2">CSV Export</div>
-                    <div className="text-sm text-white/70">Export everything anytime</div>
+                    <div className="text-sm text-neutral-600 dark:text-white/70">Export everything anytime</div>
                   </div>
                 </div>
               </div>
@@ -2636,13 +2641,13 @@ export default function GMECityLanding() {
               {selectedPlan && (
                 <div className={`${CARD} text-center`}>
                   <h3 className="text-2xl font-bold mb-2">Ready to get started?</h3>
-                  <p className="text-white/70 mb-6">
+                  <p className="text-neutral-600 dark:text-white/70 mb-6">
                     Complete your purchase and we'll send you to the onboarding form. Your dashboard goes live within one business day.
                   </p>
                   <button className={`${BTN_PRIMARY} text-lg px-8 py-4`}>
                     Proceed to checkout →
                   </button>
-                  <div className="mt-4 text-sm text-white/60">
+                  <div className="mt-4 text-sm text-neutral-500 dark:text-white/60">
                     Secure payment via Stripe • Money-back guarantee
                   </div>
                 </div>
@@ -2654,42 +2659,42 @@ export default function GMECityLanding() {
             <div className={`grid lg:grid-cols-2 ${GRID_GAP}`} id="schema">
               <div className={CARD}>
                 <h2 className="text-2xl font-semibold tracking-tight">LocalBusiness schema generator</h2>
-                <p className="mt-1 text-white/70 text-sm">Paste the script into your site head or use a tag manager</p>
+                <p className="mt-1 text-neutral-600 dark:text-white/70 text-sm">Paste the script into your site head or use a tag manager</p>
                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Name</span>
+                    <span className="text-neutral-700 dark:text-white/80">Name</span>
                     <input className={INPUT} value={schemaForm.name} onChange={(e) => setSchemaForm(s => ({ ...s, name: e.target.value }))} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Website</span>
+                    <span className="text-neutral-700 dark:text-white/80">Website</span>
                     <input className={INPUT} value={schemaForm.url} onChange={(e) => setSchemaForm(s => ({ ...s, url: e.target.value }))} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Phone</span>
+                    <span className="text-neutral-700 dark:text-white/80">Phone</span>
                     <input className={INPUT} value={schemaForm.phone} onChange={(e) => setSchemaForm(s => ({ ...s, phone: e.target.value }))} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Street</span>
+                    <span className="text-neutral-700 dark:text-white/80">Street</span>
                     <input className={INPUT} value={schemaForm.street1} onChange={(e) => setSchemaForm(s => ({ ...s, street1: e.target.value }))} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Suite</span>
+                    <span className="text-neutral-700 dark:text-white/80">Suite</span>
                     <input className={INPUT} value={schemaForm.street2 || ""} onChange={(e) => setSchemaForm(s => ({ ...s, street2: e.target.value }))} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">City</span>
+                    <span className="text-neutral-700 dark:text-white/80">City</span>
                     <input className={INPUT} value={schemaForm.city} onChange={(e) => setSchemaForm(s => ({ ...s, city: e.target.value }))} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Region</span>
+                    <span className="text-neutral-700 dark:text-white/80">Region</span>
                     <input className={INPUT} value={schemaForm.region} onChange={(e) => setSchemaForm(s => ({ ...s, region: e.target.value }))} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Postal</span>
+                    <span className="text-neutral-700 dark:text-white/80">Postal</span>
                     <input className={INPUT} value={schemaForm.postal} onChange={(e) => setSchemaForm(s => ({ ...s, postal: e.target.value }))} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Country</span>
+                    <span className="text-neutral-700 dark:text-white/80">Country</span>
                     <input className={INPUT} value={schemaForm.country} onChange={(e) => setSchemaForm(s => ({ ...s, country: e.target.value }))} />
                   </label>
                 </div>
@@ -2712,7 +2717,7 @@ export default function GMECityLanding() {
                     Copy
                   </button>
                 </div>
-                <pre className="mt-4 max-h-[420px] overflow-auto rounded-xl bg-black/60 p-4 text-emerald-200 text-sm whitespace-pre-wrap break-words">{`<script type="application/ld+json">
+                <pre className="mt-4 max-h-[420px] overflow-auto rounded-xl bg-neutral-100/50 dark:bg-black/60 p-4 text-emerald-700 dark:text-emerald-200 text-sm whitespace-pre-wrap break-words transition-colors">{`<script type="application/ld+json">
 ${schemaJson}
 </script>`}</pre>
               </div>
@@ -2725,7 +2730,7 @@ ${schemaJson}
                 <h2 className="text-2xl font-semibold tracking-tight">PageSpeed Insights</h2>
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">URL</span>
+                    <span className="text-neutral-700 dark:text-white/80">URL</span>
                     <input className={INPUT} value={psiUrl} onChange={(e) => setPsiUrl(e.target.value)} />
                   </label>
                   <button
@@ -2737,13 +2742,13 @@ ${schemaJson}
                     {psiLoading ? "Running..." : "Run"}
                   </button>
                 </div>
-                {!API_ENABLED && <div className="mt-3 text-xs text-white/70">Configure API keys to enable live data</div>}
+                {!API_ENABLED && <div className="mt-3 text-xs text-neutral-600 dark:text-white/70">Configure API keys to enable live data</div>}
                 {psi && (
                   <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3"><div className="text-white/60 text-xs">Score</div><div className="text-lg font-semibold">{String(psi.score ?? "")}</div></div>
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3"><div className="text-white/60 text-xs">LCP</div><div className="text-lg font-semibold">{psi.lcp ?? ""}</div></div>
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3"><div className="text-white/60 text-xs">CLS</div><div className="text-lg font-semibold">{psi.cls ?? ""}</div></div>
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3"><div className="text-white/60 text-xs">TBT</div><div className="text-lg font-semibold">{psi.fid ?? ""}</div></div>
+                    <div className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-3 transition-colors"><div className="text-neutral-500 dark:text-white/60 text-xs">Score</div><div className="text-lg font-semibold">{String(psi.score ?? "")}</div></div>
+                    <div className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-3 transition-colors"><div className="text-neutral-500 dark:text-white/60 text-xs">LCP</div><div className="text-lg font-semibold">{psi.lcp ?? ""}</div></div>
+                    <div className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-3 transition-colors"><div className="text-neutral-500 dark:text-white/60 text-xs">CLS</div><div className="text-lg font-semibold">{psi.cls ?? ""}</div></div>
+                    <div className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-3 transition-colors"><div className="text-neutral-500 dark:text-white/60 text-xs">TBT</div><div className="text-lg font-semibold">{psi.fid ?? ""}</div></div>
                   </div>
                 )}
               </div>
@@ -2752,11 +2757,11 @@ ${schemaJson}
                 <h2 className="text-2xl font-semibold tracking-tight">Local Pack snapshot</h2>
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Query</span>
+                    <span className="text-neutral-700 dark:text-white/80">Query</span>
                     <input className={INPUT} value={lpQuery} onChange={(e) => setLpQuery(e.target.value)} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Location</span>
+                    <span className="text-neutral-700 dark:text-white/80">Location</span>
                     <input className={INPUT} value={lpLocation} onChange={(e) => setLpLocation(e.target.value)} />
                   </label>
                   <button
@@ -2768,12 +2773,12 @@ ${schemaJson}
                     {lpLoading ? "Loading..." : "Fetch"}
                   </button>
                 </div>
-                {!API_ENABLED && <div className="mt-3 text-xs text-white/70">Configure API keys to enable live data</div>}
+                {!API_ENABLED && <div className="mt-3 text-xs text-neutral-600 dark:text-white/70">Configure API keys to enable live data</div>}
                 <ul className="mt-4 space-y-2 text-sm">
                   {lp.slice(0, 10).map((b: any, i: number) => (
-                    <li key={b.position ?? i} className="flex items-center justify-between rounded-lg border border-white/10 px-3 py-2">
+                    <li key={b.position ?? i} className="flex items-center justify-between rounded-lg border border-neutral-300 dark:border-white/10 px-3 py-2 transition-colors">
                       <span className="truncate">{(b.position ?? i + 1)}. {b.title || b.name}</span>
-                      <span className="text-white/60">{b.rating ? `${b.rating}★` : ""}</span>
+                      <span className="text-neutral-500 dark:text-white/60">{b.rating ? `${b.rating}★` : ""}</span>
                     </li>
                   ))}
                 </ul>
@@ -2783,11 +2788,11 @@ ${schemaJson}
                 <h2 className="text-2xl font-semibold tracking-tight">Yelp search</h2>
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Term</span>
+                    <span className="text-neutral-700 dark:text-white/80">Term</span>
                     <input className={INPUT} value={yTerm} onChange={(e) => setYTerm(e.target.value)} />
                   </label>
                   <label className="grid gap-1 text-sm">
-                    <span className="text-white/80">Location</span>
+                    <span className="text-neutral-700 dark:text-white/80">Location</span>
                     <input className={INPUT} value={yLoc} onChange={(e) => setYLoc(e.target.value)} />
                   </label>
                   <button
@@ -2799,13 +2804,13 @@ ${schemaJson}
                     {yLoading ? "Loading..." : "Fetch"}
                   </button>
                 </div>
-                {!API_ENABLED && <div className="mt-3 text-xs text-white/70">Configure API keys to enable live data</div>}
+                {!API_ENABLED && <div className="mt-3 text-xs text-neutral-600 dark:text-white/70">Configure API keys to enable live data</div>}
                 <ul className="mt-4 space-y-2 text-sm">
                   {yelp.slice(0, 10).map((b: any) => (
-                    <li key={b.id} className="rounded-lg border border-white/10 px-3 py-2">
+                    <li key={b.id} className="rounded-lg border border-neutral-300 dark:border-white/10 px-3 py-2 transition-colors">
                       <div className="font-medium truncate">{b.name}</div>
-                      <div className="text-white/60">{b.location?.address1}, {b.location?.city}</div>
-                      <div className="text-white/60">{b.rating ? `${b.rating}★ (${b.review_count})` : ""}</div>
+                      <div className="text-neutral-500 dark:text-white/60">{b.location?.address1}, {b.location?.city}</div>
+                      <div className="text-neutral-500 dark:text-white/60">{b.rating ? `${b.rating}★ (${b.review_count})` : ""}</div>
                     </li>
                   ))}
                 </ul>
@@ -2815,13 +2820,13 @@ ${schemaJson}
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-white/10">
-          <div className={`${CONTAINER} py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4`}>
+        <footer className="border-t border-neutral-300 dark:border-white/10 transition-colors">
+          <div className={`${CONTAINER} py-10 text-sm text-neutral-500 dark:text-white/60 flex flex-wrap items-center justify-between gap-4`}>
             <div>© {new Date().getFullYear()} GMB City. Local SEO that ships.</div>
             <div className="flex gap-6">
-              <a href="/privacy" className="hover:text-white transition">Privacy</a>
-              <a href="/terms" className="hover:text-white transition">Terms</a>
-              <a href="/contact" className="hover:text-white transition">Contact</a>
+              <a href="/privacy" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Privacy</a>
+              <a href="/terms" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Terms</a>
+              <a href="/contact" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Contact</a>
             </div>
           </div>
         </footer>
@@ -2829,21 +2834,21 @@ ${schemaJson}
 
       {/* Email Modal */}
       {showEmailModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowEmailModal(false)}>
+        <div className="fixed inset-0 bg-neutral-100/50 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-colors" onClick={() => setShowEmailModal(false)}>
           <div className={`${CARD} max-w-md w-full`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold">Email Audit Report</h3>
-              <button onClick={() => setShowEmailModal(false)} className="text-white/60 hover:text-white">
+              <button onClick={() => setShowEmailModal(false)} className="text-neutral-500 dark:text-white/60 hover:text-neutral-900 dark:hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <p className="text-sm text-white/70 mb-4">
+            <p className="text-sm text-neutral-600 dark:text-white/70 mb-4">
               Send this audit report to your client's inbox with all recommendations and action items.
             </p>
             <label className="block mb-4">
-              <span className="text-sm text-white/80 mb-2 block">Email address</span>
+              <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Email address</span>
               <input
                 type="email"
                 className={INPUT}
@@ -2871,20 +2876,20 @@ ${schemaJson}
 
       {/* Share Link Modal */}
       {showShareModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowShareModal(false)}>
+        <div className="fixed inset-0 bg-neutral-100/50 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-colors" onClick={() => setShowShareModal(false)}>
           <div className={`${CARD} max-w-lg w-full`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold">Shareable Link</h3>
-              <button onClick={() => setShowShareModal(false)} className="text-white/60 hover:text-white">
+              <button onClick={() => setShowShareModal(false)} className="text-neutral-500 dark:text-white/60 hover:text-neutral-900 dark:hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <p className="text-sm text-white/70 mb-4">
+            <p className="text-sm text-neutral-600 dark:text-white/70 mb-4">
               Share this audit with anyone using this unique link. The link contains all audit data and will display with your white-label branding.
             </p>
-            <div className="rounded-xl border border-white/10 bg-black/40 p-3 mb-4 break-all text-sm text-emerald-300">
+            <div className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-100/40 dark:bg-black/40 p-3 mb-4 break-all text-sm text-emerald-700 dark:text-emerald-300 transition-colors">
               {shareableLink}
             </div>
             <div className="flex gap-3">
@@ -2901,22 +2906,22 @@ ${schemaJson}
 
       {/* White Label Modal */}
       {showWhiteLabelModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowWhiteLabelModal(false)}>
+        <div className="fixed inset-0 bg-neutral-100/50 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-colors" onClick={() => setShowWhiteLabelModal(false)}>
           <div className={`${CARD} max-w-lg w-full`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold">White-Label Settings</h3>
-              <button onClick={() => setShowWhiteLabelModal(false)} className="text-white/60 hover:text-white">
+              <button onClick={() => setShowWhiteLabelModal(false)} className="text-neutral-500 dark:text-white/60 hover:text-neutral-900 dark:hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <p className="text-sm text-white/70 mb-6">
+            <p className="text-sm text-neutral-600 dark:text-white/70 mb-6">
               Customize the branding for reports and shareable links. Perfect for agencies presenting to clients.
             </p>
             <div className="space-y-4 mb-6">
               <label className="block">
-                <span className="text-sm text-white/80 mb-2 block">Agency/Brand name</span>
+                <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Agency/Brand name</span>
                 <input
                   type="text"
                   className={INPUT}
@@ -2926,11 +2931,11 @@ ${schemaJson}
                 />
               </label>
               <label className="block">
-                <span className="text-sm text-white/80 mb-2 block">Brand color (hex)</span>
+                <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Brand color (hex)</span>
                 <div className="flex gap-3">
                   <input
                     type="color"
-                    className="h-11 w-16 rounded-xl border border-white/10 bg-white/10 cursor-pointer"
+                    className="h-11 w-16 rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-100 dark:bg-white/10 cursor-pointer transition-colors"
                     value={whiteLabelConfig.brandColor}
                     onChange={(e) => setWhiteLabelConfig(c => ({ ...c, brandColor: e.target.value }))}
                   />
@@ -2944,7 +2949,7 @@ ${schemaJson}
                 </div>
               </label>
               <label className="block">
-                <span className="text-sm text-white/80 mb-2 block">Logo URL (optional)</span>
+                <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Logo URL (optional)</span>
                 <input
                   type="url"
                   className={INPUT}
@@ -2954,8 +2959,8 @@ ${schemaJson}
                 />
               </label>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4 mb-6">
-              <div className="text-xs text-white/60 mb-2">Preview</div>
+            <div className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 mb-6 transition-colors">
+              <div className="text-xs text-neutral-500 dark:text-white/60 mb-2">Preview</div>
               <div className="flex items-center gap-3">
                 {whiteLabelConfig.logoUrl ? (
                   <img src={whiteLabelConfig.logoUrl} alt="Logo" className="h-8 w-8 rounded object-cover" />
@@ -2982,21 +2987,21 @@ ${schemaJson}
 
       {/* Save Audit Modal */}
       {showSaveModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowSaveModal(false)}>
+        <div className="fixed inset-0 bg-neutral-100/50 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-colors" onClick={() => setShowSaveModal(false)}>
           <div className={`${CARD} max-w-md w-full`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold">Save Audit to Database</h3>
-              <button onClick={() => setShowSaveModal(false)} className="text-white/60 hover:text-white">
+              <button onClick={() => setShowSaveModal(false)} className="text-neutral-500 dark:text-white/60 hover:text-neutral-900 dark:hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <p className="text-sm text-white/70 mb-4">
+            <p className="text-sm text-neutral-600 dark:text-white/70 mb-4">
               Save this audit to your database for historical tracking and analytics. Optionally provide an email to associate this audit with your account.
             </p>
             <label className="block mb-4">
-              <span className="text-sm text-white/80 mb-2 block">Your email (optional)</span>
+              <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Your email (optional)</span>
               <input
                 type="email"
                 className={INPUT}
@@ -3005,11 +3010,11 @@ ${schemaJson}
                 onChange={(e) => setUserEmail(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && saveAuditToDatabase()}
               />
-              <p className="text-xs text-white/60 mt-2">This helps you find your audits later and track your progress over time.</p>
+              <p className="text-xs text-neutral-500 dark:text-white/60 mt-2">This helps you find your audits later and track your progress over time.</p>
             </label>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4 mb-4 text-sm">
+            <div className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 mb-4 text-sm transition-colors">
               <div className="font-semibold mb-2">Audit Summary:</div>
-              <div className="space-y-1 text-white/70">
+              <div className="space-y-1 text-neutral-600 dark:text-white/70">
                 <div>Business: {audit.businessName || "Not entered"}</div>
                 <div>Score: {score}/100</div>
                 <div>City: {audit.city}</div>
@@ -3039,11 +3044,11 @@ ${schemaJson}
 
       {/* Automated Monitoring Modal */}
       {showMonitoringModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowMonitoringModal(false)}>
+        <div className="fixed inset-0 bg-neutral-100/50 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-colors" onClick={() => setShowMonitoringModal(false)}>
           <div className={`${CARD} max-w-2xl w-full`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-2xl font-semibold">Automated Monitoring</h3>
-              <button onClick={() => setShowMonitoringModal(false)} className="text-white/60 hover:text-white">
+              <button onClick={() => setShowMonitoringModal(false)} className="text-neutral-500 dark:text-white/60 hover:text-neutral-900 dark:hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -3053,9 +3058,9 @@ ${schemaJson}
             <div className="mb-6">
               <div className="flex items-baseline gap-2 mb-2">
                 <span className="text-4xl font-bold text-emerald-400">$29</span>
-                <span className="text-white/60">/month</span>
+                <span className="text-neutral-500 dark:text-white/60">/month</span>
               </div>
-              <p className="text-sm text-white/70">
+              <p className="text-sm text-neutral-600 dark:text-white/70">
                 Never miss important changes to your Local SEO performance. Get automated tracking and instant alerts.
               </p>
             </div>
@@ -3069,8 +3074,8 @@ ${schemaJson}
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <div className="font-medium text-white">Weekly Email Reports</div>
-                      <div className="text-white/60 text-xs">Score changes, review trends, photo updates</div>
+                      <div className="font-medium text-neutral-900 dark:text-white">Weekly Email Reports</div>
+                      <div className="text-neutral-500 dark:text-white/60 text-xs">Score changes, review trends, photo updates</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-2 text-sm">
@@ -3078,8 +3083,8 @@ ${schemaJson}
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <div className="font-medium text-white">Review Alerts</div>
-                      <div className="text-white/60 text-xs">Instant notification if rating drops</div>
+                      <div className="font-medium text-neutral-900 dark:text-white">Review Alerts</div>
+                      <div className="text-neutral-500 dark:text-white/60 text-xs">Instant notification if rating drops</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-2 text-sm">
@@ -3087,8 +3092,8 @@ ${schemaJson}
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <div className="font-medium text-white">Competitor Tracking</div>
-                      <div className="text-white/60 text-xs">Alert when competitors pass you</div>
+                      <div className="font-medium text-neutral-900 dark:text-white">Competitor Tracking</div>
+                      <div className="text-neutral-500 dark:text-white/60 text-xs">Alert when competitors pass you</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-2 text-sm">
@@ -3096,8 +3101,8 @@ ${schemaJson}
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <div className="font-medium text-white">Ranking Changes</div>
-                      <div className="text-white/60 text-xs">Track Local Pack position movements</div>
+                      <div className="font-medium text-neutral-900 dark:text-white">Ranking Changes</div>
+                      <div className="text-neutral-500 dark:text-white/60 text-xs">Track Local Pack position movements</div>
                     </div>
                   </div>
                 </div>
@@ -3106,27 +3111,27 @@ ${schemaJson}
               <div>
                 <h4 className="font-semibold mb-3">Configure your alerts:</h4>
                 <div className="space-y-3">
-                  <label className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
-                    <span className="text-white/80">Weekly summary reports</span>
+                  <label className="flex items-center justify-between gap-4 rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 px-4 py-3 text-sm transition-colors">
+                    <span className="text-neutral-700 dark:text-white/80">Weekly summary reports</span>
                     <button
                       type="button"
                       role="switch"
                       aria-checked={monitoringSettings.weeklyReport}
                       onClick={() => setMonitoringSettings(s => ({ ...s, weeklyReport: !s.weeklyReport }))}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${monitoringSettings.weeklyReport ? "bg-emerald-400" : "bg-white/20"}`}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${monitoringSettings.weeklyReport ? "bg-emerald-400" : "bg-neutral-300 dark:bg-white/20"}`}
                     >
                       <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition ${monitoringSettings.weeklyReport ? "translate-x-5" : "translate-x-1"}`} />
                     </button>
                   </label>
 
-                  <label className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
-                    <span className="text-white/80">Review drop alerts</span>
+                  <label className="flex items-center justify-between gap-4 rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 px-4 py-3 text-sm transition-colors">
+                    <span className="text-neutral-700 dark:text-white/80">Review drop alerts</span>
                     <button
                       type="button"
                       role="switch"
                       aria-checked={monitoringSettings.reviewAlerts}
                       onClick={() => setMonitoringSettings(s => ({ ...s, reviewAlerts: !s.reviewAlerts }))}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${monitoringSettings.reviewAlerts ? "bg-emerald-400" : "bg-white/20"}`}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${monitoringSettings.reviewAlerts ? "bg-emerald-400" : "bg-neutral-300 dark:bg-white/20"}`}
                     >
                       <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition ${monitoringSettings.reviewAlerts ? "translate-x-5" : "translate-x-1"}`} />
                     </button>
@@ -3134,7 +3139,7 @@ ${schemaJson}
 
                   {monitoringSettings.reviewAlerts && (
                     <div className="ml-4 flex items-center gap-3">
-                      <label className="text-sm text-white/70">Alert if rating drops below:</label>
+                      <label className="text-sm text-neutral-600 dark:text-white/70">Alert if rating drops below:</label>
                       <input
                         type="number"
                         step="0.1"
@@ -3144,31 +3149,31 @@ ${schemaJson}
                         value={monitoringSettings.reviewThreshold}
                         onChange={(e) => setMonitoringSettings(s => ({ ...s, reviewThreshold: parseFloat(e.target.value) }))}
                       />
-                      <span className="text-sm text-white/60">stars</span>
+                      <span className="text-sm text-neutral-500 dark:text-white/60">stars</span>
                     </div>
                   )}
 
-                  <label className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
-                    <span className="text-white/80">Competitor movement alerts</span>
+                  <label className="flex items-center justify-between gap-4 rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 px-4 py-3 text-sm transition-colors">
+                    <span className="text-neutral-700 dark:text-white/80">Competitor movement alerts</span>
                     <button
                       type="button"
                       role="switch"
                       aria-checked={monitoringSettings.competitorAlerts}
                       onClick={() => setMonitoringSettings(s => ({ ...s, competitorAlerts: !s.competitorAlerts }))}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${monitoringSettings.competitorAlerts ? "bg-emerald-400" : "bg-white/20"}`}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${monitoringSettings.competitorAlerts ? "bg-emerald-400" : "bg-neutral-300 dark:bg-white/20"}`}
                     >
                       <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition ${monitoringSettings.competitorAlerts ? "translate-x-5" : "translate-x-1"}`} />
                     </button>
                   </label>
 
-                  <label className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
-                    <span className="text-white/80">Local Pack ranking alerts</span>
+                  <label className="flex items-center justify-between gap-4 rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 px-4 py-3 text-sm transition-colors">
+                    <span className="text-neutral-700 dark:text-white/80">Local Pack ranking alerts</span>
                     <button
                       type="button"
                       role="switch"
                       aria-checked={monitoringSettings.rankingAlerts}
                       onClick={() => setMonitoringSettings(s => ({ ...s, rankingAlerts: !s.rankingAlerts }))}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${monitoringSettings.rankingAlerts ? "bg-emerald-400" : "bg-white/20"}`}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${monitoringSettings.rankingAlerts ? "bg-emerald-400" : "bg-neutral-300 dark:bg-white/20"}`}
                     >
                       <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition ${monitoringSettings.rankingAlerts ? "translate-x-5" : "translate-x-1"}`} />
                     </button>
@@ -3178,7 +3183,7 @@ ${schemaJson}
 
               <div>
                 <label className="block mb-2">
-                  <span className="text-sm text-white/80">Email address for reports *</span>
+                  <span className="text-sm text-neutral-700 dark:text-white/80">Email address for reports *</span>
                   <input
                     type="email"
                     required
@@ -3191,17 +3196,17 @@ ${schemaJson}
               </div>
             </div>
 
-            <div className="border-t border-white/10 pt-6">
+            <div className="border-t border-neutral-300 dark:border-white/10 pt-6 transition-colors">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <div className="text-2xl font-bold">$29<span className="text-base font-normal text-white/60">/month</span></div>
-                  <div className="text-xs text-white/60">Cancel anytime • No commitment</div>
+                  <div className="text-2xl font-bold">$29<span className="text-base font-normal text-neutral-500 dark:text-white/60">/month</span></div>
+                  <div className="text-xs text-neutral-500 dark:text-white/60">Cancel anytime • No commitment</div>
                 </div>
                 <button className={BTN_PRIMARY} onClick={subscribeToMonitoring}>
                   Start Monitoring
                 </button>
               </div>
-              <div className="text-xs text-white/60 text-center">
+              <div className="text-xs text-neutral-500 dark:text-white/60 text-center">
                 Secure payment via Stripe • First report within 24 hours
               </div>
             </div>
@@ -3211,24 +3216,24 @@ ${schemaJson}
 
       {/* GMB Import Modal */}
       {showGMBModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowGMBModal(false)}>
+        <div className="fixed inset-0 bg-neutral-100/50 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-colors" onClick={() => setShowGMBModal(false)}>
           <div className={`${CARD} max-w-lg w-full`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold">Import from Google My Business</h3>
-              <button onClick={() => setShowGMBModal(false)} className="text-white/60 hover:text-white">
+              <button onClick={() => setShowGMBModal(false)} className="text-neutral-500 dark:text-white/60 hover:text-neutral-900 dark:hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <p className="text-sm text-white/70 mb-6">
+            <p className="text-sm text-neutral-600 dark:text-white/70 mb-6">
               Auto-populate the audit form with real data from your Google Business Profile. You'll need your Account ID, Location ID, and an OAuth access token.
             </p>
 
             <div className="space-y-4 mb-6">
               <label className="block">
-                <span className="text-sm text-white/80 mb-2 block">Account ID *</span>
+                <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Account ID *</span>
                 <input
                   type="text"
                   className={INPUT}
@@ -3236,11 +3241,11 @@ ${schemaJson}
                   value={gmbAccountId}
                   onChange={(e) => setGmbAccountId(e.target.value)}
                 />
-                <p className="text-xs text-white/60 mt-1">Find this in the GMB API Console</p>
+                <p className="text-xs text-neutral-500 dark:text-white/60 mt-1">Find this in the GMB API Console</p>
               </label>
 
               <label className="block">
-                <span className="text-sm text-white/80 mb-2 block">Location ID *</span>
+                <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Location ID *</span>
                 <input
                   type="text"
                   className={INPUT}
@@ -3248,11 +3253,11 @@ ${schemaJson}
                   value={gmbLocationId}
                   onChange={(e) => setGmbLocationId(e.target.value)}
                 />
-                <p className="text-xs text-white/60 mt-1">Your specific business location ID</p>
+                <p className="text-xs text-neutral-500 dark:text-white/60 mt-1">Your specific business location ID</p>
               </label>
 
               <label className="block">
-                <span className="text-sm text-white/80 mb-2 block">Access Token *</span>
+                <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Access Token *</span>
                 <input
                   type="password"
                   className={INPUT}
@@ -3260,13 +3265,13 @@ ${schemaJson}
                   value={gmbAccessToken}
                   onChange={(e) => setGmbAccessToken(e.target.value)}
                 />
-                <p className="text-xs text-white/60 mt-1">OAuth 2.0 token from Google Cloud Console</p>
+                <p className="text-xs text-neutral-500 dark:text-white/60 mt-1">OAuth 2.0 token from Google Cloud Console</p>
               </label>
             </div>
 
             <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-4 mb-6 text-sm">
               <div className="font-semibold text-blue-300 mb-2">📖 How to get your credentials:</div>
-              <ol className="text-white/70 space-y-1 text-xs list-decimal list-inside">
+              <ol className="text-neutral-600 dark:text-white/70 space-y-1 text-xs list-decimal list-inside">
                 <li>Enable the Google My Business API in Google Cloud Console</li>
                 <li>Create OAuth 2.0 credentials</li>
                 <li>Get your Account ID from the GMB API Explorer</li>
@@ -3301,24 +3306,24 @@ ${schemaJson}
 
       {/* Zapier Webhook Modal */}
       {showZapierModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowZapierModal(false)}>
+        <div className="fixed inset-0 bg-neutral-100/50 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-colors" onClick={() => setShowZapierModal(false)}>
           <div className={`${CARD} max-w-lg w-full`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold">Send to Zapier</h3>
-              <button onClick={() => setShowZapierModal(false)} className="text-white/60 hover:text-white">
+              <button onClick={() => setShowZapierModal(false)} className="text-neutral-500 dark:text-white/60 hover:text-neutral-900 dark:hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <p className="text-sm text-white/70 mb-6">
+            <p className="text-sm text-neutral-600 dark:text-white/70 mb-6">
               Send this audit result to your CRM, Slack, email automation, or any other tool via Zapier webhooks.
             </p>
 
             <div className="space-y-4 mb-6">
               <label className="block">
-                <span className="text-sm text-white/80 mb-2 block">Zapier Webhook URL *</span>
+                <span className="text-sm text-neutral-700 dark:text-white/80 mb-2 block">Zapier Webhook URL *</span>
                 <input
                   type="url"
                   className={INPUT}
@@ -3326,13 +3331,13 @@ ${schemaJson}
                   value={zapierWebhookUrl}
                   onChange={(e) => setZapierWebhookUrl(e.target.value)}
                 />
-                <p className="text-xs text-white/60 mt-1">Get this from your Zapier "Catch Hook" trigger</p>
+                <p className="text-xs text-neutral-500 dark:text-white/60 mt-1">Get this from your Zapier "Catch Hook" trigger</p>
               </label>
             </div>
 
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4 mb-6 text-sm">
+            <div className="rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-50 dark:bg-white/5 p-4 mb-6 text-sm transition-colors">
               <div className="font-semibold mb-2">What gets sent:</div>
-              <ul className="text-white/70 space-y-1 text-xs">
+              <ul className="text-neutral-600 dark:text-white/70 space-y-1 text-xs">
                 <li>• Business name, city, category</li>
                 <li>• Score and breakdown</li>
                 <li>• All action items with priorities</li>
@@ -3343,7 +3348,7 @@ ${schemaJson}
 
             <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-4 mb-6 text-sm">
               <div className="font-semibold text-blue-300 mb-2">🔧 Popular Zap ideas:</div>
-              <ul className="text-white/70 space-y-1 text-xs">
+              <ul className="text-neutral-600 dark:text-white/70 space-y-1 text-xs">
                 <li>• Send to HubSpot/Salesforce as new lead</li>
                 <li>• Post to Slack channel with score</li>
                 <li>• Add to Google Sheets for tracking</li>
@@ -3403,25 +3408,25 @@ ${schemaJson}
                   </h2>
 
                   {/* Subheadline */}
-                  <p className="text-lg text-white/80 mb-6 max-w-xl mx-auto leading-relaxed">
+                  <p className="text-lg text-neutral-700 dark:text-white/80 mb-6 max-w-xl mx-auto leading-relaxed">
                     Get a comprehensive analysis of your local SEO performance—including the exact issues preventing you from ranking #1
                   </p>
 
                   {/* What's Included - Compact */}
                   <div className="grid grid-cols-2 gap-3 max-w-md mx-auto text-left">
-                    <div className="flex items-center gap-2 text-sm text-white/70">
+                    <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-white/70">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
                       <span>SEO Snapshot</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-white/70">
+                    <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-white/70">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
                       <span>Citation Coverage</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-white/70">
+                    <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-white/70">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
                       <span>Keyword Opportunities</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-white/70">
+                    <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-white/70">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
                       <span>GBP Analysis</span>
                     </div>
@@ -3432,7 +3437,7 @@ ${schemaJson}
                 <div className="grid sm:grid-cols-2 gap-4 mb-6">
                   {/* Name */}
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       Full Name *
                     </label>
                     <input
@@ -3447,7 +3452,7 @@ ${schemaJson}
 
                   {/* Email */}
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       Email Address *
                     </label>
                     <input
@@ -3462,7 +3467,7 @@ ${schemaJson}
 
                   {/* Phone */}
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       Phone Number *
                     </label>
                     <input
@@ -3478,7 +3483,7 @@ ${schemaJson}
 
                   {/* Business Name */}
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       Business Name *
                     </label>
                     <input

@@ -1,8 +1,97 @@
 @import "tailwindcss";
 
+/* Light theme (default) */
 :root {
+  /* Backgrounds */
+  --background-primary: #ffffff;
+  --background-secondary: #f9fafb;
+  --background-tertiary: #f3f4f6;
+
+  /* Surfaces */
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --surface-hover: #f9fafb;
+
+  /* Text */
+  --text-primary: #171717;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+
+  /* Borders */
+  --border-primary: #e5e7eb;
+  --border-secondary: #d1d5db;
+  --border-hover: #9ca3af;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Card glow (subtle in light mode) */
+  --glow-color-1: rgba(16, 185, 129, 0.15);
+  --glow-color-2: rgba(52, 211, 153, 0.15);
+  --glow-blur: 8px;
+  --glow-inset: -8px;
+  --glow-hover-inset: -10px;
+  --glow-hover-blur: 10px;
+
+  /* Accent (emerald - same for both themes) */
+  --accent-primary: #10b981;
+  --accent-hover: #059669;
+
+  /* Input backgrounds */
+  --input-bg: #f9fafb;
+  --input-border: #e5e7eb;
+
+  /* Legacy variables for font compatibility */
   --background: #ffffff;
   --foreground: #171717;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --background-primary: #0a0a0a;
+  --background-secondary: #171717;
+  --background-tertiary: #262626;
+
+  /* Surfaces */
+  --surface: #000000;
+  --surface-elevated: #171717;
+  --surface-hover: rgba(255, 255, 255, 0.1);
+
+  /* Text */
+  --text-primary: #ededed;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: rgba(255, 255, 255, 0.4);
+
+  /* Borders */
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(255, 255, 255, 0.2);
+  --border-hover: rgba(255, 255, 255, 0.3);
+
+  /* Shadows (barely visible in dark mode) */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+
+  /* Card glow (more visible in dark mode) */
+  --glow-color-1: rgba(16, 185, 129, 0.3);
+  --glow-color-2: rgba(52, 211, 153, 0.3);
+  --glow-blur: 12px;
+  --glow-inset: -12px;
+  --glow-hover-inset: -16px;
+  --glow-hover-blur: 16px;
+
+  /* Input backgrounds */
+  --input-bg: rgba(255, 255, 255, 0.1);
+  --input-border: rgba(255, 255, 255, 0.1);
+
+  /* Legacy variables */
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,25 +101,66 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Ensure dark mode respects data-theme attribute */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    /* Backgrounds */
+    --background-primary: #0a0a0a;
+    --background-secondary: #171717;
+    --background-tertiary: #262626;
+
+    /* Surfaces */
+    --surface: #000000;
+    --surface-elevated: #171717;
+    --surface-hover: rgba(255, 255, 255, 0.1);
+
+    /* Text */
+    --text-primary: #ededed;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-tertiary: rgba(255, 255, 255, 0.4);
+
+    /* Borders */
+    --border-primary: rgba(255, 255, 255, 0.1);
+    --border-secondary: rgba(255, 255, 255, 0.2);
+    --border-hover: rgba(255, 255, 255, 0.3);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+
+    /* Card glow */
+    --glow-color-1: rgba(16, 185, 129, 0.3);
+    --glow-color-2: rgba(52, 211, 153, 0.3);
+    --glow-blur: 12px;
+    --glow-inset: -12px;
+    --glow-hover-inset: -16px;
+    --glow-hover-blur: 16px;
+
+    /* Input backgrounds */
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --input-border: rgba(255, 255, 255, 0.1);
+
+    /* Legacy */
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--background-primary);
+  color: var(--text-primary);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Card uniform outer glow effect - static, always visible */
+/* Card uniform outer glow effect - theme aware */
 .card-uniform-glow {
   position: relative;
   z-index: 1;
-  background-color: #000000 !important;
-  transition: transform 0.3s ease;
+  background-color: var(--surface) !important;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .card-uniform-glow:hover {
@@ -42,37 +172,38 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: #000000;
+  background: var(--surface);
   border-radius: 1rem;
   z-index: -1;
   pointer-events: none;
+  transition: background-color 0.3s ease;
 }
 
-/* Outer glow layer behind everything */
+/* Outer glow layer behind everything - theme aware */
 .card-uniform-glow::before {
   content: '';
   position: absolute;
-  inset: -12px;
+  inset: var(--glow-inset);
   background: linear-gradient(
     to right,
-    rgba(16, 185, 129, 0.3),
-    rgba(52, 211, 153, 0.3),
-    rgba(16, 185, 129, 0.3)
+    var(--glow-color-1),
+    var(--glow-color-2),
+    var(--glow-color-1)
   );
   border-radius: 2rem;
   z-index: -2;
   pointer-events: none;
-  filter: blur(12px);
+  filter: blur(var(--glow-blur));
   transition: all 0.3s ease;
 }
 
 .card-uniform-glow:hover::before {
-  inset: -16px;
+  inset: var(--glow-hover-inset);
   background: linear-gradient(
     to right,
     rgba(16, 185, 129, 0.5),
     rgba(52, 211, 153, 0.5),
     rgba(16, 185, 129, 0.5)
   );
-  filter: blur(16px);
+  filter: blur(var(--glow-hover-blur));
 }

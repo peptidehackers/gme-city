@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "../lib/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,18 +58,18 @@ export const metadata: Metadata = {
 
 function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-black/50 backdrop-blur-sm mt-16">
+    <footer className="border-t border-neutral-300 dark:border-white/10 bg-neutral-100/50 dark:bg-black/50 backdrop-blur-sm mt-16 transition-colors">
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
           {/* Business Name */}
           <div className="text-center md:text-left">
-            <h3 className="text-xl font-bold text-white mb-2">GMB City</h3>
-            <p className="text-sm text-white/60">Local SEO Solutions</p>
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">GMB City</h3>
+            <p className="text-sm text-neutral-600 dark:text-white/60">Local SEO Solutions</p>
           </div>
 
           {/* NAP Information */}
           <div className="text-center md:text-right space-y-1.5 sm:space-y-2">
-            <div className="flex items-center justify-center md:justify-end gap-2 text-white/80">
+            <div className="flex items-center justify-center md:justify-end gap-2 text-neutral-700 dark:text-white/80">
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -77,7 +78,7 @@ function Footer() {
                 2029 Century Park E Suite 430, Los Angeles, CA 90067
               </span>
             </div>
-            <div className="flex items-center justify-center md:justify-end gap-2 text-white/80">
+            <div className="flex items-center justify-center md:justify-end gap-2 text-neutral-700 dark:text-white/80">
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
@@ -85,7 +86,7 @@ function Footer() {
                 (424) 283-2608
               </a>
             </div>
-            <div className="flex items-center justify-center md:justify-end gap-2 text-white/80">
+            <div className="flex items-center justify-center md:justify-end gap-2 text-neutral-700 dark:text-white/80">
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
@@ -93,7 +94,7 @@ function Footer() {
                 info@gmbcity.com
               </a>
             </div>
-            <div className="flex items-center justify-center md:justify-end gap-2 text-white/80">
+            <div className="flex items-center justify-center md:justify-end gap-2 text-neutral-700 dark:text-white/80">
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -106,7 +107,7 @@ function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-6 pt-6 border-t border-white/10 text-center text-sm text-white/60">
+        <div className="mt-6 pt-6 border-t border-neutral-300 dark:border-white/10 text-center text-sm text-neutral-600 dark:text-white/60">
           © {new Date().getFullYear()} GMB City. All rights reserved.
         </div>
       </div>
@@ -120,12 +121,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Footer />
+        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

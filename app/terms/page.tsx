@@ -1,31 +1,33 @@
 "use client";
 import React from "react";
+import { ThemeToggle } from "../../components/theme-toggle";
 
 export default function TermsOfService() {
   return (
-    <div className="min-h-screen w-full bg-neutral-950 text-white">
-      <header className="sticky top-0 z-40 backdrop-blur bg-neutral-950/80 border-b border-white/10">
+    <div className="min-h-screen w-full bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white transition-colors">
+      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 dark:bg-neutral-950/80 border-b border-neutral-300 dark:border-white/10 transition-colors">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-3">
             <img src="/logo.svg" alt="GMB City Logo" className="h-12 w-auto sm:h-14" />
           </a>
+          <ThemeToggle />
         </div>
       </header>
 
       <main className="mx-auto max-w-4xl px-6 py-16">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Terms of Service</h1>
-        <p className="mt-4 text-white/70">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+        <p className="mt-4 text-neutral-600 dark:text-white/70">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
 
-        <div className="mt-12 space-y-8 text-white/80 leading-relaxed">
+        <div className="mt-12 space-y-8 text-neutral-700 dark:text-white/80 leading-relaxed">
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Agreement to Terms</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Agreement to Terms</h2>
             <p>
               By accessing or using GMB City's Local SEO audit tool and related services (the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Description of Service</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Description of Service</h2>
             <p className="mb-3">GMB City provides:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li><strong>Instant GBP Audit:</strong> A scoring algorithm that evaluates Google Business Profile optimization</li>
@@ -36,7 +38,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">User Obligations</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">User Obligations</h2>
             <p className="mb-3">You agree to:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Provide accurate and truthful information when using our audit tool</li>
@@ -49,9 +51,9 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Free vs. Paid Services</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Free vs. Paid Services</h2>
 
-            <h3 className="text-xl font-semibold text-white mt-4 mb-2">Free Services</h3>
+            <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mt-4 mb-2">Free Services</h3>
             <p className="mb-3">The following features are provided free of charge:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>GBP audit score generation</li>
@@ -60,14 +62,14 @@ export default function TermsOfService() {
               <li>Data API dashboard (subject to third-party API rate limits)</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-white mt-4 mb-2">Paid Services</h3>
+            <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mt-4 mb-2">Paid Services</h3>
             <p>
               Strategy consultations and implementation services are available for purchase. Pricing, terms, and refund policies for paid services will be provided before purchase.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Accuracy and Limitations</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Accuracy and Limitations</h2>
             <p className="mb-3">
               Our audit tool provides recommendations based on general Local SEO best practices. However:
             </p>
@@ -81,7 +83,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Intellectual Property</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Intellectual Property</h2>
             <p className="mb-3">
               All content, features, and functionality of the Service, including but not limited to text, graphics, logos, algorithms, and software, are owned by GMB City and protected by copyright, trademark, and other intellectual property laws.
             </p>
@@ -91,7 +93,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Third-Party APIs and Services</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Third-Party APIs and Services</h2>
             <p className="mb-3">
               Our Service integrates with third-party APIs (Google PageSpeed Insights, SerpAPI, Yelp Fusion). Your use of these features is also subject to:
             </p>
@@ -106,14 +108,14 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Disclaimer of Warranties</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Disclaimer of Warranties</h2>
             <p>
               THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF HARMFUL COMPONENTS.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Limitation of Liability</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Limitation of Liability</h2>
             <p>
               TO THE MAXIMUM EXTENT PERMITTED BY LAW, GME CITY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, REVENUE, DATA, OR USE, ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
             </p>
@@ -123,7 +125,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Indemnification</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Indemnification</h2>
             <p>
               You agree to indemnify, defend, and hold harmless GMB City, its officers, directors, employees, and agents from any claims, liabilities, damages, losses, or expenses (including legal fees) arising from:
             </p>
@@ -136,7 +138,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Termination</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Termination</h2>
             <p>
               We reserve the right to suspend or terminate your access to the Service at any time, with or without cause or notice, for violations of these Terms or for any other reason at our discretion.
             </p>
@@ -146,7 +148,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Governing Law and Disputes</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Governing Law and Disputes</h2>
             <p className="mb-3">
               These Terms are governed by the laws of the State of California, United States, without regard to conflict of law principles.
             </p>
@@ -156,7 +158,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Changes to Terms</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Changes to Terms</h2>
             <p>
               We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting. Your continued use of the Service after changes constitutes acceptance of the updated Terms.
             </p>
@@ -166,21 +168,21 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Severability</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Severability</h2>
             <p>
               If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will remain in full force and effect.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Entire Agreement</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Entire Agreement</h2>
             <p>
               These Terms, along with our Privacy Policy, constitute the entire agreement between you and GMB City regarding the Service and supersede any prior agreements.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">Contact Us</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Contact Us</h2>
             <p>
               If you have questions about these Terms, please contact us at:
             </p>
@@ -192,13 +194,13 @@ export default function TermsOfService() {
         </div>
       </main>
 
-      <footer className="border-t border-white/10 mt-16">
-        <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-white/60 flex flex-wrap items-center justify-between gap-4">
+      <footer className="border-t border-neutral-300 dark:border-white/10 mt-16 transition-colors">
+        <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-neutral-600 dark:text-white/60 flex flex-wrap items-center justify-between gap-4">
           <div>© {new Date().getFullYear()} GMB City. Local SEO that ships.</div>
           <div className="flex gap-6">
-            <a href="/privacy" className="hover:text-white">Privacy</a>
-            <a href="/terms" className="hover:text-white">Terms</a>
-            <a href="/contact" className="hover:text-white">Contact</a>
+            <a href="/privacy" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Privacy</a>
+            <a href="/terms" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Terms</a>
+            <a href="/contact" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Contact</a>
           </div>
         </div>
       </footer>
