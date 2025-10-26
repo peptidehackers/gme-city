@@ -29,12 +29,12 @@
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
   /* Card glow (subtle in light mode) */
-  --glow-color-1: rgba(16, 185, 129, 0.15);
-  --glow-color-2: rgba(52, 211, 153, 0.15);
-  --glow-blur: 8px;
-  --glow-inset: -8px;
-  --glow-hover-inset: -10px;
-  --glow-hover-blur: 10px;
+  --glow-color-1: rgba(16, 185, 129, 0.1);
+  --glow-color-2: rgba(52, 211, 153, 0.1);
+  --glow-blur: 6px;
+  --glow-inset: -6px;
+  --glow-hover-inset: -8px;
+  --glow-hover-blur: 8px;
 
   /* Accent (emerald - same for both themes) */
   --accent-primary: #10b981;
@@ -50,7 +50,7 @@
 }
 
 /* Dark theme */
-[data-theme="dark"] {
+.dark {
   /* Backgrounds */
   --background-primary: #0a0a0a;
   --background-secondary: #171717;
@@ -101,9 +101,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Ensure dark mode respects data-theme attribute */
+/* Ensure dark mode respects class attribute for system preference */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not(.light) {
     /* Backgrounds */
     --background-primary: #0a0a0a;
     --background-secondary: #171717;
