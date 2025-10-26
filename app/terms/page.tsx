@@ -7,8 +7,7 @@ export default function TermsOfService() {
       <header className="sticky top-0 z-40 backdrop-blur bg-neutral-950/80 border-b border-white/10">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400" />
-            <span className="text-lg font-semibold tracking-tight">GMB City</span>
+            <img src="/logo.svg" alt="GMB City Logo" className="h-12 w-auto sm:h-14" />
           </a>
         </div>
       </header>
