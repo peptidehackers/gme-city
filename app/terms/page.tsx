@@ -116,7 +116,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">Limitation of Liability</h2>
             <p>
-              TO THE MAXIMUM EXTENT PERMITTED BY LAW, GME CITY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, REVENUE, DATA, OR USE, ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+              TO THE MAXIMUM EXTENT PERMITTED BY LAW, GMB CITY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, REVENUE, DATA, OR USE, ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
             </p>
             <p className="mt-3">
               IN NO EVENT SHALL OUR TOTAL LIABILITY EXCEED THE AMOUNT YOU PAID TO US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR $100, WHICHEVER IS GREATER.
@@ -186,6 +186,10 @@ export default function TermsOfService() {
               If you have questions about these Terms, please contact us at:
             </p>
             <p className="mt-3">
+              <strong>GMB City</strong><br />
+              2029 Century Park E Suite 438<br />
+              Los Angeles, CA 90067<br />
+              <strong>Phone:</strong> <a href="tel:+14245995312" className="text-emerald-400 hover:underline">(424) 599-5312</a><br />
               <strong>Email:</strong> <a href="mailto:info@gmb.city" className="text-emerald-400 hover:underline">info@gmb.city</a><br />
               <strong>Website:</strong> <a href="https://www.gmb.city" className="text-emerald-400 hover:underline">https://www.gmb.city</a>
             </p>

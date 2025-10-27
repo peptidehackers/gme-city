@@ -132,6 +132,10 @@ export default function PrivacyPolicy() {
               If you have questions about this Privacy Policy or wish to exercise your rights, please contact us at:
             </p>
             <p className="mt-3">
+              <strong>GMB City</strong><br />
+              2029 Century Park E Suite 438<br />
+              Los Angeles, CA 90067<br />
+              <strong>Phone:</strong> <a href="tel:+14245995312" className="text-emerald-400 hover:underline">(424) 599-5312</a><br />
               <strong>Email:</strong> <a href="mailto:info@gmb.city" className="text-emerald-400 hover:underline">info@gmb.city</a><br />
               <strong>Website:</strong> <a href="https://www.gmb.city" className="text-emerald-400 hover:underline">https://www.gmb.city</a>
             </p>
