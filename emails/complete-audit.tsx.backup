@@ -439,7 +439,7 @@ export const CompleteAuditEmail = ({
             />
             <Text style={styles.footerTitle}>GMB City</Text>
             <Text style={styles.footerAddress}>
-              2029 Century Park E Suite 430<br />
+              2029 Century Park E Suite 438<br />
               Los Angeles, CA 90067
             </Text>
             <Text style={styles.footerContact}>

@@ -74,7 +74,7 @@ function Footer() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               <span className="text-xs sm:text-sm">
-                2029 Century Park E Suite 430, Los Angeles, CA 90067
+                2029 Century Park E Suite 438, Los Angeles, CA 90067
               </span>
             </div>
             <div className="flex items-center justify-center md:justify-end gap-2 text-neutral-700 dark:text-white/80">
