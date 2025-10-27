@@ -539,7 +539,7 @@ const styles = {
 
   // Grade Badge - Hero Element
   gradeBadgeContainer: {
-    backgroundColor: '#18181b',
+    backgroundColor: '#ffffff',
     borderRadius: '100px',
     padding: '20px 40px',
     margin: '0 auto 32px auto',
@@ -573,7 +573,7 @@ const styles = {
   gradeLabel: {
     fontSize: '14px',
     fontWeight: '700',
-    color: '#71717a',
+    color: '#6b7280',
     textTransform: 'uppercase' as const,
     letterSpacing: '1.2px',
     margin: '0 0 6px 0',
@@ -583,7 +583,7 @@ const styles = {
   gradeScore: {
     fontSize: '32px',
     fontWeight: '900',
-    color: '#ffffff',
+    color: '#111827',
     lineHeight: '1',
     margin: '0',
     textAlign: 'center' as const,
@@ -591,8 +591,8 @@ const styles = {
 
   // Executive Summary
   executiveSummary: {
-    backgroundColor: '#09090b',
-    border: '1px solid #3f3f46',
+    backgroundColor: '#f9fafb',
+    border: '1px solid #e5e7eb',
     borderRadius: '12px',
     padding: '24px 28px',
     textAlign: 'center' as const,
@@ -601,7 +601,7 @@ const styles = {
   },
 
   summaryTitle: {
-    color: '#ffffff',
+    color: '#111827',
     fontSize: '14px',
     fontWeight: '700',
     textTransform: 'uppercase' as const,
@@ -611,7 +611,7 @@ const styles = {
   },
 
   summaryText: {
-    color: '#a1a1aa',
+    color: '#4b5563',
     fontSize: '15px',
     lineHeight: '1.7',
     margin: '0',
@@ -621,11 +621,11 @@ const styles = {
   // Metrics Section - Dashboard Style
   metricsSection: {
     padding: '40px 40px 32px',
-    backgroundColor: '#09090b',
+    backgroundColor: '#fafafa',
   },
 
   sectionTitle: {
-    color: '#ffffff',
+    color: '#111827',
     fontSize: '20px',
     fontWeight: '700',
     margin: '0 0 8px 0',
@@ -633,7 +633,7 @@ const styles = {
   },
 
   sectionDescription: {
-    color: '#71717a',
+    color: '#6b7280',
     fontSize: '14px',
     margin: '0 0 0 0',
     lineHeight: '1.5',
@@ -644,8 +644,8 @@ const styles = {
   },
 
   metricCard: {
-    backgroundColor: '#18181b',
-    border: '1px solid #3f3f46',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
     borderRadius: '12px',
     padding: '20px',
     textAlign: 'center' as const,
@@ -655,7 +655,7 @@ const styles = {
   metricValue: {
     fontSize: '40px',
     fontWeight: '900',
-    color: '#ffffff',
+    color: '#111827',
     lineHeight: '1',
     margin: '0 0 8px 0',
     textAlign: 'center' as const,
@@ -689,7 +689,7 @@ const styles = {
   },
 
   metricLabel: {
-    color: '#71717a',
+    color: '#6b7280',
     fontSize: '12px',
     fontWeight: '600',
     textTransform: 'uppercase' as const,
@@ -729,7 +729,7 @@ const styles = {
   },
 
   progressBarContainer: {
-    backgroundColor: '#3f3f46',
+    backgroundColor: '#e5e7eb',
     borderRadius: '4px',
     height: '6px',
     overflow: 'hidden',
@@ -747,7 +747,7 @@ const styles = {
   },
 
   sectionDivider: {
-    borderColor: '#27272a',
+    borderColor: '#f3f4f6',
     borderWidth: '1px',
     margin: '0',
   },
@@ -758,8 +758,8 @@ const styles = {
   },
 
   scoreCard: {
-    backgroundColor: '#18181b',
-    border: '2px solid #3f3f46',
+    backgroundColor: '#ffffff',
+    border: '2px solid #e5e7eb',
     borderRadius: '16px',
     padding: '24px',
     textAlign: 'center' as const,
@@ -773,7 +773,7 @@ const styles = {
   },
 
   scoreCardTitle: {
-    color: '#d4d4d8',
+    color: '#374151',
     fontSize: '13px',
     fontWeight: '700',
     textTransform: 'uppercase' as const,
@@ -785,14 +785,14 @@ const styles = {
   scoreNumber: {
     fontSize: '56px',
     fontWeight: '900',
-    color: '#ffffff',
+    color: '#111827',
     lineHeight: '1',
     margin: '0 0 4px 0',
     textAlign: 'center' as const,
   },
 
   scoreSubtext: {
-    color: '#52525b',
+    color: '#9ca3af',
     fontSize: '13px',
     fontWeight: '500',
     margin: '0 0 16px 0',
@@ -800,7 +800,7 @@ const styles = {
   },
 
   scoreProgressBar: {
-    backgroundColor: '#27272a',
+    backgroundColor: '#f3f4f6',
     borderRadius: '6px',
     height: '8px',
     overflow: 'hidden',
@@ -904,7 +904,7 @@ const styles = {
   },
 
   gbpTitle: {
-    color: '#ffffff',
+    color: '#111827',
     fontSize: '18px',
     fontWeight: '700',
     margin: '0 0 4px 0',
@@ -930,7 +930,7 @@ const styles = {
   },
 
   gbpStatValue: {
-    color: '#ffffff',
+    color: '#111827',
     fontSize: '24px',
     fontWeight: '800',
     margin: '0 0 4px 0',
@@ -938,7 +938,7 @@ const styles = {
   },
 
   gbpStatLabel: {
-    color: '#71717a',
+    color: '#6b7280',
     fontSize: '11px',
     fontWeight: '600',
     textTransform: 'uppercase' as const,
@@ -949,7 +949,7 @@ const styles = {
 
   // Locked Section - Minimal
   lockedSection: {
-    backgroundColor: '#18181b',
+    backgroundColor: '#ffffff',
     border: '2px dashed #d1d5db',
     borderRadius: '12px',
     padding: '20px 24px',
@@ -966,7 +966,7 @@ const styles = {
   },
 
   lockedTitle: {
-    color: '#ffffff',
+    color: '#111827',
     fontSize: '16px',
     fontWeight: '700',
     margin: '0 0 6px 0',
@@ -987,7 +987,7 @@ const styles = {
   },
 
   lockedDescription: {
-    color: '#71717a',
+    color: '#6b7280',
     fontSize: '13px',
     margin: '0 0 16px 0',
     display: 'block',
@@ -1041,8 +1041,8 @@ const styles = {
   },
 
   keywordRow: {
-    backgroundColor: '#18181b',
-    border: '1px solid #3f3f46',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
     borderRadius: '10px',
     padding: '16px 20px',
     marginBottom: '10px',
@@ -1059,8 +1059,8 @@ const styles = {
   },
 
   keywordRank: {
-    backgroundColor: '#27272a',
-    color: '#71717a',
+    backgroundColor: '#f3f4f6',
+    color: '#6b7280',
     fontSize: '12px',
     fontWeight: '700',
     padding: '4px 8px',
@@ -1069,7 +1069,7 @@ const styles = {
   },
 
   keywordText: {
-    color: '#ffffff',
+    color: '#111827',
     fontSize: '15px',
     fontWeight: '600',
     margin: '0',
@@ -1087,7 +1087,7 @@ const styles = {
   },
 
   keywordVolumeLabel: {
-    color: '#52525b',
+    color: '#9ca3af',
     fontSize: '11px',
     margin: '0',
   },
@@ -1225,7 +1225,7 @@ const styles = {
   },
 
   noGbpActions: {
-    backgroundColor: '#18181b',
+    backgroundColor: '#ffffff',
     border: '1px solid #fecaca',
     borderRadius: '10px',
     padding: '20px',
@@ -1252,11 +1252,11 @@ const styles = {
   ctaOuterWrapper: {
     padding: '48px 40px',
     margin: '40px 0 0 0',
-    backgroundColor: '#18181b',
+    backgroundColor: '#ffffff',
   },
 
   ctaSection: {
-    backgroundColor: '#18181b',
+    backgroundColor: '#ffffff',
     borderRadius: '20px',
     padding: '48px 40px',
     textAlign: 'center' as const,
@@ -1291,7 +1291,7 @@ const styles = {
   },
 
   ctaHeading: {
-    color: '#ffffff',
+    color: '#111827',
     fontSize: '36px',
     fontWeight: '900',
     margin: '0 0 16px 0',
@@ -1310,7 +1310,7 @@ const styles = {
   },
 
   ctaDescription: {
-    color: '#a1a1aa',
+    color: '#4b5563',
     fontSize: '15px',
     fontWeight: '600',
     margin: '0 0 20px 0',
@@ -1323,7 +1323,7 @@ const styles = {
   },
 
   ctaBenefitText: {
-    color: '#d4d4d8',
+    color: '#374151',
     fontSize: '15px',
     fontWeight: '600',
     margin: '0 0 12px 0',
@@ -1356,7 +1356,7 @@ const styles = {
   },
 
   ctaTrustText: {
-    color: '#71717a',
+    color: '#6b7280',
     fontSize: '13px',
     fontWeight: '600',
     margin: '0',
@@ -1364,14 +1364,14 @@ const styles = {
   },
 
   ctaSocialProof: {
-    backgroundColor: '#09090b',
-    border: '1px solid #3f3f46',
+    backgroundColor: '#f9fafb',
+    border: '1px solid #e5e7eb',
     borderRadius: '10px',
     padding: '16px 20px',
   },
 
   ctaSocialProofText: {
-    color: '#d4d4d8',
+    color: '#374151',
     fontSize: '14px',
     lineHeight: '1.5',
     margin: '0',
@@ -1380,7 +1380,7 @@ const styles = {
 
   // Footer
   footer: {
-    backgroundColor: '#09090b',
+    backgroundColor: '#f9fafb',
     padding: '40px 40px 32px',
     textAlign: 'center' as const,
   },
@@ -1391,21 +1391,21 @@ const styles = {
   },
 
   footerTitle: {
-    color: '#ffffff',
+    color: '#111827',
     fontSize: '16px',
     fontWeight: '700',
     margin: '0 0 12px 0',
   },
 
   footerAddress: {
-    color: '#71717a',
+    color: '#6b7280',
     fontSize: '13px',
     lineHeight: '1.6',
     margin: '0 0 8px 0',
   },
 
   footerContact: {
-    color: '#71717a',
+    color: '#6b7280',
     fontSize: '13px',
     margin: '0 0 20px 0',
   },
@@ -1417,25 +1417,25 @@ const styles = {
   },
 
   footerDivider: {
-    borderColor: '#3f3f46',
+    borderColor: '#e5e7eb',
     borderWidth: '1px',
     margin: '20px 0',
   },
 
   footerCopyright: {
-    color: '#52525b',
+    color: '#9ca3af',
     fontSize: '12px',
     margin: '0 0 8px 0',
   },
 
   footerUnsubscribe: {
-    color: '#52525b',
+    color: '#9ca3af',
     fontSize: '11px',
     margin: '0',
   },
 
   unsubscribeLink: {
-    color: '#52525b',
+    color: '#9ca3af',
     textDecoration: 'underline',
   },
 };
