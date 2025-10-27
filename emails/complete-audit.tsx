@@ -813,8 +813,8 @@ const styles = {
 
   // Alert Card
   alertCard: {
-    backgroundColor: '#fef2f2',
-    border: '1px solid #fecaca',
+    backgroundColor: '#18181b',
+    border: '1px solid #3f3f46',
     borderLeft: '4px solid #ef4444',
     borderRadius: '12px',
     padding: '20px 24px',
@@ -834,7 +834,7 @@ const styles = {
   },
 
   alertTitle: {
-    color: '#dc2626',
+    color: '#ef4444',
     fontSize: '14px',
     fontWeight: '700',
     margin: '0',
@@ -856,7 +856,7 @@ const styles = {
   },
 
   alertText: {
-    color: '#7f1d1d',
+    color: '#d4d4d8',
     fontSize: '14px',
     lineHeight: '1.5',
     margin: '0',
@@ -864,7 +864,7 @@ const styles = {
   },
 
   alertMore: {
-    color: '#b91c1c',
+    color: '#fca5a5',
     fontSize: '13px',
     fontWeight: '600',
     fontStyle: 'italic' as const,
@@ -873,7 +873,7 @@ const styles = {
 
   // GBP Cards
   gbpActiveCard: {
-    backgroundColor: '#ecfdf5',
+    backgroundColor: '#18181b',
     border: '2px solid #10b981',
     borderRadius: '16px',
     padding: '28px',
@@ -881,7 +881,7 @@ const styles = {
   },
 
   gbpMissingCard: {
-    backgroundColor: '#fef2f2',
+    backgroundColor: '#18181b',
     border: '2px solid #ef4444',
     borderRadius: '16px',
     padding: '28px',
@@ -911,14 +911,14 @@ const styles = {
   },
 
   gbpStatusActive: {
-    color: '#059669',
+    color: '#10b981',
     fontSize: '13px',
     fontWeight: '600',
     margin: '0',
   },
 
   gbpStatusMissing: {
-    color: '#dc2626',
+    color: '#ef4444',
     fontSize: '13px',
     fontWeight: '600',
     margin: '0',
@@ -950,7 +950,7 @@ const styles = {
   // Locked Section - Minimal
   lockedSection: {
     backgroundColor: '#18181b',
-    border: '2px dashed #d1d5db',
+    border: '2px dashed #52525b',
     borderRadius: '12px',
     padding: '20px 24px',
     marginTop: '20px',
@@ -977,7 +977,7 @@ const styles = {
   lockedBadge: {
     display: 'inline-block',
     backgroundColor: '#f59e0b',
-    color: '#ffffff',
+    color: '#000000',
     fontSize: '9px',
     fontWeight: '700',
     padding: '3px 8px',
@@ -987,7 +987,7 @@ const styles = {
   },
 
   lockedDescription: {
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: '13px',
     margin: '0 0 16px 0',
     display: 'block',
@@ -1008,8 +1008,8 @@ const styles = {
 
   // Keyword Section
   keywordHero: {
-    backgroundColor: '#fffbeb',
-    border: '2px solid #fbbf24',
+    backgroundColor: '#18181b',
+    border: '2px solid #f59e0b',
     borderRadius: '16px',
     padding: '32px',
     textAlign: 'center' as const,
@@ -1019,14 +1019,14 @@ const styles = {
   keywordHeroNumber: {
     fontSize: '64px',
     fontWeight: '900',
-    color: '#d97706',
+    color: '#f59e0b',
     lineHeight: '1',
     margin: '0 0 8px 0',
     textAlign: 'center' as const,
   },
 
   keywordHeroLabel: {
-    color: '#92400e',
+    color: '#fbbf24',
     fontSize: '16px',
     fontWeight: '700',
     margin: '0 0 8px 0',
@@ -1034,7 +1034,7 @@ const styles = {
   },
 
   keywordHeroSubtext: {
-    color: '#78350f',
+    color: '#a1a1aa',
     fontSize: '13px',
     margin: '0',
     textAlign: 'center' as const,
@@ -1060,7 +1060,7 @@ const styles = {
 
   keywordRank: {
     backgroundColor: '#27272a',
-    color: '#71717a',
+    color: '#a1a1aa',
     fontSize: '12px',
     fontWeight: '700',
     padding: '4px 8px',
@@ -1080,22 +1080,22 @@ const styles = {
   },
 
   keywordVolume: {
-    color: '#f59e0b',
+    color: '#fbbf24',
     fontSize: '16px',
     fontWeight: '800',
     margin: '0',
   },
 
   keywordVolumeLabel: {
-    color: '#52525b',
+    color: '#71717a',
     fontSize: '11px',
     margin: '0',
   },
 
   // Strengths Section
   strengthsSection: {
-    backgroundColor: '#f0fdf4',
-    border: '1px solid #bbf7d0',
+    backgroundColor: '#18181b',
+    border: '1px solid #3f3f46',
     borderLeft: '4px solid #10b981',
     borderRadius: '12px',
     padding: '20px 24px',
@@ -1115,7 +1115,7 @@ const styles = {
   },
 
   strengthsTitle: {
-    color: '#059669',
+    color: '#10b981',
     fontSize: '14px',
     fontWeight: '700',
     margin: '0',
@@ -1135,7 +1135,7 @@ const styles = {
   },
 
   strengthText: {
-    color: '#065f46',
+    color: '#d4d4d8',
     fontSize: '14px',
     lineHeight: '1.5',
     margin: '0',
@@ -1144,8 +1144,8 @@ const styles = {
 
   // Opportunities Section
   opportunitiesSection: {
-    backgroundColor: '#fffbeb',
-    border: '1px solid #fde68a',
+    backgroundColor: '#18181b',
+    border: '1px solid #3f3f46',
     borderLeft: '4px solid #f59e0b',
     borderRadius: '12px',
     padding: '20px 24px',
@@ -1165,7 +1165,7 @@ const styles = {
   },
 
   opportunitiesTitle: {
-    color: '#d97706',
+    color: '#fbbf24',
     fontSize: '14px',
     fontWeight: '700',
     margin: '0',
@@ -1185,7 +1185,7 @@ const styles = {
   },
 
   opportunityText: {
-    color: '#92400e',
+    color: '#d4d4d8',
     fontSize: '14px',
     lineHeight: '1.5',
     margin: '0',
@@ -1194,8 +1194,8 @@ const styles = {
 
   // No GBP Section
   noGbpSection: {
-    backgroundColor: '#fef2f2',
-    border: '2px solid #fecaca',
+    backgroundColor: '#18181b',
+    border: '2px solid #ef4444',
     borderRadius: '16px',
     padding: '32px',
     textAlign: 'center' as const,
@@ -1209,7 +1209,7 @@ const styles = {
   },
 
   noGbpTitle: {
-    color: '#dc2626',
+    color: '#ef4444',
     fontSize: '20px',
     fontWeight: '700',
     margin: '0 0 12px 0',
@@ -1217,7 +1217,7 @@ const styles = {
   },
 
   noGbpText: {
-    color: '#7f1d1d',
+    color: '#d4d4d8',
     fontSize: '14px',
     lineHeight: '1.6',
     margin: '0 0 24px 0',
@@ -1225,15 +1225,15 @@ const styles = {
   },
 
   noGbpActions: {
-    backgroundColor: '#18181b',
-    border: '1px solid #fecaca',
+    backgroundColor: '#09090b',
+    border: '1px solid #3f3f46',
     borderRadius: '10px',
     padding: '20px',
     textAlign: 'left' as const,
   },
 
   noGbpActionTitle: {
-    color: '#991b1b',
+    color: '#fca5a5',
     fontSize: '13px',
     fontWeight: '700',
     textTransform: 'uppercase' as const,
@@ -1242,7 +1242,7 @@ const styles = {
   },
 
   noGbpActionItem: {
-    color: '#7f1d1d',
+    color: '#d4d4d8',
     fontSize: '14px',
     lineHeight: '1.7',
     margin: '0 0 8px 0',
