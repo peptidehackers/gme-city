@@ -67,20 +67,63 @@ export const CompleteAuditEmail = ({
       <Head>
         <meta name="color-scheme" content="light only" />
         <meta name="supported-color-schemes" content="light" />
+        <meta name="x-apple-disable-message-reformatting" />
         <style>{`
           :root {
-            color-scheme: light only;
-            supported-color-schemes: light;
+            color-scheme: light only !important;
+            supported-color-schemes: light !important;
           }
+
+          /* Universal dark mode prevention */
+          body, table, td, div, p, span, a, img, h1, h2, h3, h4, h5, h6 {
+            color-scheme: light only !important;
+          }
+
+          /* Force white backgrounds and dark text in dark mode */
           @media (prefers-color-scheme: dark) {
-            body, .body, * {
+            body, .body, table, td, div, p, span, a {
+              background-color: #ffffff !important;
+              background: #ffffff !important;
+              color: #111827 !important;
+            }
+
+            /* Preserve specific colors */
+            [style*="background-color"] {
+              background-color: inherit !important;
+            }
+
+            /* Prevent image inversion */
+            img {
+              opacity: 1 !important;
+              filter: none !important;
+            }
+          }
+
+          /* Gmail dark mode targeting */
+          [data-ogsc] body,
+          [data-ogsc] table,
+          [data-ogsc] td,
+          [data-ogsc] div,
+          [data-ogsc] p {
+            color-scheme: light !important;
+            background-color: #ffffff !important;
+            color: #111827 !important;
+          }
+
+          /* Outlook dark mode */
+          [data-ogsb] body,
+          [data-ogsb] table,
+          [data-ogsb] td {
+            background-color: #ffffff !important;
+            color: #111827 !important;
+          }
+
+          /* Apple Mail dark mode */
+          @media (prefers-dark-interface) {
+            body, table, td, div, p {
               background-color: #ffffff !important;
               color: #111827 !important;
             }
-          }
-          /* Force light mode on all email clients */
-          [data-ogsc] * {
-            color-scheme: light !important;
           }
         `}</style>
       </Head>
