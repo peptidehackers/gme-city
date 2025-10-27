@@ -1,5 +1,4 @@
 import { render } from '@react-email/components';
-import puppeteer from 'puppeteer';
 import { CompleteAuditEmail } from '../emails/complete-audit';
 
 export interface AuditPDFData {
@@ -28,11 +27,31 @@ export async function generateAuditPDF(data: AuditPDFData): Promise<Buffer> {
     }
   );
 
-  // Launch headless browser
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
+  // Dynamically import based on environment
+  let browser;
+
+  // Check if we're in a serverless environment (Vercel, AWS Lambda, etc.)
+  const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+  if (isServerless) {
+    // Use puppeteer-core with @sparticuz/chromium for serverless
+    const puppeteerCore = await import('puppeteer-core');
+    const chromium = await import('@sparticuz/chromium');
+
+    browser = await puppeteerCore.default.launch({
+      args: chromium.default.args,
+      defaultViewport: chromium.default.defaultViewport,
+      executablePath: await chromium.default.executablePath(),
+      headless: chromium.default.headless,
+    });
+  } else {
+    // Use regular puppeteer for local development
+    const puppeteer = await import('puppeteer');
+    browser = await puppeteer.default.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+  }
 
   try {
     const page = await browser.newPage();
