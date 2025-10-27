@@ -65,58 +65,12 @@ export const CompleteAuditEmail = ({
   return (
     <Html lang="en">
       <Head>
-        <meta name="color-scheme" content="light" />
-        <meta name="supported-color-schemes" content="light" />
-        <meta name="x-apple-disable-message-reformatting" />
-        <style>{`
-          /* Gmail iOS Dark Mode Hack - Use gradient backgrounds */
-          .darkmode {
-            background-image: linear-gradient(#ffffff, #ffffff) !important;
-            background-color: transparent !important;
-          }
-
-          .darkmode-text {
-            -webkit-text-fill-color: #111827 !important;
-            color: #111827 !important;
-          }
-
-          /* Prevent color inversion on all elements */
-          u + .body .darkmode {
-            background-image: linear-gradient(#ffffff, #ffffff) !important;
-          }
-
-          u + .body .darkmode-text {
-            -webkit-text-fill-color: #111827 !important;
-          }
-
-          /* Prevent image inversion */
-          img {
-            opacity: 1 !important;
-          }
-
-          /* Apple Mail / iOS Mail */
-          @media (prefers-dark-interface) {
-            .darkmode {
-              background-image: linear-gradient(#ffffff, #ffffff) !important;
-            }
-            .darkmode-text {
-              color: #111827 !important;
-            }
-          }
-
-          /* Outlook.com dark mode */
-          [data-ogsc] .darkmode {
-            background-image: linear-gradient(#ffffff, #ffffff) !important;
-          }
-
-          [data-ogsc] .darkmode-text {
-            color: #111827 !important;
-          }
-        `}</style>
+        <meta name="color-scheme" content="light dark" />
+        <meta name="supported-color-schemes" content="light dark" />
       </Head>
       <Preview>Your complete local SEO audit results for {businessName} - {grade.label} grade with {criticalIssues} critical issues found</Preview>
-      <Body style={styles.body} className="body darkmode">
-        <Container style={styles.container} className="darkmode">
+      <Body style={styles.body}>
+        <Container style={styles.container}>
 
           {/* Minimal Header with Logo */}
           <Section style={styles.headerSection}>
@@ -517,9 +471,9 @@ export default CompleteAuditEmail;
 // ============================================
 
 const styles = {
-  // Base Styles
+  // Base Styles - Dark theme
   body: {
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#000000',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     WebkitFontSmoothing: 'antialiased' as const,
     MozOsxFontSmoothing: 'grayscale' as const,
@@ -527,20 +481,20 @@ const styles = {
   },
 
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#0a0a0a',
     margin: '40px auto',
     maxWidth: '600px',
     borderRadius: '12px',
     overflow: 'hidden',
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.08)',
+    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
   },
 
   // Header Section
   headerSection: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#1a1a1a',
     padding: '32px 32px 24px',
     textAlign: 'center' as const,
-    borderBottom: '1px solid #f3f4f6',
+    borderBottom: '1px solid #27272a',
   },
 
   logo: {
@@ -550,7 +504,7 @@ const styles = {
 
   // Hero Section
   heroSection: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#1a1a1a',
     padding: '40px 40px 48px',
     textAlign: 'center' as const,
   },
@@ -566,7 +520,7 @@ const styles = {
   },
 
   heroTitle: {
-    color: '#111827',
+    color: '#ffffff',
     fontSize: '32px',
     fontWeight: '800',
     margin: '0 0 8px 0',
@@ -576,7 +530,7 @@ const styles = {
   },
 
   heroDate: {
-    color: '#9ca3af',
+    color: '#71717a',
     fontSize: '14px',
     fontWeight: '500',
     margin: '0 0 32px 0',
