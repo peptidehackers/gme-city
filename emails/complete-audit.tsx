@@ -65,71 +65,58 @@ export const CompleteAuditEmail = ({
   return (
     <Html lang="en">
       <Head>
-        <meta name="color-scheme" content="light only" />
+        <meta name="color-scheme" content="light" />
         <meta name="supported-color-schemes" content="light" />
         <meta name="x-apple-disable-message-reformatting" />
         <style>{`
-          :root {
-            color-scheme: light only !important;
-            supported-color-schemes: light !important;
+          /* Gmail iOS Dark Mode Hack - Use gradient backgrounds */
+          .darkmode {
+            background-image: linear-gradient(#ffffff, #ffffff) !important;
+            background-color: transparent !important;
           }
 
-          /* Universal dark mode prevention */
-          body, table, td, div, p, span, a, img, h1, h2, h3, h4, h5, h6 {
-            color-scheme: light only !important;
-          }
-
-          /* Force white backgrounds and dark text in dark mode */
-          @media (prefers-color-scheme: dark) {
-            body, .body, table, td, div, p, span, a {
-              background-color: #ffffff !important;
-              background: #ffffff !important;
-              color: #111827 !important;
-            }
-
-            /* Preserve specific colors */
-            [style*="background-color"] {
-              background-color: inherit !important;
-            }
-
-            /* Prevent image inversion */
-            img {
-              opacity: 1 !important;
-              filter: none !important;
-            }
-          }
-
-          /* Gmail dark mode targeting */
-          [data-ogsc] body,
-          [data-ogsc] table,
-          [data-ogsc] td,
-          [data-ogsc] div,
-          [data-ogsc] p {
-            color-scheme: light !important;
-            background-color: #ffffff !important;
+          .darkmode-text {
+            -webkit-text-fill-color: #111827 !important;
             color: #111827 !important;
           }
 
-          /* Outlook dark mode */
-          [data-ogsb] body,
-          [data-ogsb] table,
-          [data-ogsb] td {
-            background-color: #ffffff !important;
-            color: #111827 !important;
+          /* Prevent color inversion on all elements */
+          u + .body .darkmode {
+            background-image: linear-gradient(#ffffff, #ffffff) !important;
           }
 
-          /* Apple Mail dark mode */
+          u + .body .darkmode-text {
+            -webkit-text-fill-color: #111827 !important;
+          }
+
+          /* Prevent image inversion */
+          img {
+            opacity: 1 !important;
+          }
+
+          /* Apple Mail / iOS Mail */
           @media (prefers-dark-interface) {
-            body, table, td, div, p {
-              background-color: #ffffff !important;
+            .darkmode {
+              background-image: linear-gradient(#ffffff, #ffffff) !important;
+            }
+            .darkmode-text {
               color: #111827 !important;
             }
+          }
+
+          /* Outlook.com dark mode */
+          [data-ogsc] .darkmode {
+            background-image: linear-gradient(#ffffff, #ffffff) !important;
+          }
+
+          [data-ogsc] .darkmode-text {
+            color: #111827 !important;
           }
         `}</style>
       </Head>
       <Preview>Your complete local SEO audit results for {businessName} - {grade.label} grade with {criticalIssues} critical issues found</Preview>
-      <Body style={styles.body}>
-        <Container style={styles.container}>
+      <Body style={styles.body} className="body darkmode">
+        <Container style={styles.container} className="darkmode">
 
           {/* Minimal Header with Logo */}
           <Section style={styles.headerSection}>
