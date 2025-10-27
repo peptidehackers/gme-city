@@ -75,7 +75,7 @@ export const CompleteAuditEmail = ({
           {/* Minimal Header with Logo */}
           <Section style={styles.headerSection}>
             <Img
-              src="https://raw.githubusercontent.com/peptidehackers/gme-city/main/public/gmb-city-logo-email.png"
+              src="https://gmb.city/gmb-city-logo-email.png"
               width="300"
               height="133"
               alt="GMB City"
@@ -375,7 +375,7 @@ export const CompleteAuditEmail = ({
               {/* Logo */}
               <Section style={styles.ctaLogoWrapper}>
                 <Img
-                  src="https://raw.githubusercontent.com/peptidehackers/gme-city/main/public/gmb-city-logo-email.png"
+                  src="https://gmb.city/gmb-city-logo-email.png"
                   width="240"
                   height="107"
                   alt="GMB City"
@@ -431,7 +431,7 @@ export const CompleteAuditEmail = ({
           {/* Footer */}
           <Section style={styles.footer}>
             <Img
-              src="https://raw.githubusercontent.com/peptidehackers/gme-city/main/public/gmb-city-logo-email.png"
+              src="https://gmb.city/gmb-city-logo-email.png"
               width="100"
               height="44"
               alt="GMB City"
