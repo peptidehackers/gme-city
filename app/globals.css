@@ -209,3 +209,9 @@ body {
   );
   filter: blur(var(--glow-hover-blur));
 }
+
+/* Feature card wrapper - theme aware */
+.feature-card {
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
