@@ -3379,14 +3379,14 @@ ${schemaJson}
 
       {/* Complete Audit Modal */}
       {showCompleteAuditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-gradient-to-br from-gray-900 to-black border border-emerald-400/30 rounded-2xl shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-100/70 dark:bg-black/80 backdrop-blur-sm transition-colors">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-gradient-to-br from-white via-emerald-50/30 to-white dark:from-gray-900 dark:to-black border border-emerald-400/30 rounded-2xl shadow-2xl transition-colors">
             {/* Close button */}
             <button
               onClick={() => setShowCompleteAuditModal(false)}
-              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-neutral-200 dark:bg-white/10 hover:bg-neutral-300 dark:hover:bg-white/20 transition-colors z-10"
             >
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-6 h-6 text-neutral-900 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -3404,8 +3404,8 @@ ${schemaJson}
                   </div>
 
                   {/* Main Headline */}
-                  <h2 className="text-4xl sm:text-5xl font-black text-white mb-3 leading-tight">
-                    Discover What's <span className="text-emerald-400">Holding You Back</span>
+                  <h2 className="text-4xl sm:text-5xl font-black text-neutral-900 dark:text-white mb-3 leading-tight">
+                    Discover What's <span className="text-emerald-500 dark:text-emerald-400">Holding You Back</span>
                   </h2>
 
                   {/* Subheadline */}
@@ -3499,7 +3499,7 @@ ${schemaJson}
 
                   {/* Website */}
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       Website URL *
                     </label>
                     <input
@@ -3515,7 +3515,7 @@ ${schemaJson}
 
                   {/* Street Address */}
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       Street Address *
                     </label>
                     <input
@@ -3530,7 +3530,7 @@ ${schemaJson}
 
                   {/* City */}
                   <div>
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       City *
                     </label>
                     <input
@@ -3545,7 +3545,7 @@ ${schemaJson}
 
                   {/* ZIP */}
                   <div>
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       ZIP Code *
                     </label>
                     <input
@@ -3560,7 +3560,7 @@ ${schemaJson}
 
                   {/* Category */}
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-white/80 mb-2">
                       Business Category / Services *
                     </label>
                     <input
@@ -3575,7 +3575,7 @@ ${schemaJson}
 
                   {/* Consent */}
                   <div className="sm:col-span-2">
-                    <label className="flex items-start gap-3 text-sm text-white/80 cursor-pointer p-4 rounded-xl border border-white/10 hover:bg-white/5 transition-colors">
+                    <label className="flex items-start gap-3 text-sm text-neutral-700 dark:text-white/80 cursor-pointer p-4 rounded-xl border border-neutral-300 dark:border-white/10 hover:bg-neutral-100 dark:hover:bg-white/5 transition-colors">
                       <input
                         type="checkbox"
                         className="mt-1"
@@ -3591,29 +3591,29 @@ ${schemaJson}
                 </div>
 
                 {/* What's included */}
-                <div className="mb-6 p-4 rounded-xl bg-emerald-400/5 border border-emerald-400/20">
-                  <h3 className="text-sm font-semibold text-emerald-400 mb-3">Your Complete Report Includes:</h3>
-                  <div className="grid sm:grid-cols-2 gap-2 text-xs text-white/70">
+                <div className="mb-6 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-400/5 border border-emerald-200 dark:border-emerald-400/20">
+                  <h3 className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-3">Your Complete Report Includes:</h3>
+                  <div className="grid sm:grid-cols-2 gap-2 text-xs text-neutral-700 dark:text-white/70">
                     <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>SEO Snapshot (Local + On-site)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>Citation Coverage Analysis</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>Keyword Opportunities</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>Google Business Profile Audit</span>
@@ -3645,7 +3645,7 @@ ${schemaJson}
                   )}
                 </button>
 
-                <p className="mt-4 text-center text-xs text-white/60">
+                <p className="mt-4 text-center text-xs text-neutral-600 dark:text-white/60">
                   Your report will be emailed within 2-3 minutes
                 </p>
               </form>
