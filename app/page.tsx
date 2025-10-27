@@ -1446,7 +1446,7 @@ export default function GMECityLanding() {
   // Schema state
   const [schemaForm, setSchemaForm] = useState({
     name: "GMB City",
-    url: "https://gme.city",
+    url: "https://www.gmb.city",
     phone: "+1 310 555 1212",
     street1: "123 Example Blvd",
     street2: "Suite 200",
@@ -1573,7 +1573,7 @@ export default function GMECityLanding() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // Data tab state
-  const [psiUrl, setPsiUrl] = useState("https://gme.city");
+  const [psiUrl, setPsiUrl] = useState("https://www.gmb.city");
   const [psi, setPsi] = useState<any>(null);
   const [psiLoading, setPsiLoading] = useState(false);
   const runPSI = async () => {

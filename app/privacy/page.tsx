@@ -135,7 +135,7 @@ export default function PrivacyPolicy() {
             </p>
             <p className="mt-3">
               <strong>Email:</strong> <a href="mailto:info@gmb.city" className="text-emerald-400 hover:underline">info@gmb.city</a><br />
-              <strong>Website:</strong> <a href="https://gme.city" className="text-emerald-400 hover:underline">https://gme.city</a>
+              <strong>Website:</strong> <a href="https://www.gmb.city" className="text-emerald-400 hover:underline">https://www.gmb.city</a>
             </p>
           </section>
         </div>

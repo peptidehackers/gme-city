@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       const resend = new Resend(process.env.RESEND_API_KEY);
 
       await resend.emails.send({
-        from: whiteLabelConfig?.fromEmail || 'GMB City Reports <reports@gme.city>',
+        from: whiteLabelConfig?.fromEmail || 'GMB City Reports <reports@gmb.city>',
         to: emailTo,
         subject: `Local SEO Audit Report - ${templateData.businessName}`,
         react: CompleteAuditEmail(templateData),

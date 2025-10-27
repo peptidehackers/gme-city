@@ -130,7 +130,7 @@ export default function Contact() {
                   </svg>
                   <div>
                     <p className="text-neutral-700 dark:text-white/80 font-medium">Website</p>
-                    <a href="https://gme.city" className="text-emerald-400 hover:underline">https://gme.city</a>
+                    <a href="https://www.gmb.city" className="text-emerald-400 hover:underline">https://www.gmb.city</a>
                   </div>
                 </div>
 
