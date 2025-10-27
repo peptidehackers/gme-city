@@ -64,7 +64,26 @@ export const CompleteAuditEmail = ({
 
   return (
     <Html lang="en">
-      <Head />
+      <Head>
+        <meta name="color-scheme" content="light only" />
+        <meta name="supported-color-schemes" content="light" />
+        <style>{`
+          :root {
+            color-scheme: light only;
+            supported-color-schemes: light;
+          }
+          @media (prefers-color-scheme: dark) {
+            body, .body, * {
+              background-color: #ffffff !important;
+              color: #111827 !important;
+            }
+          }
+          /* Force light mode on all email clients */
+          [data-ogsc] * {
+            color-scheme: light !important;
+          }
+        `}</style>
+      </Head>
       <Preview>Your complete local SEO audit results for {businessName} - {grade.label} grade with {criticalIssues} critical issues found</Preview>
       <Body style={styles.body}>
         <Container style={styles.container}>
