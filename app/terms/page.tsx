@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { ThemeToggle } from "../../components/theme-toggle";
 import { ThemeLogo } from "../../components/theme-logo";
 
 export default function TermsOfService() {
@@ -11,7 +10,6 @@ export default function TermsOfService() {
           <a href="/" className="flex items-center gap-3">
             <ThemeLogo className="h-12 w-auto sm:h-14" />
           </a>
-          <ThemeToggle />
         </div>
       </header>
 
