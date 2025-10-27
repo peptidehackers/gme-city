@@ -215,3 +215,29 @@ body {
   background-color: transparent;
   transition: background-color 0.3s ease;
 }
+
+/* Hero fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* CSS Property for animating conic gradient angle */
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+/* Rotating border angle animation */
+@keyframes rotateBorder {
+  to {
+    --border-angle: 360deg;
+  }
+}

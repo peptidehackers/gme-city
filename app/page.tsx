@@ -2028,66 +2028,94 @@ export default function GMECityLanding() {
 
       <main>
         {/* Hero */}
-        <section className={`${SECTION_Y} relative overflow-hidden`}>
-          <div className="absolute inset-0 opacity-90 md:opacity-100 bg-[radial-gradient(900px_400px_at_50%_-10%,rgba(16,185,129,0.25),transparent_60%)]" />
-          <div className={`${CONTAINER} grid md:grid-cols-2 ${GRID_GAP} items-center`}>
-            <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] max-w-[16ch]">Dominate local search with AI-powered SEO that never stops working</h1>
-              <p className="mt-5 text-lg text-neutral-700 dark:text-white/80 max-w-prose">Plug in your business, get a live score, then ship the exact fixes that move the needle. No fluff. Just tasks that produce calls.</p>
-              <div className="mt-8 max-w-prose space-y-3">
-                {/* Primary CTA: Complete Audit */}
-                <button
-                  onClick={() => setShowCompleteAuditModal(true)}
-                  className="group relative w-full px-8 py-5 bg-emerald-400 text-black text-lg font-bold rounded-xl overflow-hidden transition-all duration-300 hover:bg-emerald-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-emerald-400/50 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-emerald-400/50"
-                >
-                  {/* Background glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <section className={`${SECTION_Y} relative overflow-hidden py-20 md:py-28 lg:py-32 border-b border-neutral-200 dark:border-white/10`}>
+          {/* Reduced gradient - subtle background */}
+          <div className="absolute inset-0 bg-[radial-gradient(1000px_1000px_at_50%_0%,rgba(16,185,129,0.12),transparent_60%)]" />
 
-                  {/* Button text */}
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    Get Complete Audit Report
-                    <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                  </span>
-                </button>
+          {/* Subtle mesh overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(600px_600px_at_30%_20%,rgba(6,182,212,0.08),transparent_50%)] animate-pulse" style={{ animationDuration: '4s' }} />
 
-                {/* Secondary: Individual audits */}
-                <button
-                  onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                  className="w-full px-6 py-3 border-2 border-neutral-400 dark:border-white/20 text-neutral-900 dark:text-white text-base font-semibold rounded-xl transition-all duration-200 hover:bg-neutral-100 dark:hover:bg-white/10 hover:border-neutral-500 dark:hover:border-white/30"
-                >
-                  Or Try Individual Audits
-                </button>
-              </div>
-              <div className="mt-6 flex items-center gap-2 text-sm text-neutral-600 dark:text-white/70">
-                <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>All 4 audits in one PDF • Emailed in 2 minutes • $500 value, free today</span>
-              </div>
+          {/* Light vignette for subtle focus */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.15)_100%)]" />
+
+          {/* Centered hero content */}
+          <div className={`${CONTAINER} max-w-4xl mx-auto text-center relative z-10`}>
+            {/* Main headline with glow and fade-in animation */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-white animate-[fadeIn_0.8s_ease-out]" style={{ textShadow: '0 0 40px rgba(16,185,129,0.4), 0 0 20px rgba(16,185,129,0.3)' }}>
+              The Only SEO Audit Built for 2025.
+            </h1>
+
+            {/* Subheadline */}
+            <p className="mt-6 text-lg sm:text-xl md:text-2xl text-neutral-300 dark:text-white/90 max-w-2xl mx-auto animate-[fadeIn_1s_ease-out]">
+              Local and Onsite optimization across every platform that matters—Google, Bing, ChatGPT, Perplexity, and more. Real visibility. Real calls.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-[fadeIn_1.2s_ease-out]">
+              {/* Primary CTA with bright intense spinning comet */}
+              <button
+                onClick={() => setShowCompleteAuditModal(true)}
+                className="group relative px-8 py-5 text-black text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] focus:outline-none border-[4px] border-transparent"
+                style={{
+                  background: `
+                    linear-gradient(#10b981 0 0) padding-box,
+                    conic-gradient(
+                      from var(--border-angle),
+                      transparent 0deg,
+                      transparent 85deg,
+                      rgba(255,255,255,0.4) 95deg,
+                      rgba(255,255,255,0.7) 100deg,
+                      rgba(255,255,255,0.9) 105deg,
+                      rgba(255,255,255,1) 108deg,
+                      rgba(255,255,255,1) 110deg,
+                      rgba(255,255,255,1) 112deg,
+                      rgba(255,255,255,0.9) 115deg,
+                      rgba(255,255,255,0.7) 120deg,
+                      rgba(255,255,255,0.4) 125deg,
+                      transparent 135deg,
+                      transparent 360deg
+                    ) border-box
+                  `,
+                  animation: 'rotateBorder 5s linear infinite'
+                }}
+              >
+                {/* Button text */}
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  Get Your Free Audit
+                  <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
+              </button>
+
+              {/* Secondary CTA */}
+              <button
+                onClick={() => seoSnapshotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="px-8 py-5 border-2 border-neutral-400 dark:border-white/40 text-neutral-900 dark:text-white text-lg font-semibold rounded-xl transition-all duration-200 hover:bg-neutral-100 dark:hover:bg-white/10 hover:border-neutral-600 dark:hover:border-white/60 hover:scale-[1.02] backdrop-blur-sm"
+              >
+                See Example Report
+              </button>
             </div>
-            <div className="relative">
-              <div className="absolute -inset-8 bg-gradient-to-br from-emerald-400/40 via-emerald-500/30 to-cyan-400/40 rounded-3xl blur-3xl animate-pulse" />
-              <div className="absolute -inset-6 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-3xl blur-2xl" />
-              <div className={`${CARD} relative`}>
-                <div className="text-sm text-neutral-600 dark:text-white/70">Live score</div>
-                <div className="mt-2 flex items-end gap-4">
-                  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight transition-all duration-500 will-change-auto">{animatedScore}</div>
-                  <div className="pb-2 text-neutral-500 dark:text-white/60">out of 100</div>
-                </div>
-                <div className="mt-4 grid grid-cols-2 gap-4 text-sm md:text-base">
-                  {Object.entries(breakdown).map(([k, v]) => (
-                    <div key={k} className="flex items-center justify-between gap-4">
-                      <span className="text-neutral-700 dark:text-white/80">{k}</span>
-                      <span className="text-neutral-500 dark:text-white/60">{Math.round(v)}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className={`mt-4 ${PROGRESS_BG}`}>
-                  <div className={PROGRESS_FG} style={{ width: `${score}%` }} />
-                </div>
-                <div className="mt-4 text-sm text-neutral-600 dark:text-white/70">Improve the score by knocking out the tasks below</div>
+
+            {/* Trust badges with enhanced visibility */}
+            <div className="mt-14 flex flex-wrap items-center justify-center gap-8 sm:gap-10 text-sm sm:text-base text-neutral-400 dark:text-white/80 animate-[fadeIn_1.4s_ease-out]">
+              <div className="flex items-center gap-2.5">
+                <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-semibold">12,847+ Audits Completed</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span className="font-semibold">No Credit Card Required</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-semibold">Results in 2 Minutes</span>
               </div>
             </div>
           </div>
