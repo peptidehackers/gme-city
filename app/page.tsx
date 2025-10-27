@@ -2068,7 +2068,8 @@ export default function GMECityLanding() {
               </div>
             </div>
             <div className="relative">
-              <div className="absolute -inset-6 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-3xl blur-xl" />
+              <div className="absolute -inset-8 bg-gradient-to-br from-emerald-400/40 via-emerald-500/30 to-cyan-400/40 rounded-3xl blur-3xl animate-pulse" />
+              <div className="absolute -inset-6 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-3xl blur-2xl" />
               <div className={`${CARD} relative`}>
                 <div className="text-sm text-neutral-600 dark:text-white/70">Live score</div>
                 <div className="mt-2 flex items-end gap-4">
