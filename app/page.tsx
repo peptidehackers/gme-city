@@ -41,7 +41,7 @@ const CARD_GLOW = "absolute -inset-2 bg-emerald-500/30 rounded-2xl blur-xl opaci
 const FEATURE_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none";
 
 // control tokens
-const INPUT = "h-12 w-full rounded-xl border border-neutral-300 dark:border-white/10 bg-neutral-100 dark:bg-white/10 px-3 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 transition-all duration-200";
+const INPUT = "h-12 w-full rounded-xl border border-neutral-300 dark:border-white/10 bg-white dark:bg-white/10 px-3 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 shadow-sm dark:shadow-none transition-all duration-200";
 const BTN = "h-12 px-6 rounded-xl font-semibold transition-all duration-200";
 const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-400/20 hover:scale-105 active:scale-95 flex items-center justify-center text-base font-bold cursor-pointer`;
 const BTN_GHOST = `${BTN} border border-neutral-300 dark:border-white/20 hover:bg-neutral-100 dark:hover:bg-white/10 hover:border-neutral-400 dark:hover:border-white/30 transition-colors`;
