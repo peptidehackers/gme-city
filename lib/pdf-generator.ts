@@ -40,7 +40,6 @@ export async function generateAuditPDF(data: AuditPDFData): Promise<Buffer> {
 
     browser = await puppeteerCore.default.launch({
       args: chromium.default.args,
-      defaultViewport: chromium.default.defaultViewport,
       executablePath: await chromium.default.executablePath(),
       headless: chromium.default.headless,
     });
