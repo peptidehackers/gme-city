@@ -30,13 +30,19 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
-  /* Card glow (subtle in light mode) */
-  --glow-color-1: rgba(16, 185, 129, 0.1);
-  --glow-color-2: rgba(52, 211, 153, 0.1);
-  --glow-blur: 6px;
+  /* Card glow (stronger in light mode) */
+  --glow-color-1: rgba(16, 185, 129, 0.2);
+  --glow-color-2: rgba(52, 211, 153, 0.2);
+  --glow-blur: 8px;
   --glow-inset: -6px;
   --glow-hover-inset: -8px;
-  --glow-hover-blur: 8px;
+  --glow-hover-blur: 10px;
+
+  /* CTA button spinning effect (champagne in light mode - less orange) */
+  --cta-spin-color-1: rgba(212, 175, 55, 0.6);
+  --cta-spin-color-2: rgba(212, 175, 55, 0.85);
+  --cta-spin-color-3: rgba(212, 175, 55, 0.95);
+  --cta-spin-color-peak: rgba(212, 175, 55, 1);
 
   /* Accent (emerald - same for both themes) */
   --accent-primary: #10b981;
@@ -79,13 +85,19 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
 
-  /* Card glow (more visible in dark mode) */
+  /* Card glow (emerald in dark mode too) */
   --glow-color-1: rgba(16, 185, 129, 0.3);
   --glow-color-2: rgba(52, 211, 153, 0.3);
-  --glow-blur: 12px;
-  --glow-inset: -12px;
-  --glow-hover-inset: -16px;
-  --glow-hover-blur: 16px;
+  --glow-blur: 8px;
+  --glow-inset: -4px;
+  --glow-hover-inset: -8px;
+  --glow-hover-blur: 12px;
+
+  /* CTA button spinning effect (champagne in dark mode - less orange) */
+  --cta-spin-color-1: rgba(250, 235, 180, 0.4);
+  --cta-spin-color-2: rgba(250, 235, 180, 0.7);
+  --cta-spin-color-3: rgba(250, 235, 180, 0.9);
+  --cta-spin-color-peak: rgba(250, 235, 180, 1);
 
   /* Input backgrounds */
   --input-bg: rgba(255, 255, 255, 0.1);
@@ -132,13 +144,19 @@
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
     --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
 
-    /* Card glow */
+    /* Card glow (emerald in dark mode too) */
     --glow-color-1: rgba(16, 185, 129, 0.3);
     --glow-color-2: rgba(52, 211, 153, 0.3);
-    --glow-blur: 12px;
-    --glow-inset: -12px;
-    --glow-hover-inset: -16px;
-    --glow-hover-blur: 16px;
+    --glow-blur: 8px;
+    --glow-inset: -4px;
+    --glow-hover-inset: -8px;
+    --glow-hover-blur: 12px;
+
+    /* CTA button spinning effect (champagne in dark mode - less orange) */
+    --cta-spin-color-1: rgba(250, 235, 180, 0.4);
+    --cta-spin-color-2: rgba(250, 235, 180, 0.7);
+    --cta-spin-color-3: rgba(250, 235, 180, 0.9);
+    --cta-spin-color-peak: rgba(250, 235, 180, 1);
 
     /* Input backgrounds */
     --input-bg: rgba(255, 255, 255, 0.1);
@@ -216,6 +234,64 @@ body {
   transition: background-color 0.3s ease;
 }
 
+/* Value prop card - hover-only glow effect */
+.value-prop-card {
+  position: relative;
+  z-index: 1;
+}
+
+/* Solid background layer to prevent glow showing through card */
+.value-prop-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--surface);
+  border-radius: 0.75rem;
+  z-index: -1;
+  pointer-events: none;
+  transition: background-color 0.3s ease;
+}
+
+/* Outer glow layer - only visible on hover */
+.value-prop-card::before {
+  content: '';
+  position: absolute;
+  inset: var(--glow-inset);
+  background: linear-gradient(
+    to right,
+    var(--glow-color-1),
+    var(--glow-color-2),
+    var(--glow-color-1)
+  );
+  border-radius: 1.5rem;
+  z-index: -2;
+  pointer-events: none;
+  filter: blur(var(--glow-blur));
+  opacity: 0;
+  transition: all 0.15s ease;
+}
+
+.value-prop-card:hover::before {
+  opacity: 1;
+  inset: var(--glow-hover-inset);
+  background: linear-gradient(
+    to right,
+    rgba(16, 185, 129, 0.5),
+    rgba(52, 211, 153, 0.5),
+    rgba(16, 185, 129, 0.5)
+  );
+  filter: blur(var(--glow-hover-blur));
+}
+
+/* Hero heading text glow - only in dark mode */
+.hero-heading-glow {
+  text-shadow: none;
+}
+
+.dark .hero-heading-glow {
+  text-shadow: 0 0 40px rgba(16,185,129,0.4), 0 0 20px rgba(16,185,129,0.3);
+}
+
 /* Hero fade-in animation */
 @keyframes fadeIn {
   from {
@@ -240,4 +316,32 @@ body {
   to {
     --border-angle: 360deg;
   }
+}
+
+/* Shiny gradient for all emerald buttons */
+.button-gradient {
+  background: linear-gradient(135deg, #6ee7b7 0%, #34d399 25%, #10b981 50%, #059669 75%, #047857 100%);
+}
+
+/* CTA button with shiny gradient and theme-aware spinning border */
+.cta-button-glow {
+  background:
+    linear-gradient(135deg, #6ee7b7 0%, #34d399 25%, #10b981 50%, #059669 75%, #047857 100%) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      transparent 0deg,
+      transparent 85deg,
+      var(--cta-spin-color-1) 95deg,
+      var(--cta-spin-color-2) 100deg,
+      var(--cta-spin-color-3) 105deg,
+      var(--cta-spin-color-peak) 108deg,
+      var(--cta-spin-color-peak) 110deg,
+      var(--cta-spin-color-peak) 112deg,
+      var(--cta-spin-color-3) 115deg,
+      var(--cta-spin-color-2) 120deg,
+      var(--cta-spin-color-1) 125deg,
+      transparent 135deg,
+      transparent 360deg
+    ) border-box;
+  animation: rotateBorder 5s linear infinite;
 }

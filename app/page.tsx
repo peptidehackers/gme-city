@@ -36,14 +36,14 @@ const GRID_GAP = "gap-4 md:gap-6";
 
 // surface tokens
 const CARD = "rounded-2xl border border-neutral-300 dark:border-white/10 bg-white dark:bg-black p-4 sm:p-6 md:p-8 lg:p-10 shadow-lg dark:shadow-xl dark:shadow-black/20 transition-colors";
-const CARD_INTERACTIVE = "card-uniform-glow relative rounded-2xl border border-neutral-400 dark:border-white/20 p-4 sm:p-6 md:p-8 lg:p-10 shadow-lg dark:shadow-xl dark:shadow-black/20";
+const CARD_INTERACTIVE = "card-uniform-glow relative rounded-2xl border-2 border-emerald-400/60 dark:border-emerald-400/40 p-4 sm:p-6 md:p-8 lg:p-10 shadow-lg dark:shadow-xl dark:shadow-black/20";
 const CARD_GLOW = "absolute -inset-2 bg-emerald-500/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10";
 const FEATURE_CARD_GLOW = "absolute -inset-1 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-emerald-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none";
 
 // control tokens
 const INPUT = "h-12 w-full rounded-xl border border-neutral-300 dark:border-white/10 bg-white dark:bg-white/10 px-3 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 focus:border-emerald-400/60 shadow-sm dark:shadow-none transition-all duration-200";
 const BTN = "h-12 px-6 rounded-xl font-semibold transition-all duration-200";
-const BTN_PRIMARY = `${BTN} bg-emerald-400 text-black hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-400/20 hover:scale-105 active:scale-95 flex items-center justify-center text-base font-bold cursor-pointer`;
+const BTN_PRIMARY = `${BTN} button-gradient text-black hover:shadow-lg hover:shadow-emerald-400/20 hover:scale-105 active:scale-95 flex items-center justify-center text-base font-bold cursor-pointer`;
 const BTN_GHOST = `${BTN} border border-neutral-300 dark:border-white/20 hover:bg-neutral-100 dark:hover:bg-white/10 hover:border-neutral-400 dark:hover:border-white/30 transition-colors`;
 
 // progress bar
@@ -2028,25 +2028,25 @@ export default function GMECityLanding() {
 
       <main>
         {/* Hero */}
-        <section className={`${SECTION_Y} relative overflow-hidden py-20 md:py-28 lg:py-32 border-b border-neutral-200 dark:border-white/10`}>
-          {/* Reduced gradient - subtle background */}
-          <div className="absolute inset-0 bg-[radial-gradient(1000px_1000px_at_50%_0%,rgba(16,185,129,0.12),transparent_60%)]" />
+        <section className={`${SECTION_Y} relative overflow-hidden py-20 md:py-28 lg:py-32 border-b border-neutral-200 dark:border-white/10 bg-gradient-to-b from-neutral-50 to-white dark:from-transparent dark:to-transparent`}>
+          {/* Reduced gradient - subtle background - more visible in light mode */}
+          <div className="absolute inset-0 bg-[radial-gradient(1000px_1000px_at_50%_0%,rgba(16,185,129,0.08),transparent_60%)] dark:bg-[radial-gradient(1000px_1000px_at_50%_0%,rgba(16,185,129,0.12),transparent_60%)]" />
 
           {/* Subtle mesh overlay */}
-          <div className="absolute inset-0 bg-[radial-gradient(600px_600px_at_30%_20%,rgba(6,182,212,0.08),transparent_50%)] animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute inset-0 bg-[radial-gradient(600px_600px_at_30%_20%,rgba(6,182,212,0.05),transparent_50%)] dark:bg-[radial-gradient(600px_600px_at_30%_20%,rgba(6,182,212,0.08),transparent_50%)] animate-pulse" style={{ animationDuration: '4s' }} />
 
-          {/* Light vignette for subtle focus */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.15)_100%)]" />
+          {/* Vignette for subtle focus - lighter in light mode */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.03)_100%)] dark:bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.15)_100%)]" />
 
           {/* Centered hero content */}
           <div className={`${CONTAINER} max-w-4xl mx-auto text-center relative z-10`}>
             {/* Main headline with glow and fade-in animation */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-white animate-[fadeIn_0.8s_ease-out]" style={{ textShadow: '0 0 40px rgba(16,185,129,0.4), 0 0 20px rgba(16,185,129,0.3)' }}>
+            <h1 className="hero-heading-glow text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-neutral-900 dark:text-white animate-[fadeIn_0.8s_ease-out]">
               The Only SEO Audit Built for 2025.
             </h1>
 
             {/* Subheadline */}
-            <p className="mt-6 text-lg sm:text-xl md:text-2xl text-neutral-300 dark:text-white/90 max-w-2xl mx-auto animate-[fadeIn_1s_ease-out]">
+            <p className="mt-6 text-lg sm:text-xl md:text-2xl text-neutral-700 dark:text-white/90 max-w-2xl mx-auto animate-[fadeIn_1s_ease-out]">
               Local and Onsite optimization across every platform that matters—Google, Bing, ChatGPT, Perplexity, and more. Real visibility. Real calls.
             </p>
 
@@ -2055,29 +2055,7 @@ export default function GMECityLanding() {
               {/* Primary CTA with bright intense spinning comet */}
               <button
                 onClick={() => setShowCompleteAuditModal(true)}
-                className="group relative px-8 py-5 text-black text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] focus:outline-none border-[4px] border-transparent"
-                style={{
-                  background: `
-                    linear-gradient(#10b981 0 0) padding-box,
-                    conic-gradient(
-                      from var(--border-angle),
-                      transparent 0deg,
-                      transparent 85deg,
-                      rgba(255,255,255,0.4) 95deg,
-                      rgba(255,255,255,0.7) 100deg,
-                      rgba(255,255,255,0.9) 105deg,
-                      rgba(255,255,255,1) 108deg,
-                      rgba(255,255,255,1) 110deg,
-                      rgba(255,255,255,1) 112deg,
-                      rgba(255,255,255,0.9) 115deg,
-                      rgba(255,255,255,0.7) 120deg,
-                      rgba(255,255,255,0.4) 125deg,
-                      transparent 135deg,
-                      transparent 360deg
-                    ) border-box
-                  `,
-                  animation: 'rotateBorder 5s linear infinite'
-                }}
+                className="cta-button-glow group relative px-8 py-5 text-black text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] focus:outline-none border-[4px] border-transparent"
               >
                 {/* Button text */}
                 <span className="relative z-10 flex items-center justify-center gap-2">
@@ -2116,6 +2094,57 @@ export default function GMECityLanding() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span className="font-semibold">Results in 2 Minutes</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Value Props Section - What's Included */}
+        <section className="py-16 md:py-20 border-b border-neutral-200 dark:border-white/10">
+          <div className={CONTAINER}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+              {/* Value Prop 1: All 4 Audits */}
+              <div className="value-prop-card flex flex-col items-center text-center p-6 rounded-xl border-[3px] border-emerald-400/70 dark:border-emerald-400/40 bg-white dark:bg-neutral-950 transition-all duration-150 hover:scale-[1.02]">
+                <div className="w-14 h-14 rounded-xl bg-emerald-400/10 border-2 border-emerald-400/70 dark:border-emerald-400/50 flex items-center justify-center mb-4">
+                  <svg className="w-7 h-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">All 4 Audits</h3>
+                <p className="text-sm text-neutral-600 dark:text-white/70">Complete SEO analysis in one comprehensive report</p>
+              </div>
+
+              {/* Value Prop 2: 2-Minute Results */}
+              <div className="value-prop-card flex flex-col items-center text-center p-6 rounded-xl border-[3px] border-emerald-400/70 dark:border-emerald-400/40 bg-white dark:bg-neutral-950 transition-all duration-150 hover:scale-[1.02]">
+                <div className="w-14 h-14 rounded-xl bg-emerald-400/10 border-2 border-emerald-400/70 dark:border-emerald-400/50 flex items-center justify-center mb-4">
+                  <svg className="w-7 h-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">2-Minute Results</h3>
+                <p className="text-sm text-neutral-600 dark:text-white/70">Instant PDF delivery straight to your inbox</p>
+              </div>
+
+              {/* Value Prop 3: Action Plan */}
+              <div className="value-prop-card flex flex-col items-center text-center p-6 rounded-xl border-[3px] border-emerald-400/70 dark:border-emerald-400/40 bg-white dark:bg-neutral-950 transition-all duration-150 hover:scale-[1.02]">
+                <div className="w-14 h-14 rounded-xl bg-emerald-400/10 border-2 border-emerald-400/70 dark:border-emerald-400/50 flex items-center justify-center mb-4">
+                  <svg className="w-7 h-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">Action Plan</h3>
+                <p className="text-sm text-neutral-600 dark:text-white/70">Clear, prioritized tasks to boost rankings</p>
+              </div>
+
+              {/* Value Prop 4: No Credit Card */}
+              <div className="value-prop-card flex flex-col items-center text-center p-6 rounded-xl border-[3px] border-emerald-400/70 dark:border-emerald-400/40 bg-white dark:bg-neutral-950 transition-all duration-150 hover:scale-[1.02]">
+                <div className="w-14 h-14 rounded-xl bg-emerald-400/10 border-2 border-emerald-400/70 dark:border-emerald-400/50 flex items-center justify-center mb-4">
+                  <svg className="w-7 h-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">No Credit Card</h3>
+                <p className="text-sm text-neutral-600 dark:text-white/70">100% free forever, no strings attached</p>
               </div>
             </div>
           </div>
