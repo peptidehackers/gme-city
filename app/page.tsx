@@ -3379,8 +3379,8 @@ ${schemaJson}
 
       {/* Complete Audit Modal */}
       {showCompleteAuditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-100/70 dark:bg-black/80 backdrop-blur-sm transition-colors">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-gradient-to-br from-white via-emerald-50/30 to-white dark:from-gray-900 dark:to-black border border-emerald-400/30 rounded-2xl shadow-2xl transition-colors">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/60 dark:bg-black/80 backdrop-blur-sm transition-colors">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-black border border-neutral-200 dark:border-emerald-400/30 rounded-2xl shadow-2xl transition-colors">
             {/* Close button */}
             <button
               onClick={() => setShowCompleteAuditModal(false)}
@@ -3591,7 +3591,7 @@ ${schemaJson}
                 </div>
 
                 {/* What's included */}
-                <div className="mb-6 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-400/5 border border-emerald-200 dark:border-emerald-400/20">
+                <div className="mb-6 p-4 rounded-xl bg-white dark:bg-emerald-400/5 border border-emerald-200 dark:border-emerald-400/20 shadow-md dark:shadow-none">
                   <h3 className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-3">Your Complete Report Includes:</h3>
                   <div className="grid sm:grid-cols-2 gap-2 text-xs text-neutral-700 dark:text-white/70">
                     <div className="flex items-center gap-2">
