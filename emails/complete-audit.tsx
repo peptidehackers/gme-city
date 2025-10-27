@@ -443,7 +443,7 @@ export const CompleteAuditEmail = ({
               Los Angeles, CA 90067
             </Text>
             <Text style={styles.footerContact}>
-              <Link href="tel:+14242832608" style={styles.footerLink}>(424) 283-2608</Link>
+              <Link href="tel:+14245995312" style={styles.footerLink}>(424) 599-5312</Link>
               {' • '}
               <Link href="mailto:info@gmbcity.com" style={styles.footerLink}>info@gmbcity.com</Link>
             </Text>
